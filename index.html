@@ -1,1140 +1,1699 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>5'10" PG Dunk System - Interactive Training Dashboard</title>
-<style>
-:root { --primary: #ff6b35; --secondary: #004e89; --accent: #1a936f; --dark: #1a1a2e; --light: #f5f5f5; --danger: #e63946; --warning: #f4a261; }
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--dark); color: var(--light); min-height: 100vh; }
-.header { background: linear-gradient(135deg, var(--secondary), var(--dark)); padding: 2rem; text-align: center; border-bottom: 4px solid var(--primary); position: relative; overflow: hidden; }
-.header::before { content: '🏀'; position: absolute; font-size: 8rem; opacity: 0.1; top: -20px; right: 50px; animation: bounce 2s infinite; }
-@keyframes bounce { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
-.header h1 { font-size: 2.5rem; margin-bottom: 0.5rem; text-transform: uppercase; letter-spacing: 2px; }
-.header p { color: var(--primary); font-size: 1.1rem; }
-.nav-tabs { display: flex; justify-content: center; background: rgba(255,255,255,0.05); padding: 1rem; gap: 0.5rem; flex-wrap: wrap; }
-.nav-tab { padding: 0.8rem 1.5rem; border: 2px solid var(--secondary); background: transparent; color: var(--light); cursor: pointer; border-radius: 30px; transition: all 0.3s; font-weight: 600; text-transform: uppercase; font-size: 0.9rem; }
-.nav-tab:hover, .nav-tab.active { background: var(--primary); border-color: var(--primary); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(255,107,53,0.3); }
-.content-section { display: none; padding: 2rem; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.5s; }
-.content-section.active { display: block; }
-@keyframes fadeIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-.card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem; }
-.card { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 1.5rem; border: 1px solid rgba(255,255,255,0.1); transition: transform 0.3s, box-shadow 0.3s; }
-.card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-.card h3 { color: var(--primary); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
-.card-icon { font-size: 1.5rem; }
-.progress-container { margin: 1rem 0; }
-.progress-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; }
-.progress-bar { height: 20px; background: rgba(255,255,255,0.1); border-radius: 10px; overflow: hidden; }
-.progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--warning)); border-radius: 10px; transition: width 1s ease; position: relative; }
-.progress-fill::after { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent); animation: shimmer 2s infinite; }
-@keyframes shimmer { 0% { transform: translateX(-100%); } 100% { transform: translateX(100%); } }
-.calculator { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; border: 2px solid var(--secondary); }
-.input-group { margin-bottom: 1.5rem; }
-.input-group label { display: block; margin-bottom: 0.5rem; color: var(--primary); font-weight: 600; }
-.input-group input, .input-group select { width: 100%; padding: 0.8rem; border: 2px solid var(--secondary); background: var(--dark); color: var(--light); border-radius: 8px; font-size: 1rem; }
-.input-group input:focus, .input-group select:focus { outline: none; border-color: var(--primary); }
-.btn { padding: 1rem 2rem; background: var(--primary); color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 1rem; font-weight: 600; text-transform: uppercase; transition: all 0.3s; display: inline-flex; align-items: center; gap: 0.5rem; }
-.btn:hover { background: var(--warning); transform: translateY(-2px); box-shadow: 0 5px 15px rgba(244,162,97,0.4); }
-.btn-secondary { background: var(--secondary); }
-.btn-secondary:hover { background: var(--accent); }
-.result-box { background: rgba(26,147,111,0.2); border: 2px solid var(--accent); border-radius: 10px; padding: 1.5rem; margin-top: 1rem; display: none; }
-.result-box.show { display: block; animation: fadeIn 0.5s; }
-.result-value { font-size: 2rem; color: var(--accent); font-weight: bold; }
-.timer-display { font-size: 4rem; font-weight: bold; text-align: center; color: var(--primary); font-family: 'Courier New', monospace; margin: 2rem 0; }
-.timer-controls { display: flex; justify-content: center; gap: 1rem; margin-bottom: 2rem; }
-.exercise-list { list-style: none; }
-.exercise-item { background: rgba(255,255,255,0.03); border-left: 4px solid var(--primary); padding: 1rem; margin-bottom: 0.5rem; border-radius: 0 8px 8px 0; display: flex; justify-content: space-between; align-items: center; transition: all 0.3s; }
-.exercise-item:hover { background: rgba(255,255,255,0.08); transform: translateX(5px); }
-.exercise-name { font-weight: 600; }
-.exercise-details { color: var(--warning); font-size: 0.9rem; }
-.check-btn { width: 30px; height: 30px; border: 2px solid var(--accent); background: transparent; border-radius: 50%; cursor: pointer; transition: all 0.3s; }
-.check-btn.completed { background: var(--accent); border-color: var(--accent); }
-.check-btn.completed::after { content: '✓'; color: white; font-weight: bold; }
-.week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; }
-.day-card { background: rgba(255,255,255,0.05); border-radius: 10px; padding: 1rem; border-top: 4px solid var(--secondary); }
-.day-card.active-day { border-top-color: var(--primary); background: rgba(255,107,53,0.1); }
-.day-title { font-weight: bold; color: var(--primary); margin-bottom: 0.5rem; }
-.chart-container { background: rgba(255,255,255,0.05); border-radius: 15px; padding: 2rem; margin-bottom: 2rem; }
-.chart-bar { display: flex; align-items: flex-end; height: 200px; gap: 1rem; margin-top: 1rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.2); position: relative; }
-.chart-column { flex: 1; background: linear-gradient(to top, var(--secondary), var(--primary)); border-radius: 5px 5px 0 0; transition: height 1s ease; position: relative; min-height: 10px; }
-.chart-column:hover { opacity: 0.8; }
-.chart-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.8rem; white-space: nowrap; }
-.chart-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-weight: bold; color: var(--primary); }
-.modal-overlay { display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.8); z-index: 1000; justify-content: center; align-items: center; }
-.modal-overlay.show { display: flex; }
-.modal-content { background: var(--dark); border: 2px solid var(--primary); border-radius: 15px; padding: 2rem; max-width: 500px; width: 90%; animation: fadeIn 0.3s; }
-.modal-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
-.close-btn { background: none; border: none; color: var(--light); font-size: 1.5rem; cursor: pointer; }
-@media (max-width: 768px) { .header h1 { font-size: 1.5rem; } .timer-display { font-size: 2.5rem; } .card-grid { grid-template-columns: 1fr; } }
-.badge-container { display: flex; gap: 1rem; flex-wrap: wrap; margin-top: 1rem; }
-.badge { padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.8rem; font-weight: bold; text-transform: uppercase; }
-.badge.locked { background: rgba(255,255,255,0.1); color: #666; }
-.badge.unlocked { background: var(--accent); color: white; animation: pulse 2s infinite; }
-@keyframes pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(26,147,111,0.4); } 50% { box-shadow: 0 0 0 10px rgba(26,147,111,0); } }
-.notes-area { width: 100%; min-height: 150px; background: rgba(255,255,255,0.05); border: 2px solid var(--secondary); border-radius: 8px; padding: 1rem; color: var(--light); font-family: inherit; resize: vertical; }
-.save-note-btn { margin-top: 0.5rem; }
-.pr-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
-.pr-table th, .pr-table td { padding: 1rem; text-align: left; border-bottom: 1px solid rgba(255,255,255,0.1); }
-.pr-table th { color: var(--primary); text-transform: uppercase; font-size: 0.9rem; }
-.pr-table tr:hover { background: rgba(255,255,255,0.03); }
-.new-pr { color: var(--accent); font-weight: bold; }
-.footer { text-align: center; padding: 2rem; color: rgba(255,255,255,0.5); border-top: 1px solid rgba(255,255,255,0.1); margin-top: 2rem; }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>5'10" PG Dunk System - Interactive Training Dashboard</title>
+    <style>
+        :root {
+            --primary: #ff6b35;
+            --secondary: #004e89;
+            --accent: #1a936f;
+            --dark: #1a1a2e;
+            --light: #f5f5f5;
+            --danger: #e63946;
+            --warning: #f4a261;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--dark);
+            color: var(--light);
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, var(--secondary), var(--dark));
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 4px solid var(--primary);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '🏀';
+            position: absolute;
+            font-size: 8rem;
+            opacity: 0.1;
+            top: -20px;
+            right: 50px;
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .header p {
+            color: var(--primary);
+            font-size: 1.1rem;
+        }
+
+        /* Navigation */
+        .nav-tabs {
+            display: flex;
+            justify-content: center;
+            background: rgba(255,255,255,0.05);
+            padding: 1rem;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .nav-tab {
+            padding: 0.8rem 1.5rem;
+            border: 2px solid var(--secondary);
+            background: transparent;
+            color: var(--light);
+            cursor: pointer;
+            border-radius: 30px;
+            transition: all 0.3s;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .nav-tab:hover, .nav-tab.active {
+            background: var(--primary);
+            border-color: var(--primary);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255,107,53,0.3);
+        }
+
+        /* Content Sections */
+        .content-section {
+            display: none;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: fadeIn 0.5s;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Cards */
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255,255,255,0.1);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        .card h3 {
+            color: var(--primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-icon {
+            font-size: 1.5rem;
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin: 1rem 0;
+        }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary), var(--warning));
+            border-radius: 10px;
+            transition: width 1s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        /* Interactive Tools */
+        .calculator {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--secondary);
+        }
+
+        .input-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        .input-group input, .input-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 2px solid var(--secondary);
+            background: var(--dark);
+            color: var(--light);
+            border-radius: 8px;
+            font-size: 1rem;
+        }
+
+        .input-group input:focus, .input-group select:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        .btn {
+            padding: 1rem 2rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn:hover {
+            background: var(--warning);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(244,162,97,0.4);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+
+        .btn-secondary:hover {
+            background: var(--accent);
+        }
+
+        /* Results Display */
+        .result-box {
+            background: rgba(26,147,111,0.2);
+            border: 2px solid var(--accent);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+            display: none;
+        }
+
+        .result-box.show {
+            display: block;
+            animation: fadeIn 0.5s;
+        }
+
+        .result-value {
+            font-size: 2rem;
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Timer */
+        .timer-display {
+            font-size: 4rem;
+            font-weight: bold;
+            text-align: center;
+            color: var(--primary);
+            font-family: 'Courier New', monospace;
+            margin: 2rem 0;
+        }
+
+        .timer-controls {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Exercise List */
+        .exercise-list {
+            list-style: none;
+        }
+
+        .exercise-item {
+            background: rgba(255,255,255,0.03);
+            border-left: 4px solid var(--primary);
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 0 8px 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s;
+        }
+
+        .exercise-item:hover {
+            background: rgba(255,255,255,0.08);
+            transform: translateX(5px);
+        }
+
+        .exercise-name {
+            font-weight: 600;
+        }
+
+        .exercise-details {
+            color: var(--warning);
+            font-size: 0.9rem;
+        }
+
+        .check-btn {
+            width: 30px;
+            height: 30px;
+            border: 2px solid var(--accent);
+            background: transparent;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .check-btn.completed {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+
+        .check-btn.completed::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+        }
+
+        /* Weekly Schedule */
+        .week-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1rem;
+        }
+
+        .day-card {
+            background: rgba(255,255,255,0.05);
+            border-radius: 10px;
+            padding: 1rem;
+            border-top: 4px solid var(--secondary);
+        }
+
+        .day-card.active-day {
+            border-top-color: var(--primary);
+            background: rgba(255,107,53,0.1);
+        }
+
+        .day-title {
+            font-weight: bold;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Charts */
+        .chart-container {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        .chart-bar {
+            display: flex;
+            align-items: flex-end;
+            height: 200px;
+            gap: 1rem;
+            margin-top: 1rem;
+            padding-bottom: 2rem;
+            border-bottom: 2px solid rgba(255,255,255,0.2);
+            position: relative;
+        }
+
+        .chart-column {
+            flex: 1;
+            background: linear-gradient(to top, var(--secondary), var(--primary));
+            border-radius: 5px 5px 0 0;
+            transition: height 1s ease;
+            position: relative;
+            min-height: 10px;
+        }
+
+        .chart-column:hover {
+            opacity: 0.8;
+        }
+
+        .chart-label {
+            position: absolute;
+            bottom: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.8rem;
+            white-space: nowrap;
+        }
+
+        .chart-value {
+            position: absolute;
+            top: -25px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        /* Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-overlay.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border: 2px solid var(--primary);
+            border-radius: 15px;
+            padding: 2rem;
+            max-width: 500px;
+            width: 90%;
+            animation: fadeIn 0.3s;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: var(--light);
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5rem;
+            }
+            .timer-display {
+                font-size: 2.5rem;
+            }
+            .card-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Tooltip */
+        .tooltip {
+            position: relative;
+            cursor: help;
+        }
+
+        .tooltip::after {
+            content: attr(data-tip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--secondary);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s;
+            font-size: 0.8rem;
+            z-index: 10;
+        }
+
+        .tooltip:hover::after {
+            opacity: 1;
+        }
+
+        /* Achievement Badges */
+        .badge-container {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1rem;
+        }
+
+        .badge {
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            text-transform: uppercase;
+        }
+
+        .badge.locked {
+            background: rgba(255,255,255,0.1);
+            color: #666;
+        }
+
+        .badge.unlocked {
+            background: var(--accent);
+            color: white;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(26,147,111,0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(26,147,111,0); }
+        }
+
+        /* Notes Section */
+        .notes-area {
+            width: 100%;
+            min-height: 150px;
+            background: rgba(255,255,255,0.05);
+            border: 2px solid var(--secondary);
+            border-radius: 8px;
+            padding: 1rem;
+            color: var(--light);
+            font-family: inherit;
+            resize: vertical;
+        }
+
+        .save-note-btn {
+            margin-top: 0.5rem;
+        }
+
+        /* Personal Records */
+        .pr-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+        }
+
+        .pr-table th, .pr-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .pr-table th {
+            color: var(--primary);
+            text-transform: uppercase;
+            font-size: 0.9rem;
+        }
+
+        .pr-table tr:hover {
+            background: rgba(255,255,255,0.03);
+        }
+
+        .new-pr {
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: rgba(255,255,255,0.5);
+            border-top: 1px solid rgba(255,255,255,0.1);
+            margin-top: 2rem;
+        }
+    </style>
 </head>
 <body>
 
-<header class="header">
-<h1>🏀 5'10" PG Dunk System</h1>
-<p>Interactive Training Dashboard • Steal • Block • Dunk</p>
-</header>
+    <!-- Header -->
+    <header class="header">
+        <h1>🏀 5'10" PG Dunk System</h1>
+        <p>Interactive Training Dashboard • Steal • Block • Dunk</p>
+    </header>
 
-<nav class="nav-tabs">
-<button class="nav-tab active" onclick="showSection('dashboard')">📊 Dashboard</button>
-<button class="nav-tab" onclick="showSection('calculator')">🧮 Calculators</button>
-<button class="nav-tab" onclick="showSection('workouts')">💪 Workouts</button>
-<button class="nav-tab" onclick="showSection('timer')">⏱️ Timer</button>
-<button class="nav-tab" onclick="showSection('progress')">📈 Progress</button>
-<button class="nav-tab" onclick="showSection('skills')">🎯 Skills</button>
-</nav>
+    <!-- Navigation -->
+    <nav class="nav-tabs">
+        <button class="nav-tab active" onclick="showSection('dashboard')">📊 Dashboard</button>
+        <button class="nav-tab" onclick="showSection('calculator')">🧮 Calculators</button>
+        <button class="nav-tab" onclick="showSection('workouts')">💪 Workouts</button>
+        <button class="nav-tab" onclick="showSection('timer')">⏱️ Timer</button>
+        <button class="nav-tab" onclick="showSection('progress')">📈 Progress</button>
+        <button class="nav-tab" onclick="showSection('skills')">🎯 Skills</button>
+    </nav>
 
-<section id="dashboard" class="content-section active">
-<div class="card-grid">
-<div class="card">
-<h3><span class="card-icon">📏</span> Your Profile</h3>
-<div class="input-group">
-<label>Height (inches)</label>
-<input type="number" id="profileHeight" value="70" onchange="updateProfile()">
-</div>
-<div class="input-group">
-<label>Weight (lbs)</label>
-<input type="number" id="profileWeight" value="170" onchange="updateProfile()">
-</div>
-<div class="input-group">
-<label>Standing Reach (inches)</label>
-<input type="number" id="profileReach" value="90" onchange="updateProfile()">
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Current Vertical</span>
-<span id="currentVert">28"</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" id="vertProgress" style="width: 70%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Dunk Progress</span>
-<span id="dunkProgressText">Need 2" more</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" id="dunkProgress" style="width: 85%"></div>
-</div>
-</div>
-</div>
+    <!-- Dashboard Section -->
+    <section id="dashboard" class="content-section active">
+        <div class="card-grid">
+            <div class="card">
+                <h3><span class="card-icon">📏</span> Your Profile</h3>
+                <div class="input-group">
+                    <label>Height (inches)</label>
+                    <input type="number" id="profileHeight" value="70" onchange="updateProfile()">
+                </div>
+                <div class="input-group">
+                    <label>Weight (lbs)</label>
+                    <input type="number" id="profileWeight" value="170" onchange="updateProfile()">
+                </div>
+                <div class="input-group">
+                    <label>Standing Reach (inches)</label>
+                    <input type="number" id="profileReach" value="90" onchange="updateProfile()">
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Current Vertical</span>
+                        <span id="currentVert">28"</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="vertProgress" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Dunk Progress</span>
+                        <span id="dunkProgressText">Need 2" more</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="dunkProgress" style="width: 85%"></div>
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">🏆</span> Achievements</h3>
-<div class="badge-container">
-<div class="badge unlocked" id="badge1">Rim Touch</div>
-<div class="badge locked" id="badge2">First Dunk</div>
-<div class="badge locked" id="badge3">30" Vert</div>
-<div class="badge locked" id="badge4">Windmill</div>
-<div class="badge locked" id="badge5">360 Dunk</div>
-</div>
-<p style="margin-top: 1rem; color: rgba(255,255,255,0.7);">Complete workouts and hit PRs to unlock badges!</p>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">🏆</span> Achievements</h3>
+                <div class="badge-container">
+                    <div class="badge unlocked" id="badge1">Rim Touch</div>
+                    <div class="badge locked" id="badge2">First Dunk</div>
+                    <div class="badge locked" id="badge3">30" Vert</div>
+                    <div class="badge locked" id="badge4">Windmill</div>
+                    <div class="badge locked" id="badge5">360 Dunk</div>
+                </div>
+                <p style="margin-top: 1rem; color: rgba(255,255,255,0.7);">
+                    Complete workouts and hit PRs to unlock badges!
+                </p>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">📅</span> This Week</h3>
-<div class="week-grid">
-<div class="day-card" id="day1">
-<div class="day-title">Mon</div>
-<div>Max Strength + Slow SSC</div>
-<div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Trap Bar DL, Box Jumps</div>
-</div>
-<div class="day-card" id="day2">
-<div class="day-title">Wed</div>
-<div>Reactive Plyos</div>
-<div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Drop Jumps, Pogos</div>
-</div>
-<div class="day-card" id="day3">
-<div class="day-title">Fri</div>
-<div>Power/Speed</div>
-<div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Cleans, Sleds</div>
-</div>
-<div class="day-card" id="day4">
-<div class="day-title">Sat</div>
-<div>Dunk Technique</div>
-<div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Approach, Rim Touches</div>
-</div>
-</div>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">📅</span> This Week</h3>
+                <div class="week-grid">
+                    <div class="day-card" id="day1">
+                        <div class="day-title">Mon</div>
+                        <div>Max Strength + Slow SSC</div>
+                        <div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Trap Bar DL, Box Jumps</div>
+                    </div>
+                    <div class="day-card" id="day2">
+                        <div class="day-title">Wed</div>
+                        <div>Reactive Plyos</div>
+                        <div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Drop Jumps, Pogos</div>
+                    </div>
+                    <div class="day-card" id="day3">
+                        <div class="day-title">Fri</div>
+                        <div>Power/Speed</div>
+                        <div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Cleans, Sleds</div>
+                    </div>
+                    <div class="day-card" id="day4">
+                        <div class="day-title">Sat</div>
+                        <div>Dunk Technique</div>
+                        <div style="font-size: 0.8rem; color: var(--warning); margin-top: 0.5rem;">Approach, Rim Touches</div>
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">⚡</span> Quick Stats</h3>
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-<div style="text-align: center;">
-<div style="font-size: 2rem; color: var(--primary);" id="quickRSI">1.4</div>
-<div style="font-size: 0.8rem;">RSI Score</div>
-</div>
-<div style="text-align: center;">
-<div style="font-size: 2rem; color: var(--accent);" id="quickSquat">1.4x</div>
-<div style="font-size: 0.8rem;">Squat/BW</div>
-</div>
-<div style="text-align: center;">
-<div style="font-size: 2rem; color: var(--warning);" id="quickBroad">9'2"</div>
-<div style="font-size: 0.8rem;">Broad Jump</div>
-</div>
-<div style="text-align: center;">
-<div style="font-size: 2rem; color: var(--danger);" id="quickSprint">4.5s</div>
-<div style="font-size: 0.8rem;">5-10-5 Shuttle</div>
-</div>
-</div>
-</div>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">⚡</span> Quick Stats</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: var(--primary);" id="quickRSI">1.4</div>
+                        <div style="font-size: 0.8rem;">RSI Score</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: var(--accent);" id="quickSquat">1.4x</div>
+                        <div style="font-size: 0.8rem;">Squat/BW</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: var(--warning);" id="quickBroad">9'2"</div>
+                        <div style="font-size: 0.8rem;">Broad Jump</div>
+                    </div>
+                    <div style="text-align: center;">
+                        <div style="font-size: 2rem; color: var(--danger);" id="quickSprint">4.5s</div>
+                        <div style="font-size: 0.8rem;">5-10-5 Shuttle</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<h3><span class="card-icon">📝</span> Training Notes</h3>
-<textarea class="notes-area" id="trainingNotes" placeholder="Log your workout notes, how you felt, what worked..."></textarea>
-<button class="btn save-note-btn" onclick="saveNotes()">
-<span>💾</span> Save Notes
-</button>
-<div id="savedNotes" style="margin-top: 1rem;"></div>
-</div>
-</section>
+        <div class="card">
+            <h3><span class="card-icon">📝</span> Training Notes</h3>
+            <textarea class="notes-area" id="trainingNotes" placeholder="Log your workout notes, how you felt, what worked..."></textarea>
+            <button class="btn save-note-btn" onclick="saveNotes()">
+                <span>💾</span> Save Notes
+            </button>
+            <div id="savedNotes" style="margin-top: 1rem;"></div>
+        </div>
+    </section>
 
-<section id="calculator" class="content-section">
-<div class="card-grid">
-<div class="card">
-<h3><span class="card-icon">🎯</span> Vertical Jump Calculator</h3>
-<div class="calculator">
-<div class="input-group">
-<label>Standing Reach (inches)</label>
-<input type="number" id="calcReach" value="90">
-</div>
-<div class="input-group">
-<label>Max Reach (inches)</label>
-<input type="number" id="calcMaxReach" value="118">
-</div>
-<button class="btn" onclick="calculateVertical()">
-<span>🧮</span> Calculate
-</button>
-<div class="result-box" id="vertResult">
-<div>Your Vertical: <span class="result-value" id="vertValue">28"</span></div>
-<div style="margin-top: 0.5rem;">Dunk Requirement: <span id="dunkNeed">Need 2" more for 10' rim</span></div>
-</div>
-</div>
-</div>
+    <!-- Calculator Section -->
+    <section id="calculator" class="content-section">
+        <div class="card-grid">
+            <div class="card">
+                <h3><span class="card-icon">🎯</span> Vertical Jump Calculator</h3>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label>Standing Reach (inches)</label>
+                        <input type="number" id="calcReach" value="90">
+                    </div>
+                    <div class="input-group">
+                        <label>Max Reach (inches)</label>
+                        <input type="number" id="calcMaxReach" value="118">
+                    </div>
+                    <button class="btn" onclick="calculateVertical()">
+                        <span>🧮</span> Calculate
+                    </button>
+                    <div class="result-box" id="vertResult">
+                        <div>Your Vertical: <span class="result-value" id="vertValue">28"</span></div>
+                        <div style="margin-top: 0.5rem;">Dunk Requirement: <span id="dunkNeed">Need 2" more for 10' rim</span></div>
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">⚖️</span> Strength Standards</h3>
-<div class="calculator">
-<div class="input-group">
-<label>Body Weight (lbs)</label>
-<input type="number" id="calcBW" value="170" oninput="updateStrengthStandards()">
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Back Squat Goal (1.5x BW)</span>
-<span id="squatGoal">255 lbs</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" id="squatProgress" style="width: 0%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Trap Bar DL Goal (2x BW)</span>
-<span id="dlGoal">340 lbs</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" id="dlProgress" style="width: 0%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Power Clean Goal (1x BW)</span>
-<span id="cleanGoal">170 lbs</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" id="cleanProgress" style="width: 0%"></div>
-</div>
-</div>
-<div class="input-group" style="margin-top: 1rem;">
-<label>Your Current Squat (lbs)</label>
-<input type="number" id="currentSquat" value="200" oninput="updateStrengthStandards()">
-</div>
-<div class="input-group">
-<label>Your Current Trap Bar DL (lbs)</label>
-<input type="number" id="currentDL" value="280" oninput="updateStrengthStandards()">
-</div>
-<div class="input-group">
-<label>Your Current Power Clean (lbs)</label>
-<input type="number" id="currentClean" value="135" oninput="updateStrengthStandards()">
-</div>
-</div>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">⚖️</span> Strength Standards</h3>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label>Body Weight (lbs)</label>
+                        <input type="number" id="calcBW" value="170" oninput="updateStrengthStandards()">
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Back Squat Goal (1.5x BW)</span>
+                            <span id="squatGoal">255 lbs</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="squatProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Trap Bar DL Goal (2x BW)</span>
+                            <span id="dlGoal">340 lbs</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="dlProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="progress-container">
+                        <div class="progress-label">
+                            <span>Power Clean Goal (1x BW)</span>
+                            <span id="cleanGoal">170 lbs</span>
+                        </div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="cleanProgress" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <div class="input-group" style="margin-top: 1rem;">
+                        <label>Your Current Squat (lbs)</label>
+                        <input type="number" id="currentSquat" value="200" oninput="updateStrengthStandards()">
+                    </div>
+                    <div class="input-group">
+                        <label>Your Current Trap Bar DL (lbs)</label>
+                        <input type="number" id="currentDL" value="280" oninput="updateStrengthStandards()">
+                    </div>
+                    <div class="input-group">
+                        <label>Your Current Power Clean (lbs)</label>
+                        <input type="number" id="currentClean" value="135" oninput="updateStrengthStandards()">
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">📊</span> RSI Calculator</h3>
-<div class="calculator">
-<div class="input-group">
-<label>Jump Height (cm) - from drop jump</label>
-<input type="number" id="rsiJump" value="35">
-</div>
-<div class="input-group">
-<label>Contact Time (seconds)</label>
-<input type="number" id="rsiTime" value="0.25" step="0.01">
-</div>
-<button class="btn" onclick="calculateRSI()">
-<span>🧮</span> Calculate RSI
-</button>
-<div class="result-box" id="rsiResult">
-<div>Your RSI: <span class="result-value" id="rsiValue">1.40</span></div>
-<div style="margin-top: 0.5rem;" id="rsiRating">Good - Keep training!</div>
-</div>
-</div>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">📊</span> RSI Calculator</h3>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label>Jump Height (cm) - from drop jump</label>
+                        <input type="number" id="rsiJump" value="35">
+                    </div>
+                    <div class="input-group">
+                        <label>Contact Time (seconds)</label>
+                        <input type="number" id="rsiTime" value="0.25" step="0.01">
+                    </div>
+                    <button class="btn" onclick="calculateRSI()">
+                        <span>🧮</span> Calculate RSI
+                    </button>
+                    <div class="result-box" id="rsiResult">
+                        <div>Your RSI: <span class="result-value" id="rsiValue">1.40</span></div>
+                        <div style="margin-top: 0.5rem;" id="rsiRating">Good - Keep training!</div>
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">🏃</span> Approach Jump Optimizer</h3>
-<div class="calculator">
-<div class="input-group">
-<label>Standing Vertical (inches)</label>
-<input type="number" id="standVert" value="28">
-</div>
-<div class="input-group">
-<label>Approach Speed (1-10)</label>
-<input type="range" id="approachSpeed" min="1" max="10" value="7" oninput="updateApproach()">
-<div style="text-align: center; color: var(--primary);" id="speedDisplay">7 - Fast</div>
-</div>
-<button class="btn" onclick="calculateApproach()">
-<span>🧮</span> Calculate Approach Vert
-</button>
-<div class="result-box" id="approachResult">
-<div>Estimated Approach Vertical: <span class="result-value" id="approachValue">32"</span></div>
-<div style="margin-top: 0.5rem;" id="approachTip">Good approach speed! Focus on penultimate step.</div>
-</div>
-</div>
-</div>
-</div>
-</section>
+            <div class="card">
+                <h3><span class="card-icon">🏃</span> Approach Jump Optimizer</h3>
+                <div class="calculator">
+                    <div class="input-group">
+                        <label>Standing Vertical (inches)</label>
+                        <input type="number" id="standVert" value="28">
+                    </div>
+                    <div class="input-group">
+                        <label>Approach Speed (1-10)</label>
+                        <input type="range" id="approachSpeed" min="1" max="10" value="7" oninput="updateApproach()">
+                        <div style="text-align: center; color: var(--primary);" id="speedDisplay">7 - Fast</div>
+                    </div>
+                    <button class="btn" onclick="calculateApproach()">
+                        <span>🧮</span> Calculate Approach Vert
+                    </button>
+                    <div class="result-box" id="approachResult">
+                        <div>Estimated Approach Vertical: <span class="result-value" id="approachValue">32"</span></div>
+                        <div style="margin-top: 0.5rem;" id="approachTip">Good approach speed! Focus on penultimate step.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="workouts" class="content-section">
-<div class="card">
-<h3><span class="card-icon">💪</span> Select Training Day</h3>
-<div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
-<button class="btn btn-secondary" onclick="loadWorkout('monday')">Monday: Max Strength</button>
-<button class="btn btn-secondary" onclick="loadWorkout('wednesday')">Wednesday: Reactive Plyos</button>
-<button class="btn btn-secondary" onclick="loadWorkout('friday')">Friday: Power/Speed</button>
-<button class="btn btn-secondary" onclick="loadWorkout('saturday')">Saturday: Dunk Tech</button>
-</div>
+    <!-- Workouts Section -->
+    <section id="workouts" class="content-section">
+        <div class="card">
+            <h3><span class="card-icon">💪</span> Select Training Day</h3>
+            <div style="display: flex; gap: 1rem; margin-bottom: 2rem; flex-wrap: wrap;">
+                <button class="btn btn-secondary" onclick="loadWorkout('monday')">Monday: Max Strength</button>
+                <button class="btn btn-secondary" onclick="loadWorkout('wednesday')">Wednesday: Reactive Plyos</button>
+                <button class="btn btn-secondary" onclick="loadWorkout('friday')">Friday: Power/Speed</button>
+                <button class="btn btn-secondary" onclick="loadWorkout('saturday')">Saturday: Dunk Tech</button>
+            </div>
 
-<div id="workoutDisplay">
-<div class="card" style="margin-bottom: 1rem;">
-<h3>Monday: Maximal Strength + Slow SSC</h3>
-<p style="color: var(--warning); margin-bottom: 1rem;">Goal: Increase force production for dunk height</p>
-<ul class="exercise-list" id="mondayList">
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Trap Bar Deadlift</div>
-<div class="exercise-details">4 sets x 5 reps @ 80-85% 1RM</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Back Squat</div>
-<div class="exercise-details">4 sets x 5 reps @ 80-85% 1RM</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Bulgarian Split Squat</div>
-<div class="exercise-details">3 sets x 6-8 reps/leg</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Standing Calf Raise</div>
-<div class="exercise-details">4 sets x 6-8 reps @ 1x BW</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Nordic Hamstring Curl</div>
-<div class="exercise-details">3 sets x 5-8 reps</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Box Jumps</div>
-<div class="exercise-details">4 sets x 3 reps (24-30")</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Seated Jumps</div>
-<div class="exercise-details">3 sets x 3 reps</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-</ul>
-</div>
-</div>
-</div>
-</section>
+            <div id="workoutDisplay">
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>Monday: Maximal Strength + Slow SSC</h3>
+                    <p style="color: var(--warning); margin-bottom: 1rem;">Goal: Increase force production for dunk height</p>
+                    
+                    <ul class="exercise-list" id="mondayList">
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Trap Bar Deadlift</div>
+                                <div class="exercise-details">4 sets x 5 reps @ 80-85% 1RM</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Back Squat</div>
+                                <div class="exercise-details">4 sets x 5 reps @ 80-85% 1RM</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Bulgarian Split Squat</div>
+                                <div class="exercise-details">3 sets x 6-8 reps/leg</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Standing Calf Raise</div>
+                                <div class="exercise-details">4 sets x 6-8 reps @ 1x BW</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Nordic Hamstring Curl</div>
+                                <div class="exercise-details">3 sets x 5-8 reps</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Box Jumps</div>
+                                <div class="exercise-details">4 sets x 3 reps (24-30")</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                        <li class="exercise-item">
+                            <div>
+                                <div class="exercise-name">Seated Jumps</div>
+                                <div class="exercise-details">3 sets x 3 reps</div>
+                            </div>
+                            <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="timer" class="content-section">
-<div class="card-grid">
-<div class="card">
-<h3><span class="card-icon">⏱️</span> Workout Timer</h3>
-<div class="timer-display" id="mainTimer">00:00</div>
-<div class="timer-controls">
-<button class="btn" onclick="startTimer()">▶️ Start</button>
-<button class="btn btn-secondary" onclick="pauseTimer()">⏸️ Pause</button>
-<button class="btn btn-secondary" onclick="resetTimer()">🔄 Reset</button>
-</div>
-<div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-<button class="btn" style="font-size: 0.8rem;" onclick="setTimer(60)">1 min</button>
-<button class="btn" style="font-size: 0.8rem;" onclick="setTimer(90)">90 sec</button>
-<button class="btn" style="font-size: 0.8rem;" onclick="setTimer(120)">2 min</button>
-<button class="btn" style="font-size: 0.8rem;" onclick="setTimer(180)">3 min</button>
-<button class="btn" style="font-size: 0.8rem;" onclick="setTimer(300)">5 min</button>
-</div>
-</div>
+    <!-- Timer Section -->
+    <section id="timer" class="content-section">
+        <div class="card-grid">
+            <div class="card">
+                <h3><span class="card-icon">⏱️</span> Workout Timer</h3>
+                <div class="timer-display" id="mainTimer">00:00</div>
+                <div class="timer-controls">
+                    <button class="btn" onclick="startTimer()">▶️ Start</button>
+                    <button class="btn btn-secondary" onclick="pauseTimer()">⏸️ Pause</button>
+                    <button class="btn btn-secondary" onclick="resetTimer()">🔄 Reset</button>
+                </div>
+                <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
+                    <button class="btn" style="font-size: 0.8rem;" onclick="setTimer(60)">1 min</button>
+                    <button class="btn" style="font-size: 0.8rem;" onclick="setTimer(90)">90 sec</button>
+                    <button class="btn" style="font-size: 0.8rem;" onclick="setTimer(120)">2 min</button>
+                    <button class="btn" style="font-size: 0.8rem;" onclick="setTimer(180)">3 min</button>
+                    <button class="btn" style="font-size: 0.8rem;" onclick="setTimer(300)">5 min</button>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">⚡</span> RSI Test Timer</h3>
-<p style="margin-bottom: 1rem;">Time your drop jump contact time precisely</p>
-<div class="timer-display" id="rsiTimer">0.000s</div>
-<div class="timer-controls">
-<button class="btn" onmousedown="startRSITimer()" onmouseup="stopRSITimer()" ontouchstart="startRSITimer()" ontouchend="stopRSITimer()">Hold for Contact Time</button>
-</div>
-<p style="margin-top: 1rem; font-size: 0.9rem; color: rgba(255,255,255,0.7);">Press and hold when foot hits ground, release when you leave ground.</p>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">⚡</span> RSI Test Timer</h3>
+                <p style="margin-bottom: 1rem;">Time your drop jump contact time precisely</p>
+                <div class="timer-display" id="rsiTimer">0.000s</div>
+                <div class="timer-controls">
+                    <button class="btn" onmousedown="startRSITimer()" onmouseup="stopRSITimer()" ontouchstart="startRSITimer()" ontouchend="stopRSITimer()">
+                        Hold for Contact Time
+                    </button>
+                </div>
+                <p style="margin-top: 1rem; font-size: 0.9rem; color: rgba(255,255,255,0.7);">
+                    Press and hold when foot hits ground, release when you leave ground.
+                </p>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">🏃</span> Sprint Timer</h3>
-<div class="timer-display" id="sprintTimer">0.00s</div>
-<div class="timer-controls">
-<button class="btn" onclick="startSprintTimer()">🏁 Start Sprint</button>
-<button class="btn btn-secondary" onclick="stopSprintTimer()">🛑 Stop</button>
-</div>
-<div style="margin-top: 1rem;">
-<div class="input-group">
-<label>Distance</label>
-<select id="sprintDistance">
-<option value="10">10 yards</option>
-<option value="20">20 yards</option>
-<option value="40">40 yards</option>
-<option value="5-10-5">5-10-5 Shuttle</option>
-</select>
-</div>
-</div>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">🏃</span> Sprint Timer</h3>
+                <div class="timer-display" id="sprintTimer">0.00s</div>
+                <div class="timer-controls">
+                    <button class="btn" onclick="startSprintTimer()">🏁 Start Sprint</button>
+                    <button class="btn btn-secondary" onclick="stopSprintTimer()">🛑 Stop</button>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <div class="input-group">
+                        <label>Distance</label>
+                        <select id="sprintDistance">
+                            <option value="10">10 yards</option>
+                            <option value="20">20 yards</option>
+                            <option value="40">40 yards</option>
+                            <option value="5-10-5">5-10-5 Shuttle</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">📋</span> Interval Presets</h3>
-<div class="exercise-list">
-<li class="exercise-item" style="cursor: pointer;" onclick="setTimer(30)">
-<div>
-<div class="exercise-name">Tabata Work</div>
-<div class="exercise-details">20s work / 10s rest x 8</div>
-</div>
-<span style="color: var(--primary);">Start →</span>
-</li>
-<li class="exercise-item" style="cursor: pointer;" onclick="setTimer(45)">
-<div>
-<div class="exercise-name">Plyo Set Rest</div>
-<div class="exercise-details">45-60 seconds between sets</div>
-</div>
-<span style="color: var(--primary);">Start →</span>
-</li>
-<li class="exercise-item" style="cursor: pointer;" onclick="setTimer(180)">
-<div>
-<div class="exercise-name">Strength Rest</div>
-<div class="exercise-details">3-5 minutes between heavy sets</div>
-</div>
-<span style="color: var(--primary);">Start →</span>
-</li>
-<li class="exercise-item" style="cursor: pointer;" onclick="setTimer(90)">
-<div>
-<div class="exercise-name">Power Rest</div>
-<div class="exercise-details">90-120 seconds between cleans</div>
-</div>
-<span style="color: var(--primary);">Start →</span>
-</li>
-</div>
-</div>
-</div>
-</section>
+            <div class="card">
+                <h3><span class="card-icon">📋</span> Interval Presets</h3>
+                <div class="exercise-list">
+                    <li class="exercise-item" style="cursor: pointer;" onclick="setTimer(30)">
+                        <div>
+                            <div class="exercise-name">Tabata Work</div>
+                            <div class="exercise-details">20s work / 10s rest x 8</div>
+                        </div>
+                        <span style="color: var(--primary);">Start →</span>
+                    </li>
+                    <li class="exercise-item" style="cursor: pointer;" onclick="setTimer(45)">
+                        <div>
+                            <div class="exercise-name">Plyo Set Rest</div>
+                            <div class="exercise-details">45-60 seconds between sets</div>
+                        </div>
+                        <span style="color: var(--primary);">Start →</span>
+                    </li>
+                    <li class="exercise-item" style="cursor: pointer;" onclick="setTimer(180)">
+                        <div>
+                            <div class="exercise-name">Strength Rest</div>
+                            <div class="exercise-details">3-5 minutes between heavy sets</div>
+                        </div>
+                        <span style="color: var(--primary);">Start →</span>
+                    </li>
+                    <li class="exercise-item" style="cursor: pointer;" onclick="setTimer(90)">
+                        <div>
+                            <div class="exercise-name">Power Rest</div>
+                            <div class="exercise-details">90-120 seconds between cleans</div>
+                        </div>
+                        <span style="color: var(--primary);">Start →</span>
+                    </li>
+                </div>
+            </div>
+        </div>
+    </section>
 
-<section id="progress" class="content-section">
-<div class="card">
-<h3><span class="card-icon">📊</span> Vertical Progress Tracker</h3>
-<div class="chart-container">
-<div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-<button class="btn btn-secondary" onclick="addDataPoint()">➕ Add Measurement</button>
-<button class="btn btn-secondary" onclick="clearChart()">Clear</button>
-</div>
-<div class="chart-bar" id="progressChart">
-<div class="chart-column" style="height: 60%;">
-<span class="chart-value">24"</span>
-<span class="chart-label">Week 0</span>
-</div>
-<div class="chart-column" style="height: 65%;">
-<span class="chart-value">26"</span>
-<span class="chart-label">Week 2</span>
-</div>
-<div class="chart-column" style="height: 70%;">
-<span class="chart-value">28"</span>
-<span class="chart-label">Week 4</span>
-</div>
-<div class="chart-column" style="height: 75%;">
-<span class="chart-value">30"</span>
-<span class="chart-label">Week 6</span>
-</div>
-<div class="chart-column" style="height: 80%;">
-<span class="chart-value">32"</span>
-<span class="chart-label">Week 8</span>
-</div>
-<div class="chart-column" style="height: 85%;">
-<span class="chart-value">34"</span>
-<span class="chart-label">Week 10</span>
-</div>
-<div class="chart-column" style="height: 90%;">
-<span class="chart-value">36"</span>
-<span class="chart-label">Week 12</span>
-</div>
-</div>
-</div>
-</div>
+    <!-- Progress Section -->
+    <section id="progress" class="content-section">
+        <div class="card">
+            <h3><span class="card-icon">📊</span> Vertical Progress Tracker</h3>
+            <div class="chart-container">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+                    <button class="btn btn-secondary" onclick="addDataPoint()">➕ Add Measurement</button>
+                    <button class="btn btn-secondary" onclick="clearChart()">Clear</button>
+                </div>
+                <div class="chart-bar" id="progressChart">
+                    <div class="chart-column" style="height: 60%;">
+                        <span class="chart-value">24"</span>
+                        <span class="chart-label">Week 0</span>
+                    </div>
+                    <div class="chart-column" style="height: 65%;">
+                        <span class="chart-value">26"</span>
+                        <span class="chart-label">Week 2</span>
+                    </div>
+                    <div class="chart-column" style="height: 70%;">
+                        <span class="chart-value">28"</span>
+                        <span class="chart-label">Week 4</span>
+                    </div>
+                    <div class="chart-column" style="height: 75%;">
+                        <span class="chart-value">30"</span>
+                        <span class="chart-label">Week 6</span>
+                    </div>
+                    <div class="chart-column" style="height: 80%;">
+                        <span class="chart-value">32"</span>
+                        <span class="chart-label">Week 8</span>
+                    </div>
+                    <div class="chart-column" style="height: 85%;">
+                        <span class="chart-value">34"</span>
+                        <span class="chart-label">Week 10</span>
+                    </div>
+                    <div class="chart-column" style="height: 90%;">
+                        <span class="chart-value">36"</span>
+                        <span class="chart-label">Week 12</span>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-<div class="card">
-<h3><span class="card-icon">🏆</span> Personal Records</h3>
-<table class="pr-table">
-<thead>
-<tr>
-<th>Exercise</th>
-<th>PR</th>
-<th>Date</th>
-<th>Goal</th>
-<th>Status</th>
-</tr>
-</thead>
-<tbody id="prTableBody">
-<tr>
-<td>Standing Vertical</td>
-<td class="new-pr">28"</td>
-<td>2026-06-01</td>
-<td>30"</td>
-<td>🔥 2" to go!</td>
-</tr>
-<tr>
-<td>Approach Vertical</td>
-<td>32"</td>
-<td>2026-06-01</td>
-<td>34"</td>
-<td>📈 In progress</td>
-</tr>
-<tr>
-<td>Back Squat</td>
-<td>200 lbs</td>
-<td>2026-05-15</td>
-<td>255 lbs</td>
-<td>💪 Keep pushing</td>
-</tr>
-<tr>
-<td>Trap Bar DL</td>
-<td>280 lbs</td>
-<td>2026-05-20</td>
-<td>340 lbs</td>
-<td>⚡ Almost there</td>
-</tr>
-<tr>
-<td>RSI (Drop Jump)</td>
-<td>1.40</td>
-<td>2026-06-05</td>
-<td>1.50</td>
-<td>🎯 Target zone</td>
-</tr>
-</tbody>
-</table>
-<button class="btn" style="margin-top: 1rem;" onclick="addPR()">
-<span>➕</span> Add New PR
-</button>
-</div>
+        <div class="card">
+            <h3><span class="card-icon">🏆</span> Personal Records</h3>
+            <table class="pr-table">
+                <thead>
+                    <tr>
+                        <th>Exercise</th>
+                        <th>PR</th>
+                        <th>Date</th>
+                        <th>Goal</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody id="prTableBody">
+                    <tr>
+                        <td>Standing Vertical</td>
+                        <td class="new-pr">28"</td>
+                        <td>2026-06-01</td>
+                        <td>30"</td>
+                        <td>🔥 2" to go!</td>
+                    </tr>
+                    <tr>
+                        <td>Approach Vertical</td>
+                        <td>32"</td>
+                        <td>2026-06-01</td>
+                        <td>34"</td>
+                        <td>📈 In progress</td>
+                    </tr>
+                    <tr>
+                        <td>Back Squat</td>
+                        <td>200 lbs</td>
+                        <td>2026-05-15</td>
+                        <td>255 lbs</td>
+                        <td>💪 Keep pushing</td>
+                    </tr>
+                    <tr>
+                        <td>Trap Bar DL</td>
+                        <td>280 lbs</td>
+                        <td>2026-05-20</td>
+                        <td>340 lbs</td>
+                        <td>⚡ Almost there</td>
+                    </tr>
+                    <tr>
+                        <td>RSI (Drop Jump)</td>
+                        <td>1.40</td>
+                        <td>2026-06-05</td>
+                        <td>1.50</td>
+                        <td>🎯 Target zone</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="btn" style="margin-top: 1rem;" onclick="addPR()">
+                <span>➕</span> Add New PR
+            </button>
+        </div>
 
-<div class="card">
-<h3><span class="card-icon">📈</span> 12-Week Projection</h3>
-<div class="chart-container">
-<div class="chart-bar" id="projectionChart">
-<div class="chart-column" style="height: 50%; background: linear-gradient(to top, var(--secondary), var(--secondary));">
-<span class="chart-value">28"</span>
-<span class="chart-label">Now</span>
-</div>
-<div class="chart-column" style="height: 55%; background: linear-gradient(to top, var(--secondary), var(--secondary));">
-<span class="chart-value">30"</span>
-<span class="chart-label">Month 1</span>
-</div>
-<div class="chart-column" style="height: 65%; background: linear-gradient(to top, var(--secondary), var(--secondary));">
-<span class="chart-value">32"</span>
-<span class="chart-label">Month 2</span>
-</div>
-<div class="chart-column" style="height: 75%; background: linear-gradient(to top, var(--secondary), var(--accent));">
-<span class="chart-value">34"</span>
-<span class="chart-label">Month 3</span>
-</div>
-<div class="chart-column" style="height: 85%; background: linear-gradient(to top, var(--accent), var(--primary));">
-<span class="chart-value">36"</span>
-<span class="chart-label">DUNK!</span>
-</div>
-</div>
-</div>
-<p style="text-align: center; margin-top: 1rem; color: var(--accent);">🎯 Target: 34"+ approach vertical for consistent 10' rim dunks</p>
-</div>
-</section>
+        <div class="card">
+            <h3><span class="card-icon">📈</span> 12-Week Projection</h3>
+            <div class="chart-container">
+                <div class="chart-bar" id="projectionChart">
+                    <div class="chart-column" style="height: 50%; background: linear-gradient(to top, var(--secondary), var(--secondary));">
+                        <span class="chart-value">28"</span>
+                        <span class="chart-label">Now</span>
+                    </div>
+                    <div class="chart-column" style="height: 55%; background: linear-gradient(to top, var(--secondary), var(--secondary));">
+                        <span class="chart-value">30"</span>
+                        <span class="chart-label">Month 1</span>
+                    </div>
+                    <div class="chart-column" style="height: 65%; background: linear-gradient(to top, var(--secondary), var(--secondary));">
+                        <span class="chart-value">32"</span>
+                        <span class="chart-label">Month 2</span>
+                    </div>
+                    <div class="chart-column" style="height: 75%; background: linear-gradient(to top, var(--secondary), var(--accent));">
+                        <span class="chart-value">34"</span>
+                        <span class="chart-label">Month 3</span>
+                    </div>
+                    <div class="chart-column" style="height: 85%; background: linear-gradient(to top, var(--accent), var(--primary));">
+                        <span class="chart-value">36"</span>
+                        <span class="chart-label">DUNK!</span>
+                    </div>
+                </div>
+            </div>
+            <p style="text-align: center; margin-top: 1rem; color: var(--accent);">
+                🎯 Target: 34"+ approach vertical for consistent 10' rim dunks
+            </p>
+        </div>
+    </section>
 
-<section id="skills" class="content-section">
-<div class="card-grid">
-<div class="card">
-<h3><span class="card-icon">🦶</span> Footwork Drills</h3>
-<ul class="exercise-list">
-<li class="exercise-item">
-<div>
-<div class="exercise-name">2-Step Approach</div>
-<div class="exercise-details">Jab step → gather → explode</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">3-Step Approach</div>
-<div class="exercise-details">Max height off one foot</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Penultimate Step</div>
-<div class="exercise-details">Long second-to-last step, short last step</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Euro-Step Gather</div>
-<div class="exercise-details">Two-foot gather for power</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-</ul>
-</div>
+    <!-- Skills Section -->
+    <section id="skills" class="content-section">
+        <div class="card-grid">
+            <div class="card">
+                <h3><span class="card-icon">🦶</span> Footwork Drills</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">2-Step Approach</div>
+                            <div class="exercise-details">Jab step → gather → explode</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">3-Step Approach</div>
+                            <div class="exercise-details">Max height off one foot</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Penultimate Step</div>
+                            <div class="exercise-details">Long second-to-last step, short last step</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Euro-Step Gather</div>
+                            <div class="exercise-details">Two-foot gather for power</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                </ul>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">🏀</span> Ball-Handling Jumps</h3>
-<ul class="exercise-list">
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Dribble Approach Jump</div>
-<div class="exercise-details">Full dribble into gather jump</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Toss & Catch Jump</div>
-<div class="exercise-details">React to ball, secure, jump</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Alley-Oop Prep</div>
-<div class="exercise-details">Timing with passer</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-</ul>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">🏀</span> Ball-Handling Jumps</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Dribble Approach Jump</div>
+                            <div class="exercise-details">Full dribble into gather jump</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Toss & Catch Jump</div>
+                            <div class="exercise-details">React to ball, secure, jump</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Alley-Oop Prep</div>
+                            <div class="exercise-details">Timing with passer</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                </ul>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">🎯</span> Rim Touch Progression</h3>
-<div class="progress-container">
-<div class="progress-label">
-<span>Standing Reach + 6"</span>
-<span id="prog1">Complete</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" style="width: 100%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Standing Reach + 12"</span>
-<span id="prog2">In Progress</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" style="width: 70%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Rim Touch (Standing)</span>
-<span id="prog3">Next Goal</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" style="width: 40%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Tennis Ball Dunk</span>
-<span id="prog4">Locked</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" style="width: 0%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Volleyball Dunk</span>
-<span id="prog5">Locked</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" style="width: 0%"></div>
-</div>
-</div>
-<div class="progress-container">
-<div class="progress-label">
-<span>Basketball Dunk!</span>
-<span id="prog6">Locked</span>
-</div>
-<div class="progress-bar">
-<div class="progress-fill" style="width: 0%"></div>
-</div>
-</div>
-</div>
+            <div class="card">
+                <h3><span class="card-icon">🎯</span> Rim Touch Progression</h3>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Standing Reach + 6"</span>
+                        <span id="prog1">Complete</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Standing Reach + 12"</span>
+                        <span id="prog2">In Progress</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 70%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Rim Touch (Standing)</span>
+                        <span id="prog3">Next Goal</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 40%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Tennis Ball Dunk</span>
+                        <span id="prog4">Locked</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Volleyball Dunk</span>
+                        <span id="prog5">Locked</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-label">
+                        <span>Basketball Dunk!</span>
+                        <span id="prog6">Locked</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 0%"></div>
+                    </div>
+                </div>
+            </div>
 
-<div class="card">
-<h3><span class="card-icon">⚡</span> Game Situations</h3>
-<ul class="exercise-list">
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Fast Break Dunk</div>
-<div class="exercise-details">Full court sprint, receive pass, finish</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Baseline Drive</div>
-<div class="exercise-details">One-foot takeoff from angle</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Backdoor Cut</div>
-<div class="exercise-details">Two-foot gather from moving receive</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-<li class="exercise-item">
-<div>
-<div class="exercise-name">Putback Dunk</div>
-<div class="exercise-details">Second jump timing off missed shot</div>
-</div>
-<button class="check-btn" onclick="toggleComplete(this)"></button>
-</li>
-</ul>
-</div>
-</div>
-</section>
+            <div class="card">
+                <h3><span class="card-icon">⚡</span> Game Situations</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Fast Break Dunk</div>
+                            <div class="exercise-details">Full court sprint, receive pass, finish</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Baseline Drive</div>
+                            <div class="exercise-details">One-foot takeoff from angle</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Backdoor Cut</div>
+                            <div class="exercise-details">Two-foot gather from moving receive</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">Putback Dunk</div>
+                            <div class="exercise-details">Second jump timing off missed shot</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-<div class="modal-overlay" id="prModal">
-<div class="modal-content">
-<div class="modal-header">
-<h3>Add New Personal Record</h3>
-<button class="close-btn" onclick="closeModal()">&times;</button>
-</div>
-<div class="input-group">
-<label>Exercise</label>
-<input type="text" id="modalExercise" placeholder="e.g., Back Squat">
-</div>
-<div class="input-group">
-<label>Result</label>
-<input type="text" id="modalResult" placeholder="e.g., 225 lbs">
-</div>
-<div class="input-group">
-<label>Date</label>
-<input type="date" id="modalDate">
-</div>
-<div class="input-group">
-<label>Goal</label>
-<input type="text" id="modalGoal" placeholder="e.g., 255 lbs">
-</div>
-<button class="btn" onclick="savePR()">Save PR</button>
-</div>
-</div>
+    <!-- Modal for adding PR -->
+    <div class="modal-overlay" id="prModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Add New Personal Record</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="input-group">
+                <label>Exercise</label>
+                <input type="text" id="modalExercise" placeholder="e.g., Back Squat">
+            </div>
+            <div class="input-group">
+                <label>Result</label>
+                <input type="text" id="modalResult" placeholder="e.g., 225 lbs">
+            </div>
+            <div class="input-group">
+                <label>Date</label>
+                <input type="date" id="modalDate">
+            </div>
+            <div class="input-group">
+                <label>Goal</label>
+                <input type="text" id="modalGoal" placeholder="e.g., 255 lbs">
+            </div>
+            <button class="btn" onclick="savePR()">Save PR</button>
+        </div>
+    </div>
 
-<footer class="footer">
-<p>5'10" PG Dunk System • Built for transition play, steals, blocks, and dunks</p>
-<p style="margin-top: 0.5rem; font-size: 0.8rem;">Train smart. Jump high. Dunk on them.</p>
-</footer>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>5'10" PG Dunk System • Built for transition play, steals, blocks, and dunks</p>
+        <p style="margin-top: 0.5rem; font-size: 0.8rem;">Train smart. Jump high. Dunk on them.</p>
+    </footer>
 
-<script>
-function showSection(sectionId) {
-    document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
-    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    event.target.classList.add('active');
-}
+    <script>
+        // Navigation
+        function showSection(sectionId) {
+            document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
 
-function updateProfile() {
-    const height = parseInt(document.getElementById('profileHeight').value) || 70;
-    const reach = parseInt(document.getElementById('profileReach').value) || 90;
-    const vert = parseInt(document.getElementById('currentVert').textContent) || 28;
+        // Profile Updates
+        function updateProfile() {
+            const height = parseInt(document.getElementById('profileHeight').value) || 70;
+            const reach = parseInt(document.getElementById('profileReach').value) || 90;
+            const vert = parseInt(document.getElementById('currentVert').textContent) || 28;
+            
+            const rimHeight = 120; // 10 feet
+            const maxReach = reach + vert;
+            const needed = rimHeight - maxReach + 6; // 6 inches for ball clearance
+            
+            document.getElementById('dunkProgressText').textContent = needed > 0 ? `Need ${needed}" more` : 'Dunk Ready!';
+            document.getElementById('dunkProgress').style.width = Math.max(0, Math.min(100, (vert / 36) * 100)) + '%';
+        }
 
-    const rimHeight = 120;
-    const maxReach = reach + vert;
-    const needed = rimHeight - maxReach + 6;
+        // Calculators
+        function calculateVertical() {
+            const reach = parseFloat(document.getElementById('calcReach').value);
+            const maxReach = parseFloat(document.getElementById('calcMaxReach').value);
+            const vert = maxReach - reach;
+            
+            document.getElementById('vertValue').textContent = vert + '"';
+            
+            const rimHeight = 120;
+            const needed = rimHeight - maxReach + 6;
+            
+            const dunkText = needed > 0 ? `Need ${needed.toFixed(1)}" more for 10' rim` : 'You can dunk! 🎉';
+            document.getElementById('dunkNeed').textContent = dunkText;
+            
+            document.getElementById('vertResult').classList.add('show');
+        }
 
-    document.getElementById('dunkProgressText').textContent = needed > 0 ? 'Need ' + needed + '" more' : 'Dunk Ready!';
-    document.getElementById('dunkProgress').style.width = Math.max(0, Math.min(100, (vert / 36) * 100)) + '%';
-}
+        function updateStrengthStandards() {
+            const bw = parseFloat(document.getElementById('calcBW').value) || 170;
+            const squat = parseFloat(document.getElementById('currentSquat').value) || 0;
+            const dl = parseFloat(document.getElementById('currentDL').value) || 0;
+            const clean = parseFloat(document.getElementById('currentClean').value) || 0;
+            
+            const squatGoal = bw * 1.5;
+            const dlGoal = bw * 2;
+            const cleanGoal = bw;
+            
+            document.getElementById('squatGoal').textContent = squatGoal.toFixed(0) + ' lbs';
+            document.getElementById('dlGoal').textContent = dlGoal.toFixed(0) + ' lbs';
+            document.getElementById('cleanGoal').textContent = cleanGoal.toFixed(0) + ' lbs';
+            
+            document.getElementById('squatProgress').style.width = Math.min(100, (squat / squatGoal) * 100) + '%';
+            document.getElementById('dlProgress').style.width = Math.min(100, (dl / dlGoal) * 100) + '%';
+            document.getElementById('cleanProgress').style.width = Math.min(100, (clean / cleanGoal) * 100) + '%';
+        }
 
-function calculateVertical() {
-    const reach = parseFloat(document.getElementById('calcReach').value);
-    const maxReach = parseFloat(document.getElementById('calcMaxReach').value);
-    const vert = maxReach - reach;
+        function calculateRSI() {
+            const jump = parseFloat(document.getElementById('rsiJump').value);
+            const time = parseFloat(document.getElementById('rsiTime').value);
+            const rsi = (jump / 100) / time;
+            
+            document.getElementById('rsiValue').textContent = rsi.toFixed(2);
+            
+            let rating = '';
+            if (rsi < 1.0) rating = 'Needs work - focus on landing stiffness';
+            else if (rsi < 1.3) rating = 'Average - keep training reactive jumps';
+            else if (rsi < 1.5) rating = 'Good - you\'re reactive!';
+            else if (rsi < 1.8) rating = 'Excellent - elite reactive strength!';
+            else rating = 'Elite - NBA-level RSI!';
+            
+            document.getElementById('rsiRating').textContent = rating;
+            document.getElementById('rsiResult').classList.add('show');
+        }
 
-    document.getElementById('vertValue').textContent = vert + '"';
+        function updateApproach() {
+            const speed = document.getElementById('approachSpeed').value;
+            const labels = ['Very Slow', 'Slow', 'Moderate', 'Fast', 'Sprint'];
+            const labelIndex = Math.min(4, Math.floor((speed - 1) / 2));
+            document.getElementById('speedDisplay').textContent = speed + ' - ' + labels[labelIndex];
+        }
 
-    const rimHeight = 120;
-    const needed = rimHeight - maxReach + 6;
+        function calculateApproach() {
+            const stand = parseFloat(document.getElementById('standVert').value);
+            const speed = parseFloat(document.getElementById('approachSpeed').value);
+            
+            // Approach typically adds 10-20% based on speed
+            const multiplier = 1 + (speed / 10) * 0.2;
+            const approach = stand * multiplier;
+            
+            document.getElementById('approachValue').textContent = approach.toFixed(1) + '"';
+            
+            let tip = '';
+            if (speed < 4) tip = 'Speed up! You need momentum for approach vert.';
+            else if (speed > 8) tip = 'Great speed! Focus on converting horizontal to vertical force.';
+            else tip = 'Good approach speed! Focus on penultimate step.';
+            
+            document.getElementById('approachTip').textContent = tip;
+            document.getElementById('approachResult').classList.add('show');
+        }
 
-    const dunkText = needed > 0 ? 'Need ' + needed.toFixed(1) + '" more for 10' rim' : 'You can dunk!';
-    document.getElementById('dunkNeed').textContent = dunkText;
+        // Workout Loading
+        const workouts = {
+            monday: {
+                title: 'Monday: Maximal Strength + Slow SSC',
+                subtitle: 'Goal: Increase force production for dunk height',
+                exercises: [
+                    { name: 'Trap Bar Deadlift', details: '4 sets x 5 reps @ 80-85% 1RM' },
+                    { name: 'Back Squat', details: '4 sets x 5 reps @ 80-85% 1RM' },
+                    { name: 'Bulgarian Split Squat', details: '3 sets x 6-8 reps/leg' },
+                    { name: 'Standing Calf Raise', details: '4 sets x 6-8 reps @ 1x BW' },
+                    { name: 'Nordic Hamstring Curl', details: '3 sets x 5-8 reps' },
+                    { name: 'Box Jumps', details: '4 sets x 3 reps (24-30")' },
+                    { name: 'Seated Jumps', details: '3 sets x 3 reps' }
+                ]
+            },
+            wednesday: {
+                title: 'Wednesday: Reactive Plyometrics (Fast SSC)',
+                subtitle: 'Goal: Steals, blocks, transition speed, second jumps',
+                exercises: [
+                    { name: 'Ankle Pogos (Vertical)', details: '3 sets x 20 reps, <200ms contact' },
+                    { name: 'Lateral Pogos', details: '3 sets x 16 reps (8 each), <200ms' },
+                    { name: '45° Skater Jumps', details: '3 sets x 12 reps (6 each), <250ms' },
+                    { name: 'Mini Hurdle Hops', details: '4 sets x 6 reps, stiff landings' },
+                    { name: 'Single-Leg Hurdle Hops', details: '3 sets x 5/leg' },
+                    { name: 'Continuous Broad Jumps', details: '3 sets x 5 reps' },
+                    { name: 'Drop Jump to Vertical', details: '4 sets x 3 reps, 20-30cm box' },
+                    { name: '10-5 Hop Test', details: '1 round, measure best 5 RSI' }
+                ]
+            },
+            friday: {
+                title: 'Friday: Power/Speed + Lateral Movement',
+                subtitle: 'Goal: First-step explosion, defensive slides, transition attack',
+                exercises: [
+                    { name: 'Power Clean / Hang Clean', details: '5 sets x 3 reps @ 70-75% 1RM' },
+                    { name: 'Kettlebell Swing', details: '4 sets x 8 reps (heavy, 24-32kg)' },
+                    { name: 'Sled Push', details: '4 sets x 20 yards, heavy load' },
+                    { name: 'Resisted Sprint', details: '4 sets x 15 yards, 10-15% BW' },
+                    { name: 'Skater Jumps 45° Continuous', details: '3 sets x 8 each direction' },
+                    { name: 'Single-Leg Broad Jump to 90° Turn', details: '3 sets x 4 each leg' },
+                    { name: 'Lateral Bounds', details: '3 sets x 6 each' },
+                    { name: 'Pro-Agility Shuttle (5-10-5)', details: '4 sets, goal <4.2s' }
+                ]
+            },
+            saturday: {
+                title: 'Saturday: Dunk Technique & Approach Jumps',
+                subtitle: 'Goal: Convert gym power to actual dunks',
+                exercises: [
+                    { name: 'Approach Footwork Drills', details: '2-step and 3-step approaches, 10 min' },
+                    { name: 'Rim Touches', details: 'Standing reach + 6", then +12", 3x5' },
+                    { name: 'Ball-Handling Jumps', details: 'Dribble approach + jump, 3x5' },
+                    { name: 'Toss & Catch Jumps', details: 'React to ball, secure, jump, 3x5' },
+                    { name: 'Tennis Ball Dunk Attempts', details: 'Lower rim if needed, 5 attempts' },
+                    { name: 'Approach Vertical Jumps', details: '5 max attempts, measure best' },
+                    { name: 'Single-Leg Approach Jumps', details: '3 each leg, euro-step practice' }
+                ]
+            }
+        };
 
-    document.getElementById('vertResult').classList.add('show');
-}
+        function loadWorkout(day) {
+            const w = workouts[day];
+            let html = `
+                <div class="card" style="margin-bottom: 1rem;">
+                    <h3>${w.title}</h3>
+                    <p style="color: var(--warning); margin-bottom: 1rem;">${w.subtitle}</p>
+                    <ul class="exercise-list">
+            `;
+            
+            w.exercises.forEach(ex => {
+                html += `
+                    <li class="exercise-item">
+                        <div>
+                            <div class="exercise-name">${ex.name}</div>
+                            <div class="exercise-details">${ex.details}</div>
+                        </div>
+                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                    </li>
+                `;
+            });
+            
+            html += '</ul></div>';
+            document.getElementById('workoutDisplay').innerHTML = html;
+        }
 
-function updateStrengthStandards() {
-    const bw = parseFloat(document.getElementById('calcBW').value) || 170;
-    const squat = parseFloat(document.getElementById('currentSquat').value) || 0;
-    const dl = parseFloat(document.getElementById('currentDL').value) || 0;
-    const clean = parseFloat(document.getElementById('currentClean').value) || 0;
+        function toggleComplete(btn) {
+            btn.classList.toggle('completed');
+            checkAllComplete();
+        }
 
-    const squatGoal = bw * 1.5;
-    const dlGoal = bw * 2;
-    const cleanGoal = bw;
+        function checkAllComplete() {
+            const allBtns = document.querySelectorAll('.exercise-item .check-btn');
+            const completed = document.querySelectorAll('.exercise-item .check-btn.completed');
+            
+            if (allBtns.length > 0 && allBtns.length === completed.length) {
+                // All exercises complete - could trigger achievement
+                document.getElementById('badge1').classList.add('unlocked');
+                document.getElementById('badge1').classList.remove('locked');
+            }
+        }
 
-    document.getElementById('squatGoal').textContent = squatGoal.toFixed(0) + ' lbs';
-    document.getElementById('dlGoal').textContent = dlGoal.toFixed(0) + ' lbs';
-    document.getElementById('cleanGoal').textContent = cleanGoal.toFixed(0) + ' lbs';
+        // Timer Functions
+        let timerInterval;
+        let timerSeconds = 0;
+        let timerRunning = false;
 
-    document.getElementById('squatProgress').style.width = Math.min(100, (squat / squatGoal) * 100) + '%';
-    document.getElementById('dlProgress').style.width = Math.min(100, (dl / dlGoal) * 100) + '%';
-    document.getElementById('cleanProgress').style.width = Math.min(100, (clean / cleanGoal) * 100) + '%';
-}
+        function startTimer() {
+            if (!timerRunning) {
+                timerRunning = true;
+                timerInterval = setInterval(() => {
+                    timerSeconds++;
+                    updateTimerDisplay();
+                }, 1000);
+            }
+        }
 
-function calculateRSI() {
-    const jump = parseFloat(document.getElementById('rsiJump').value);
-    const time = parseFloat(document.getElementById('rsiTime').value);
-    const rsi = (jump / 100) / time;
+        function pauseTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+        }
 
-    document.getElementById('rsiValue').textContent = rsi.toFixed(2);
-
-    let rating = '';
-    if (rsi < 1.0) rating = 'Needs work - focus on landing stiffness';
-    else if (rsi < 1.3) rating = 'Average - keep training reactive jumps';
-    else if (rsi < 1.5) rating = 'Good - you are reactive!';
-    else if (rsi < 1.8) rating = 'Excellent - elite reactive strength!';
-    else rating = 'Elite - NBA-level RSI!';
-
-    document.getElementById('rsiRating').textContent = rating;
-    document.getElementById('rsiResult').classList.add('show');
-}
-
-function updateApproach() {
-    const speed = document.getElementById('approachSpeed').value;
-    const labels = ['Very Slow', 'Slow', 'Moderate', 'Fast', 'Sprint'];
-    const labelIndex = Math.min(4, Math.floor((speed - 1) / 2));
-    document.getElementById('speedDisplay').textContent = speed + ' - ' + labels[labelIndex];
-}
-
-function calculateApproach() {
-    const stand = parseFloat(document.getElementById('standVert').value);
-    const speed = parseFloat(document.getElementById('approachSpeed').value);
-
-    const multiplier = 1 + (speed / 10) * 0.2;
-    const approach = stand * multiplier;
-
-    document.getElementById('approachValue').textContent = approach.toFixed(1) + '"';
-
-    let tip = '';
-    if (speed < 4) tip = 'Speed up! You need momentum for approach vert.';
-    else if (speed > 8) tip = 'Great speed! Focus on converting horizontal to vertical force.';
-    else tip = 'Good approach speed! Focus on penultimate step.';
-
-    document.getElementById('approachTip').textContent = tip;
-    document.getElementById('approachResult').classList.add('show');
-}
-
-const workouts = {
-    monday: {
-        title: 'Monday: Maximal Strength + Slow SSC',
-        subtitle: 'Goal: Increase force production for dunk height',
-        exercises: [
-            { name: 'Trap Bar Deadlift', details: '4 sets x 5 reps @ 80-85% 1RM' },
-            { name: 'Back Squat', details: '4 sets x 5 reps @ 80-85% 1RM' },
-            { name: 'Bulgarian Split Squat', details: '3 sets x 6-8 reps/leg' },
-            { name: 'Standing Calf Raise', details: '4 sets x 6-8 reps @ 1x BW' },
-            { name: 'Nordic Hamstring Curl', details: '3 sets x 5-8 reps' },
-            { name: 'Box Jumps', details: '4 sets x 3 reps (24-30")' },
-            { name: 'Seated Jumps', details: '3 sets x 3 reps' }
-        ]
-    },
-    wednesday: {
-        title: 'Wednesday: Reactive Plyometrics (Fast SSC)',
-        subtitle: 'Goal: Steals, blocks, transition speed, second jumps',
-        exercises: [
-            { name: 'Ankle Pogos (Vertical)', details: '3 sets x 20 reps, <200ms contact' },
-            { name: 'Lateral Pogos', details: '3 sets x 16 reps (8 each), <200ms' },
-            { name: '45 Skater Jumps', details: '3 sets x 12 reps (6 each), <250ms' },
-            { name: 'Mini Hurdle Hops', details: '4 sets x 6 reps, stiff landings' },
-            { name: 'Single-Leg Hurdle Hops', details: '3 sets x 5/leg' },
-            { name: 'Continuous Broad Jumps', details: '3 sets x 5 reps' },
-            { name: 'Drop Jump to Vertical', details: '4 sets x 3 reps, 20-30cm box' },
-            { name: '10-5 Hop Test', details: '1 round, measure best 5 RSI' }
-        ]
-    },
-    friday: {
-        title: 'Friday: Power/Speed + Lateral Movement',
-        subtitle: 'Goal: First-step explosion, defensive slides, transition attack',
-        exercises: [
-            { name: 'Power Clean / Hang Clean', details: '5 sets x 3 reps @ 70-75% 1RM' },
-            { name: 'Kettlebell Swing', details: '4 sets x 8 reps (heavy, 24-32kg)' },
-            { name: 'Sled Push', details: '4 sets x 20 yards, heavy load' },
-            { name: 'Resisted Sprint', details: '4 sets x 15 yards, 10-15% BW' },
-            { name: 'Skater Jumps 45 Continuous', details: '3 sets x 8 each direction' },
-            { name: 'Single-Leg Broad Jump to 90 Turn', details: '3 sets x 4 each leg' },
-            { name: 'Lateral Bounds', details: '3 sets x 6 each' },
-            { name: 'Pro-Agility Shuttle (5-10-5)', details: '4 sets, goal <4.2s' }
-        ]
-    },
-    saturday: {
-        title: 'Saturday: Dunk Technique & Approach Jumps',
-        subtitle: 'Goal: Convert gym power to actual dunks',
-        exercises: [
-            { name: 'Approach Footwork Drills', details: '2-step and 3-step approaches, 10 min' },
-            { name: 'Rim Touches', details: 'Standing reach + 6", then +12", 3x5' },
-            { name: 'Ball-Handling Jumps', details: 'Dribble approach + jump, 3x5' },
-            { name: 'Toss & Catch Jumps', details: 'React to ball, secure, jump, 3x5' },
-            { name: 'Tennis Ball Dunk Attempts', details: 'Lower rim if needed, 5 attempts' },
-            { name: 'Approach Vertical Jumps', details: '5 max attempts, measure best' },
-            { name: 'Single-Leg Approach Jumps', details: '3 each leg, euro-step practice' }
-        ]
-    }
-};
-
-function loadWorkout(day) {
-    const w = workouts[day];
-    let html = '<div class="card" style="margin-bottom: 1rem;"><h3>' + w.title + '</h3>';
-    html += '<p style="color: var(--warning); margin-bottom: 1rem;">' + w.subtitle + '</p>';
-    html += '<ul class="exercise-list">';
-
-    w.exercises.forEach(ex => {
-        html += '<li class="exercise-item"><div><div class="exercise-name">' + ex.name + '</div>';
-        html += '<div class="exercise-details">' + ex.details + '</div></div>';
-        html += '<button class="check-btn" onclick="toggleComplete(this)"></button></li>';
-    });
-
-    html += '</ul></div>';
-    document.getElementById('workoutDisplay').innerHTML = html;
-}
-
-function toggleComplete(btn) {
-    btn.classList.toggle('completed');
-    checkAllComplete();
-}
-
-function checkAllComplete() {
-    const allBtns = document.querySelectorAll('.exercise-item .check-btn');
-    const completed = document.querySelectorAll('.exercise-item .check-btn.completed');
-
-    if (allBtns.length > 0 && allBtns.length === completed.length) {
-        document.getElementById('badge1').classList.add('unlocked');
-        document.getElementById('badge1').classList.remove('locked');
-    }
-}
-
-let timerInterval;
-let timerSeconds = 0;
-let timerRunning = false;
-
-function startTimer() {
-    if (!timerRunning) {
-        timerRunning = true;
-        timerInterval = setInterval(() => {
-            timerSeconds++;
+        function resetTimer() {
+            timerRunning = false;
+            clearInterval(timerInterval);
+            timerSeconds = 0;
             updateTimerDisplay();
-        }, 1000);
-    }
-}
+        }
 
-function pauseTimer() {
-    timerRunning = false;
-    clearInterval(timerInterval);
-}
+        function setTimer(seconds) {
+            resetTimer();
+            timerSeconds = seconds;
+            updateTimerDisplay();
+            startTimer();
+        }
 
-function resetTimer() {
-    timerRunning = false;
-    clearInterval(timerInterval);
-    timerSeconds = 0;
-    updateTimerDisplay();
-}
+        function updateTimerDisplay() {
+            const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
+            const secs = (timerSeconds % 60).toString().padStart(2, '0');
+            document.getElementById('mainTimer').textContent = `${mins}:${secs}`;
+        }
 
-function setTimer(seconds) {
-    resetTimer();
-    timerSeconds = seconds;
-    updateTimerDisplay();
-    startTimer();
-}
+        // RSI Timer
+        let rsiStartTime;
+        let rsiRunning = false;
 
-function updateTimerDisplay() {
-    const mins = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-    const secs = (timerSeconds % 60).toString().padStart(2, '0');
-    document.getElementById('mainTimer').textContent = mins + ':' + secs;
-}
+        function startRSITimer() {
+            rsiStartTime = performance.now();
+            rsiRunning = true;
+            document.getElementById('rsiTimer').textContent = 'Timing...';
+        }
 
-let rsiStartTime;
-let rsiRunning = false;
+        function stopRSITimer() {
+            if (rsiRunning) {
+                const elapsed = (performance.now() - rsiStartTime) / 1000;
+                document.getElementById('rsiTimer').textContent = elapsed.toFixed(3) + 's';
+                rsiRunning = false;
+            }
+        }
 
-function startRSITimer() {
-    rsiStartTime = performance.now();
-    rsiRunning = true;
-    document.getElementById('rsiTimer').textContent = 'Timing...';
-}
+        // Sprint Timer
+        let sprintStartTime;
+        let sprintInterval;
 
-function stopRSITimer() {
-    if (rsiRunning) {
-        const elapsed = (performance.now() - rsiStartTime) / 1000;
-        document.getElementById('rsiTimer').textContent = elapsed.toFixed(3) + 's';
-        rsiRunning = false;
-    }
-}
+        function startSprintTimer() {
+            sprintStartTime = performance.now();
+            sprintInterval = setInterval(() => {
+                const elapsed = (performance.now() - sprintStartTime) / 1000;
+                document.getElementById('sprintTimer').textContent = elapsed.toFixed(2) + 's';
+            }, 10);
+        }
 
-let sprintStartTime;
-let sprintInterval;
+        function stopSprintTimer() {
+            clearInterval(sprintInterval);
+            const elapsed = (performance.now() - sprintStartTime) / 1000;
+            document.getElementById('sprintTimer').textContent = elapsed.toFixed(2) + 's';
+        }
 
-function startSprintTimer() {
-    sprintStartTime = performance.now();
-    sprintInterval = setInterval(() => {
-        const elapsed = (performance.now() - sprintStartTime) / 1000;
-        document.getElementById('sprintTimer').textContent = elapsed.toFixed(2) + 's';
-    }, 10);
-}
+        // Progress Chart
+        let chartData = [24, 26, 28, 30, 32, 34, 36];
 
-function stopSprintTimer() {
-    clearInterval(sprintInterval);
-    const elapsed = (performance.now() - sprintStartTime) / 1000;
-    document.getElementById('sprintTimer').textContent = elapsed.toFixed(2) + 's';
-}
+        function addDataPoint() {
+            const newValue = prompt('Enter your vertical jump (inches):');
+            if (newValue && !isNaN(newValue)) {
+                chartData.push(parseInt(newValue));
+                updateChart();
+            }
+        }
 
-let chartData = [24, 26, 28, 30, 32, 34, 36];
+        function clearChart() {
+            chartData = [];
+            updateChart();
+        }
 
-function addDataPoint() {
-    const newValue = prompt('Enter your vertical jump (inches):');
-    if (newValue && !isNaN(newValue)) {
-        chartData.push(parseInt(newValue));
-        updateChart();
-    }
-}
+        function updateChart() {
+            const chart = document.getElementById('progressChart');
+            if (chartData.length === 0) {
+                chart.innerHTML = '<div style="text-align: center; color: var(--warning);">No data yet. Add measurements!</div>';
+                return;
+            }
+            
+            const maxVal = Math.max(...chartData);
+            chart.innerHTML = '';
+            
+            chartData.forEach((val, idx) => {
+                const height = (val / maxVal) * 100;
+                const col = document.createElement('div');
+                col.className = 'chart-column';
+                col.style.height = height + '%';
+                col.innerHTML = `
+                    <span class="chart-value">${val}"</span>
+                    <span class="chart-label">Week ${idx * 2}</span>
+                `;
+                chart.appendChild(col);
+            });
+        }
 
-function clearChart() {
-    chartData = [];
-    updateChart();
-}
+        // PR Management
+        function addPR() {
+            document.getElementById('prModal').classList.add('show');
+            document.getElementById('modalDate').value = new Date().toISOString().split('T')[0];
+        }
 
-function updateChart() {
-    const chart = document.getElementById('progressChart');
-    if (chartData.length === 0) {
-        chart.innerHTML = '<div style="text-align: center; color: var(--warning);">No data yet. Add measurements!</div>';
-        return;
-    }
+        function closeModal() {
+            document.getElementById('prModal').classList.remove('show');
+        }
 
-    const maxVal = Math.max(...chartData);
-    chart.innerHTML = '';
+        function savePR() {
+            const exercise = document.getElementById('modalExercise').value;
+            const result = document.getElementById('modalResult').value;
+            const date = document.getElementById('modalDate').value;
+            const goal = document.getElementById('modalGoal').value;
+            
+            if (exercise && result) {
+                const tbody = document.getElementById('prTableBody');
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${exercise}</td>
+                    <td class="new-pr">${result}</td>
+                    <td>${date}</td>
+                    <td>${goal || '-'}</td>
+                    <td>🎉 New PR!</td>
+                `;
+                tbody.appendChild(row);
+                closeModal();
+            }
+        }
 
-    chartData.forEach((val, idx) => {
-        const height = (val / maxVal) * 100;
-        const col = document.createElement('div');
-        col.className = 'chart-column';
-        col.style.height = height + '%';
-        col.innerHTML = '<span class="chart-value">' + val + '"</span><span class="chart-label">Week ' + (idx * 2) + '</span>';
-        chart.appendChild(col);
-    });
-}
+        // Notes
+        function saveNotes() {
+            const notes = document.getElementById('trainingNotes').value;
+            if (notes) {
+                const saved = document.getElementById('savedNotes');
+                const noteDiv = document.createElement('div');
+                noteDiv.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--primary);';
+                noteDiv.innerHTML = `<strong>${new Date().toLocaleDateString()}</strong><br>${notes}`;
+                saved.prepend(noteDiv);
+                document.getElementById('trainingNotes').value = '';
+            }
+        }
 
-function addPR() {
-    document.getElementById('prModal').classList.add('show');
-    document.getElementById('modalDate').value = new Date().toISOString().split('T')[0];
-}
-
-function closeModal() {
-    document.getElementById('prModal').classList.remove('show');
-}
-
-function savePR() {
-    const exercise = document.getElementById('modalExercise').value;
-    const result = document.getElementById('modalResult').value;
-    const date = document.getElementById('modalDate').value;
-    const goal = document.getElementById('modalGoal').value;
-
-    if (exercise && result) {
-        const tbody = document.getElementById('prTableBody');
-        const row = document.createElement('tr');
-        row.innerHTML = '<td>' + exercise + '</td><td class="new-pr">' + result + '</td><td>' + date + '</td><td>' + (goal || '-') + '</td><td>🎉 New PR!</td>';
-        tbody.appendChild(row);
-        closeModal();
-    }
-}
-
-function saveNotes() {
-    const notes = document.getElementById('trainingNotes').value;
-    if (notes) {
-        const saved = document.getElementById('savedNotes');
-        const noteDiv = document.createElement('div');
-        noteDiv.style.cssText = 'background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 8px; margin-bottom: 0.5rem; border-left: 3px solid var(--primary);';
-        noteDiv.innerHTML = '<strong>' + new Date().toLocaleDateString() + '</strong><br>' + notes;
-        saved.prepend(noteDiv);
-        document.getElementById('trainingNotes').value = '';
-    }
-}
-
-document.addEventListener('DOMContentLoaded', () => {
-    updateProfile();
-    updateStrengthStandards();
-
-    const days = ['day1', 'day2', 'day3', 'day4'];
-    const today = new Date().getDay();
-    const dayMap = {1: 0, 3: 1, 5: 2, 6: 3};
-
-    if (dayMap[today] !== undefined) {
-        document.getElementById(days[dayMap[today]]).classList.add('active-day');
-    }
-});
-</script>
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            updateProfile();
+            updateStrengthStandards();
+            
+            // Highlight current day
+            const days = ['day1', 'day2', 'day3', 'day4'];
+            const dayNames = ['Monday', 'Wednesday', 'Friday', 'Saturday'];
+            const today = new Date().getDay();
+            const dayMap = {1: 0, 3: 1, 5: 2, 6: 3};
+            
+            if (dayMap[today] !== undefined) {
+                document.getElementById(days[dayMap[today]]).classList.add('active-day');
+            }
+        });
+    </script>
 </body>
 </html>
