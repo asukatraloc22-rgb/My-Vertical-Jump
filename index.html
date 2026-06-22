@@ -358,6 +358,7 @@
         <button class="nav-tab" onclick="showSection(event, 'timer')">⏱️ Timer</button>
         <button class="nav-tab" onclick="showSection(event, 'progress')">📈 Progress</button>
         <button class="nav-tab" onclick="showSection(event, 'skills')">🎯 Skills</button>
+        <button class="nav-tab" onclick="showSection(event, 'euroleague')">🇪🇺 EuroLeague PG</button>
     </nav>
 
     <section id="dashboard" class="content-section active">
@@ -449,6 +450,37 @@
         <div class="card-grid">
             <div class="card">
                 <h3><span class="card-icon">🎯</span> Advanced Jump Mechanics Engine</h3>
+                <!-- Video Jump Calculator -->
+            <div class="card">
+                <h3><span class="card-icon">🎥</span> Video Flight Time Analysis</h3>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;">
+                    Filme ton saut au ralenti. Trouve l'image exacte du décollage et celle de l'atterrissage dans ta galerie.
+                </p>
+                <div class="input-group">
+                    <label>Framerate Vidéo (Images par seconde)</label>
+                    <select id="videoFps">
+                        <option value="60">60 FPS (Vidéo standard)</option>
+                        <option value="120">120 FPS (Ralenti standard)</option>
+                        <option value="240" selected>240 FPS (Ultra Slow-Mo iPhone/Android)</option>
+                    </select>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+                    <div class="input-group">
+                        <label>Image Décollage</label>
+                        <input type="number" id="frameTakeoff" placeholder="Ex: 150">
+                    </div>
+                    <div class="input-group">
+                        <label>Image Atterrissage</label>
+                        <input type="number" id="frameLanding" placeholder="Ex: 275">
+                    </div>
+                </div>
+                <button class="btn" onclick="calculateVideoJump()">📐 Analyser le vol</button>
+                
+                <div class="result-box" id="videoResultBox">
+                    <div>Détente calculée : <span class="result-value" id="videoVertValue">0.0 cm</span></div>
+                    <div class="output-data-list" id="videoOutputs"></div>
+                </div>
+            </div>
                 <div class="input-group">
                     <label>Standing Reach (cm)</label>
                     <input type="number" id="calcReach" value="229" oninput="calculateVertical()">
@@ -660,7 +692,62 @@
         <p>Advanced Jump Biomechanics Dashboard. System Engine Scaled dynamically in Metric Units.</p>
     </footer>
 
+    <!-- ⬇️ COLLE LA NOUVELLE SECTION ICI ⬇️ -->
+    <section id="euroleague" class="content-section">
+        <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(0, 78, 137, 0.2), var(--card-bg)); border-color: var(--secondary);">
+            <h3 style="color: var(--secondary);">🇪🇺 Le standard EuroLeague à 1m78</h3>
+            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
+                En Europe, le terrain est plus petit et les défenses n'ont pas la règle des 3 secondes. La raquette est bouchée. Pour exister à 1m78, tu ne peux pas juste sauter haut. Tu dois être un maître absolu de la manipulation d'espace, du rythme (Pace) et du tir en sortie d'écran.
+            </p>
+        </div>
+
+        <div class="card-grid">
+            <!-- P&R Mastery -->
+            <div class="card">
+                <h3 style="color: var(--primary);">🏀 Pick & Roll Mastery</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item"><div><strong>Hostage Dribble (P&R Jail)</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Garder le défenseur sur sa hanche/dans son dos après l'écran pour dicter le tempo en 2 contre 1.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Snake Dribble</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Croiser agressivement devant le grand défenseur sur un "Drop" pour détruire l'angle de contre.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Pocket Pass & Hook Pass</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Passer la balle dans des fenêtres minuscules (à une main, au rebond, ou par-dessus l'épaule).</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Reject the Screen (Refus d'écran)</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Vendre l'écran avec les yeux/épaules et attaquer violemment à l'opposé.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                </ul>
+            </div>
+
+            <!-- Finitions sous la taille -->
+            <div class="card">
+                <h3 style="color: var(--warning);">🪶 Finitions (Dans le trafic)</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item"><div><strong>Floater / Teardrop (2 pieds)</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Arrêt simultané au niveau des lancers, tir en cloche haut pour lober les pivots de 2m15.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Wrong-Foot Layup</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Layup pied droit / main droite pour briser le timing du contreur (style Tony Parker).</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Bump & Finish</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Initier le contact sur le torse du défenseur en l'air pour créer de l'espace avant de lâcher la balle.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                </ul>
+            </div>
+
+            <!-- Tir & Menace -->
+            <div class="card">
+                <h3 style="color: var(--accent);">🎯 Menace Périphérique</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item"><div><strong>Pull-up 3PT sur P&R</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Si la défense passe sous l'écran (Under), tu dois punir à 3 points instantanément. Obligatoire.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Relocation 3PT</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Passer la balle sur un drive, puis courir immédiatement vers un espace libre (corner/wing) pour le tir.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Deep Range</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Tirer 1 à 2 mètres derrière la ligne FIBA pour forcer le défenseur à s'avancer et ouvrir le drive.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                </ul>
+            </div>
+
+            <!-- Défense & Dureté -->
+            <div class="card">
+                <h3 style="color: var(--danger);">🛡️ Point of Attack Defense</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item"><div><strong>Ball Pressure</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Défendre le porteur de balle sur 94 pieds (comme Campazzo) pour fatiguer et casser les systèmes.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Screen Navigation</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Passer au-dessus des écrans en suivant la hanche de l'attaquant sans se faire effacer.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item"><div><strong>Prendre des passages en force</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">À 1m78, anticiper les rotations pour prendre le contact torse nu. Un don de soi nécessaire.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                </ul>
+            </div>
+        </div>
+    </section>
+    <!-- ⬆️ FIN DE LA NOUVELLE SECTION ⬆️ -->
+
     <script>
+        // Le reste de ton code JavaScript commence ici...
         const TargetRimHeight = 305; 
         const BallClearanceDelta = 15; 
         let chartData = [61, 66, 71, 74, 78, 81, 84];
@@ -968,6 +1055,42 @@
             container.prepend(row);
             document.getElementById('trainingNotes').value = '';
         }
+
+        // ⬇️ LE NOUVEAU CALCULATEUR VIDÉO EST PLACÉ ICI ⬇️
+        function calculateVideoJump() {
+            const fps = parseFloat(document.getElementById('videoFps').value) || 240;
+            const takeoffFrame = parseFloat(document.getElementById('frameTakeoff').value);
+            const landingFrame = parseFloat(document.getElementById('frameLanding').value);
+
+            if (!takeoffFrame || !landingFrame || landingFrame <= takeoffFrame) {
+                alert("Vérifie tes frames. L'image d'atterrissage doit être supérieure au décollage.");
+                return;
+            }
+
+            const totalFrames = landingFrame - takeoffFrame;
+            const flightTime = totalFrames / fps;
+
+            const g = 9.81;
+            const heightMeters = 0.125 * g * Math.pow(flightTime, 2);
+            const heightCm = heightMeters * 100;
+
+            document.getElementById('videoVertValue').textContent = heightCm.toFixed(1) + ' cm';
+            document.getElementById('videoOutputs').innerHTML = `
+                <div><strong>Temps de vol (Airtime) :</strong> ${flightTime.toFixed(3)} secondes</div>
+                <div><strong>Images (Frames) :</strong> ${totalFrames} frames</div>
+                <div style="color: var(--warning); margin-top: 0.5rem; font-size: 0.8rem;">Note : La précision dépend de ton pointage. La "Frame de décollage" est l'image exacte où la pointe de ton pied quitte le sol.</div>
+            `;
+            
+            document.getElementById('videoResultBox').classList.add('show');
+            
+            if(confirm("Veux-tu enregistrer " + heightCm.toFixed(1) + " cm comme ta nouvelle détente max ?")) {
+                document.getElementById('standVert').value = heightCm.toFixed(1);
+                const reach = parseFloat(document.getElementById('calcReach').value) || 229;
+                document.getElementById('calcMaxReach').value = (reach + heightCm).toFixed(1);
+                calculateVertical();
+            }
+        }
+        // ⬆️ FIN DU NOUVEAU CODE ⬆️
 
         document.addEventListener('DOMContentLoaded', () => {
             calculateVertical();
