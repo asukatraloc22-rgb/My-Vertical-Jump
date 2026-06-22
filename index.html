@@ -205,6 +205,12 @@
             background: rgba(255, 107, 53, 0.05);
         }
 
+/* Correction du fond des options du menu déroulant */
+        .input-group select option {
+            background-color: var(--dark-bg);
+            color: var(--light);
+        }
+        
         .btn {
             width: 100%;
             padding: 0.85rem;
@@ -337,8 +343,11 @@
 </head>
 <body>
 
+    <body>
+
     <header class="header">
-        <h1>🏀 5'10" PG Dunk System</h1>
+        <div style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.4)); margin-bottom: 0.5rem; line-height: 1;">🏀</div>
+        <h1>PG Dunk System</h1>
         <p>Elite Performance Suite</p>
     </header>
 
