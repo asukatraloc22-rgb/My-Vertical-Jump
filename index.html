@@ -446,18 +446,35 @@
         </div>
     </section>
 
+    <!-- Calculator Section -->
     <section id="calculator" class="content-section">
         <div class="card-grid">
+            
+            <!-- 1. Advanced Jump Mechanics Engine -->
             <div class="card">
                 <h3><span class="card-icon">🎯</span> Advanced Jump Mechanics Engine</h3>
-                <!-- Video Jump Calculator -->
+                <div class="input-group">
+                    <label>Standing Reach (cm)</label>
+                    <input type="number" id="calcReach" value="229" oninput="calculateVertical()">
+                </div>
+                <div class="input-group">
+                    <label>Max Touch / Apex (cm)</label>
+                    <input type="number" id="calcMaxReach" value="300" oninput="calculateVertical()">
+                </div>
+                <div class="result-box show" id="vertResult">
+                    <div>True Vertical Displacement: <span class="result-value" id="vertValue">71.0 cm</span></div>
+                    <div class="output-data-list" id="ballisticOutputs"></div>
+                </div>
+            </div>
+
+            <!-- 2. LE NOUVEAU CALCULATEUR VIDÉO EST LÀ -->
             <div class="card">
                 <h3><span class="card-icon">🎥</span> Video Flight Time Analysis</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;">
-                    Filme ton saut au ralenti. Trouve l'image exacte du décollage et celle de l'atterrissage dans ta galerie.
+                    Filme ton saut au ralenti. Trouve l'image (frame) exacte du décollage et celle de l'atterrissage dans ta vidéo.
                 </p>
                 <div class="input-group">
-                    <label>Framerate Vidéo (Images par seconde)</label>
+                    <label>Framerate Vidéo (Images/seconde)</label>
                     <select id="videoFps">
                         <option value="60">60 FPS (Vidéo standard)</option>
                         <option value="120">120 FPS (Ralenti standard)</option>
@@ -481,20 +498,8 @@
                     <div class="output-data-list" id="videoOutputs"></div>
                 </div>
             </div>
-                <div class="input-group">
-                    <label>Standing Reach (cm)</label>
-                    <input type="number" id="calcReach" value="229" oninput="calculateVertical()">
-                </div>
-                <div class="input-group">
-                    <label>Max Touch / Apex (cm)</label>
-                    <input type="number" id="calcMaxReach" value="300" oninput="calculateVertical()">
-                </div>
-                <div class="result-box show" id="vertResult">
-                    <div>True Vertical Displacement: <span class="result-value" id="vertValue">71.0 cm</span></div>
-                    <div class="output-data-list" id="ballisticOutputs"></div>
-                </div>
-            </div>
 
+            <!-- 3. Absolute & Relative Load Standard -->
             <div class="card">
                 <h3><span class="card-icon">⚖️</span> Absolute & Relative Load Standard</h3>
                 <div class="input-group">
@@ -522,6 +527,7 @@
                 </div>
             </div>
 
+            <!-- 4. RSI (Fast SSC) -->
             <div class="card">
                 <h3><span class="card-icon">📊</span> Reactive Strength Index (Fast SSC)</h3>
                 <div class="input-group">
@@ -543,6 +549,7 @@
                 </div>
             </div>
 
+            <!-- 5. Vector Conversion Optimization -->
             <div class="card">
                 <h3><span class="card-icon">🏃</span> Vector Conversion Optimization</h3>
                 <div class="input-group">
@@ -571,9 +578,9 @@
                     <div class="output-data-list" id="approachOutputs"></div>
                 </div>
             </div>
+            
         </div>
     </section>
-
     <section id="workouts" class="content-section">
         <div class="card">
             <h3><span class="card-icon">💪</span> Microcycle Phase Isolation</h3>
