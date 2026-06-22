@@ -2,26 +2,37 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <!-- PWA Settings for Mobile Installation -->
+    <meta name="theme-color" content="#0f0f1a">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PG Dunk">
+    <!-- Inline Manifest to avoid external JSON file -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"PG Dunk System","short_name":"PG Dunk","display":"standalone","background_color":"#0f0f1a","theme_color":"#ff6b35","icons":[{"src":"data:image/svg+xml;utf8,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2250%22 fill=%22%23ff6b35%22/><path d=%22M50 0v100M0 50h100M20 15a40 40 0 0 0 0 70M80 15a40 40 0 0 1 0 70%22 stroke=%22%230f0f1a%22 stroke-width=%224%22 fill=%22none%22/></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
+    
     <title>5'10" PG Dunk System - Elite Performance Suite</title>
+    
     <style>
         :root {
             --primary: #ff6b35;
-            --primary-glow: rgba(255, 107, 53, 0.2);
+            --primary-glow: rgba(255, 107, 53, 0.25);
             --secondary: #004e89;
             --accent: #1a936f;
-            --dark-bg: #0f0f1a;
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --card-border: rgba(255, 255, 255, 0.08);
+            --dark-bg: #0a0a12;
+            --card-bg: rgba(255, 255, 255, 0.03);
+            --card-border: rgba(255, 255, 255, 0.06);
             --light: #f5f5f5;
             --danger: #e63946;
             --warning: #f4a261;
+            --safe-bottom: env(safe-area-inset-bottom, 20px);
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body {
@@ -30,22 +41,33 @@
             color: var(--light);
             min-height: 100vh;
             line-height: 1.5;
+            padding-bottom: var(--safe-bottom);
         }
 
+        /* Improved Header with SVG Logo */
         .header {
-            background: linear-gradient(135deg, #00223e, var(--dark-bg));
-            padding: 2.5rem 1.5rem;
+            background: linear-gradient(135deg, #001a30, var(--dark-bg));
+            padding: 3rem 1.5rem 2rem;
             text-align: center;
-            border-bottom: 3px solid var(--primary);
+            border-bottom: 2px solid var(--primary);
             position: relative;
-            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .logo-svg {
+            width: 60px;
+            height: 60px;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 0 10px var(--primary-glow));
         }
 
         .header h1 {
-            font-size: 2.8rem;
-            margin-bottom: 0.5rem;
+            font-size: 2.2rem;
+            margin-bottom: 0.25rem;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             font-weight: 800;
             background: linear-gradient(to right, #ffffff, #ffb396);
             -webkit-background-clip: text;
@@ -54,59 +76,62 @@
 
         .header p {
             color: var(--primary);
-            font-size: 1.2rem;
-            font-weight: 500;
+            font-size: 1rem;
+            font-weight: 600;
             letter-spacing: 1px;
         }
 
+        /* Mobile-first Horizontal Scroll Navigation */
         .nav-tabs {
             display: flex;
-            justify-content: center;
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.75rem;
+            background: rgba(10, 10, 18, 0.8);
+            padding: 0.75rem 1rem;
             gap: 0.5rem;
-            flex-wrap: wrap;
             border-bottom: 1px solid var(--card-border);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            overflow-x: auto;
+            white-space: nowrap;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none; /* Firefox */
+        }
+        
+        .nav-tabs::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
         }
 
         .nav-tab {
-            padding: 0.75rem 1.5rem;
-            border: 1px solid transparent;
-            background: transparent;
+            padding: 0.75rem 1.25rem;
+            border: 1px solid var(--card-border);
+            background: rgba(255, 255, 255, 0.02);
             color: rgba(255, 255, 255, 0.7);
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            border-radius: 20px;
+            transition: all 0.25s ease;
             font-weight: 600;
             font-size: 0.9rem;
-        }
-
-        .nav-tab:hover {
-            color: var(--light);
-            background: rgba(255, 255, 255, 0.05);
+            flex-shrink: 0;
         }
 
         .nav-tab.active {
             background: var(--primary);
             color: white;
+            border-color: var(--primary);
             box-shadow: 0 4px 12px var(--primary-glow);
         }
 
         .content-section {
             display: none;
-            padding: 2.5rem 1.5rem;
+            padding: 1.5rem 1rem;
             max-width: 1300px;
             margin: 0 auto;
-            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.3s ease;
         }
 
-        .content-section.active {
-            display: block;
-        }
+        .content-section.active { display: block; }
 
         @keyframes fadeIn {
             from { opacity: 0; transform: translateY(10px); }
@@ -115,199 +140,149 @@
 
         .card-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 1.75rem;
-            margin-bottom: 2rem;
+            grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        @media (min-width: 768px) {
+            .card-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.75rem;
+            border-radius: 20px;
+            padding: 1.5rem;
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s, border-color 0.3s;
-        }
-
-        .card:hover {
-            transform: translateY(-4px);
-            border-color: rgba(255, 107, 53, 0.3);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
         }
 
         .card h3 {
             color: #ffffff;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             margin-bottom: 1.25rem;
             display: flex;
             align-items: center;
-            gap: 0.75rem;
+            gap: 0.5rem;
             border-bottom: 1px solid var(--card-border);
             padding-bottom: 0.75rem;
         }
 
-        .card-icon {
-            color: var(--primary);
-        }
-
-        .metric-badge-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .metric-pill {
-            background: rgba(0, 0, 0, 0.2);
-            padding: 0.75rem;
-            border-radius: 10px;
-            border: 1px solid var(--card-border);
-        }
-
-        .metric-pill .label {
-            font-size: 0.75rem;
-            color: rgba(255, 255, 255, 0.5);
-            text-transform: uppercase;
-        }
-
-        .metric-pill .val {
-            font-size: 1.15rem;
-            font-weight: 700;
-            color: var(--warning);
-            margin-top: 0.25rem;
-        }
-
-        .progress-container {
-            margin: 1.25rem 0;
-        }
-
-        .progress-label {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            color: rgba(255,255,255,0.8);
-        }
-
-        .progress-bar {
-            height: 12px;
-            background: rgba(255,255,255,0.08);
-            border-radius: 6px;
-            overflow: hidden;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: linear-gradient(90deg, var(--secondary), var(--primary));
-            border-radius: 6px;
-            transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .calculator {
-            display: flex;
-            flex-direction: column;
-            gap: 1.25rem;
-        }
-
+        /* Improved Mobile Forms */
+        .input-group { margin-bottom: 1rem; }
         .input-group label {
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.4rem;
             color: rgba(255, 255, 255, 0.7);
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             text-transform: uppercase;
             letter-spacing: 0.5px;
         }
 
         .input-group input, .input-group select {
             width: 100%;
-            padding: 0.85rem 1rem;
+            padding: 0.9rem 1rem;
             border: 1px solid var(--card-border);
-            background: rgba(0, 0, 0, 0.3);
+            background: rgba(0, 0, 0, 0.4);
             color: var(--light);
-            border-radius: 10px;
-            font-size: 1rem;
-            transition: border-color 0.2s;
+            border-radius: 12px;
+            font-size: 16px; /* Prevents iOS auto-zoom */
+            transition: all 0.2s;
+            appearance: none;
         }
 
         .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: var(--primary);
+            background: rgba(255, 107, 53, 0.05);
         }
 
+        /* Metrics Display */
+        .metric-badge-container {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 0.75rem;
+            margin-bottom: 1.25rem;
+        }
+
+        .metric-pill {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            text-align: center;
+        }
+
+        .metric-pill .label { font-size: 0.7rem; color: rgba(255, 255, 255, 0.5); text-transform: uppercase; }
+        .metric-pill .val { font-size: 1.2rem; font-weight: 800; color: var(--warning); margin-top: 0.25rem; }
+
+        .progress-container { margin: 1rem 0; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 0.4rem; font-size: 0.85rem; color: rgba(255,255,255,0.8); }
+        .progress-bar { height: 10px; background: rgba(255,255,255,0.08); border-radius: 5px; overflow: hidden; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); transition: width 0.8s ease; }
+
+        /* Buttons */
         .btn {
-            padding: 0.85rem 1.75rem;
+            width: 100%;
+            padding: 1rem;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: all 0.2s;
-            display: inline-flex;
+            transition: transform 0.1s, background 0.2s;
+            display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
         }
-
-        .btn:hover {
-            background: #ff8354;
-            transform: translateY(-1px);
-            box-shadow: 0 4px 12px var(--primary-glow);
+        .btn:active { transform: scale(0.98); }
+        .btn-secondary { background: var(--secondary); }
+        
+        @media (min-width: 768px) {
+            .btn { width: auto; display: inline-flex; }
         }
 
-        .btn-secondary { background: var(--secondary); }
-        .btn-secondary:hover { background: #0063ad; }
-
         .result-box {
-            background: rgba(26, 147, 111, 0.08);
+            background: rgba(26, 147, 111, 0.1);
             border: 1px solid rgba(26, 147, 111, 0.3);
             border-radius: 12px;
             padding: 1.25rem;
             margin-top: 1rem;
             display: none;
         }
+        .result-box.show { display: block; }
+        .result-value { font-size: 2rem; color: var(--accent); font-weight: 800; }
 
-        .result-box.show { display: block; animation: fadeIn 0.3s; }
-        .result-value { font-size: 2.2rem; color: var(--accent); font-weight: 800; }
-
-        .output-data-list {
-            margin-top: 0.75rem;
-            padding-top: 0.75rem;
-            border-top: 1px dashed rgba(255,255,255,0.1);
-            font-size: 0.85rem;
-            display: flex;
-            flex-direction: column;
-            gap: 0.4rem;
-            color: rgba(255,255,255,0.7);
-        }
-
+        /* Timer Mobile Optimization */
         .timer-display {
-            font-size: 4.5rem;
+            font-size: 4rem;
             font-weight: 800;
             text-align: center;
             color: var(--primary);
             font-family: system-ui, monospace;
             letter-spacing: -2px;
-            margin: 1.5rem 0;
-            text-shadow: 0 0 20px rgba(255, 107, 53, 0.15);
+            margin: 1rem 0;
         }
 
-        .timer-controls {
-            display: flex;
-            justify-content: center;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
+        .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+        .timer-controls .btn:first-child { grid-column: span 2; } /* Start button spans full width */
+        
+        .timer-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
+        .timer-presets .btn { padding: 0.75rem 0; font-size: 0.8rem; }
 
-        .exercise-list { list-style: none; }
+        /* Exercises */
         .exercise-item {
-            background: rgba(255,255,255,0.02);
+            background: rgba(255,255,255,0.03);
             border-left: 3px solid var(--primary);
-            padding: 1rem 1.25rem;
+            padding: 1rem;
             margin-bottom: 0.75rem;
             border-radius: 0 12px 12px 0;
             display: flex;
@@ -317,145 +292,31 @@
             border-right: 1px solid var(--card-border);
             border-bottom: 1px solid var(--card-border);
         }
-
         .check-btn {
-            width: 28px;
-            height: 28px;
-            border: 2px solid rgba(255,255,255,0.2);
-            background: transparent;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 32px; height: 32px; border: 2px solid rgba(255,255,255,0.2);
+            background: transparent; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;
         }
-
-        .check-btn.completed {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-
+        .check-btn.completed { background: var(--accent); border-color: var(--accent); }
         .check-btn.completed::after { content: '✓'; color: white; font-weight: bold; }
 
-        .week-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
-            gap: 0.75rem;
-        }
+        /* Data Tables */
+        .pr-table-wrapper { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+        .pr-table { width: 100%; border-collapse: collapse; margin-top: 0.5rem; font-size: 0.85rem; white-space: nowrap; }
+        .pr-table th, .pr-table td { padding: 0.8rem; text-align: left; border-bottom: 1px solid var(--card-border); }
+        .pr-table th { color: var(--primary); font-size: 0.75rem; }
 
-        .day-card {
-            background: rgba(0,0,0,0.2);
-            border-radius: 10px;
-            padding: 1rem;
-            border: 1px solid var(--card-border);
-            border-top: 3px solid var(--secondary);
-        }
-
-        .day-card.active-day {
-            border-top-color: var(--primary);
-            background: rgba(255, 107, 53, 0.05);
-            border-color: rgba(255, 107, 53, 0.2);
-        }
-
-        .day-title { font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
-
-        .chart-container {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            border: 1px solid var(--card-border);
-        }
-
-        .chart-bar {
-            display: flex;
-            align-items: flex-end;
-            height: 220px;
-            gap: 0.75rem;
-            margin-top: 1.5rem;
-            padding-bottom: 2rem;
-            border-bottom: 2px solid rgba(255,255,255,0.1);
-            position: relative;
-        }
-
-        .chart-column {
-            flex: 1;
-            background: linear-gradient(to top, var(--secondary), var(--primary));
-            border-radius: 6px 6px 0 0;
-            transition: height 0.6s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            min-height: 15px;
-        }
-
-        .chart-label {
-            position: absolute;
-            bottom: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.75rem;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .chart-value {
-            position: absolute;
-            top: -25px;
-            left: 50%;
-            transform: translateX(-50%);
-            font-size: 0.8rem;
-            font-weight: 700;
-            color: var(--warning);
-        }
-
-        .badge-container { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-        .badge { padding: 0.5rem 1rem; border-radius: 30px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; }
-        .badge.locked { background: rgba(255,255,255,0.06); color: rgba(255,255,255,0.3); }
-        .badge.unlocked { background: var(--accent); color: white; box-shadow: 0 0 12px rgba(26,147,111,0.3); }
-
-        .notes-area {
-            width: 100%; min-height: 120px; background: rgba(0,0,0,0.2); border: 1px solid var(--card-border);
-            border-radius: 10px; padding: 1rem; color: var(--light); font-family: inherit; resize: vertical; margin-bottom: 0.75rem;
-        }
-
-        .pr-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; }
-        .pr-table th, .pr-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--card-border); }
-        .pr-table th { color: var(--primary); text-transform: uppercase; font-size: 0.75rem; letter-spacing: 0.5px; }
-
-        .modal-overlay {
-            display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0,0,0,0.75); z-index: 1000; justify-content: center; align-items: center; backdrop-filter: blur(4px);
-        }
-        .modal-overlay.show { display: flex; }
-        .modal-content {
-            background: #141424; border: 1px solid var(--card-border); border-radius: 16px;
-            padding: 2rem; max-width: 450px; width: 90%;
-        }
-
-        .speed-visualizer { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; }
-        .speed-bar-container { flex: 1; height: 10px; background: rgba(255,255,255,0.1); border-radius: 5px; overflow: hidden; }
-        .speed-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 70%; transition: width 0.3s; }
-        
-        .approach-diagram { display: flex; justify-content: space-between; gap: 0.5rem; margin: 1.5rem 0; overflow-x: auto; padding: 0.5rem 0; }
-        .step-box { background: rgba(0,0,0,0.2); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem; text-align: center; flex: 1; min-width: 80px; }
-        .step-box.active { border-color: var(--primary); background: rgba(255,107,53,0.05); }
-        .step-title { font-size: 0.8rem; font-weight: 700; color: var(--primary); }
-        .step-desc { font-size: 0.65rem; color: rgba(255,255,255,0.5); margin-top: 0.25rem; }
-
-        .footer { text-align: center; padding: 3rem 1.5rem; color: rgba(255,255,255,0.4); border-top: 1px solid var(--card-border); margin-top: 4rem; font-size: 0.85rem; }
-
-        @media (max-width: 768px) {
-            .header h1 { font-size: 1.8rem; }
-            .nav-tab { padding: 0.5rem 1rem; font-size: 0.8rem; }
-            .timer-display { font-size: 3.2rem; }
-            .content-section { padding: 1.5rem 1rem; }
-        }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <h1>🏀 5'10" PG Dunk System</h1>
-        <p>Interactive Training Suite • Metrics Engine 2.0 (Metric Standard)</p>
+        <!-- Inline SVG Basketball Logo -->
+        <svg class="logo-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="48" fill="none" stroke="#ff6b35" stroke-width="4"/>
+            <path d="M50 2v96M2 50h96M20 15a40 40 0 0 0 0 70M80 15a40 40 0 0 1 0 70" fill="none" stroke="#ff6b35" stroke-width="3"/>
+        </svg>
+        <h1>PG Dunk System</h1>
+        <p>Elite Performance Suite</p>
     </header>
 
     <nav class="nav-tabs">
@@ -464,202 +325,98 @@
         <button class="nav-tab" onclick="showSection(event, 'workouts')">💪 Workouts</button>
         <button class="nav-tab" onclick="showSection(event, 'timer')">⏱️ Timer</button>
         <button class="nav-tab" onclick="showSection(event, 'progress')">📈 Progress</button>
-        <button class="nav-tab" onclick="showSection(event, 'skills')">🎯 Skills</button>
     </nav>
 
     <!-- Dashboard Section -->
     <section id="dashboard" class="content-section active">
         <div class="card-grid">
             <div class="card">
-                <h3><span class="card-icon">📏</span> Biometrics & Profile</h3>
+                <h3><span class="card-icon">📏</span> Biometrics</h3>
                 <div class="metric-badge-container">
                     <div class="metric-pill"><div class="label">Height</div><div class="val" id="pillHeight">178 cm</div></div>
                     <div class="metric-pill"><div class="label">Weight</div><div class="val" id="pillWeight">77.0 kg</div></div>
                 </div>
-                <div class="input-group" style="margin-bottom: 1rem;">
+                <div class="input-group">
                     <label>Height (cm)</label>
                     <input type="number" id="profileHeight" value="178" onchange="updateProfile()">
                 </div>
-                <div class="input-group" style="margin-bottom: 1rem;">
+                <div class="input-group">
                     <label>Weight (kg)</label>
                     <input type="number" id="profileWeight" value="77" onchange="updateProfile()">
                 </div>
-                <div class="input-group" style="margin-bottom: 1rem;">
+                <div class="input-group">
                     <label>Standing Reach (cm)</label>
                     <input type="number" id="profileReach" value="229" onchange="updateProfile()">
                 </div>
                 <div class="progress-container">
-                    <div class="progress-label"><span>Current Vertical Jump</span><span id="currentVert">71 cm</span></div>
+                    <div class="progress-label"><span>Current Vertical</span><span id="currentVert">71 cm</span></div>
                     <div class="progress-bar"><div class="progress-fill" id="vertProgress" style="width: 70%"></div></div>
                 </div>
                 <div class="progress-container">
-                    <div class="progress-label"><span>Dunk Clearance Progress</span><span id="dunkProgressText">Loading...</span></div>
+                    <div class="progress-label"><span>Dunk Clearance</span><span id="dunkProgressText">Loading...</span></div>
                     <div class="progress-bar"><div class="progress-fill" id="dunkProgress" style="width: 85%"></div></div>
                 </div>
             </div>
 
             <div class="card">
-                <h3><span class="card-icon">🏆</span> Power Milestones</h3>
-                <div class="badge-container">
-                    <div class="badge unlocked" id="badge1">Rim Touch</div>
-                    <div class="badge locked" id="badge2">First Dunk</div>
-                    <div class="badge locked" id="badge3">76cm Vert</div>
-                    <div class="badge locked" id="badge4">Windmill</div>
-                    <div class="badge locked" id="badge5">360 Finish</div>
-                </div>
-                <p style="margin-top: 1.5rem; color: rgba(255,255,255,0.5); font-size: 0.85rem;">
-                    Your baseline power capacities scale dynamically based on current Strength-to-Weight metrics.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3><span class="card-icon">📅</span> Microcycle Schedule</h3>
-                <div class="week-grid">
-                    <div class="day-card" id="day1"><div class="day-title">Mon</div><div style="font-size:0.75rem; color:rgba(255,255,255,0.7)">Max Force / SSC</div></div>
-                    <div class="day-card" id="day2"><div class="day-title">Wed</div><div style="font-size:0.75rem; color:rgba(255,255,255,0.7)">Fast SSC Plyos</div></div>
-                    <div class="day-card" id="day3"><div class="day-title">Fri</div><div style="font-size:0.75rem; color:rgba(255,255,255,0.7)">Rate of Force</div></div>
-                    <div class="day-card" id="day4"><div class="day-title">Sat</div><div style="font-size:0.75rem; color:rgba(255,255,255,0.7)">Kinematics Tech</div></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3><span class="card-icon">⚡</span> Neuro-Kinetic Metrics</h3>
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.8rem; font-weight:700; color: var(--primary);" id="quickRSI">1.40</div>
-                        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6)">Reactive Strength (RSI)</div>
+                <h3><span class="card-icon">⚡</span> Neuro-Metrics</h3>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="metric-pill">
+                        <div class="val" style="color: var(--primary);" id="quickRSI">1.40</div>
+                        <div class="label">RSI</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.8rem; font-weight:700; color: var(--accent);" id="quickSquat">1.18x</div>
-                        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6)">Relative Squat Multiplier</div>
+                    <div class="metric-pill">
+                        <div class="val" style="color: var(--accent);" id="quickSquat">1.18x</div>
+                        <div class="label">Squat/BW</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.8rem; font-weight:700; color: var(--warning);" id="quickBroad">280 cm</div>
-                        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6)">Horizontal Elastic Pool</div>
+                    <div class="metric-pill">
+                        <div class="val" style="color: var(--warning);" id="quickBroad">280cm</div>
+                        <div class="label">Broad Jump</div>
                     </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 1.8rem; font-weight:700; color: var(--danger);" id="quickSprint">4.50s</div>
-                        <div style="font-size: 0.75rem; color: rgba(255,255,255,0.6)">CODA Shuttle (5-10-5)</div>
+                    <div class="metric-pill">
+                        <div class="val" style="color: var(--danger);" id="quickSprint">4.50s</div>
+                        <div class="label">5-10-5</div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <div class="card">
-            <h3><span class="card-icon">📝</span> Performance Log</h3>
-            <textarea class="notes-area" id="trainingNotes" placeholder="Log physiological feelings, velocity changes, neurological fatigue..."></textarea>
-            <button class="btn" onclick="saveNotes()">💾 Store Log Entry</button>
-            <div id="savedNotes" style="margin-top: 1.25rem;"></div>
         </div>
     </section>
 
     <!-- Calculator Section -->
     <section id="calculator" class="content-section">
         <div class="card-grid">
-            <!-- Jump Calculator -->
             <div class="card">
-                <h3><span class="card-icon">🎯</span> Advanced Jump Mechanics Engine</h3>
-                <div class="calculator">
-                    <div class="input-group">
-                        <label>Standing Reach (cm)</label>
-                        <input type="number" id="calcReach" value="229" oninput="calculateVertical()">
-                    </div>
-                    <div class="input-group">
-                        <label>Max Touch / Apex (cm)</label>
-                        <input type="number" id="calcMaxReach" value="300" oninput="calculateVertical()">
-                    </div>
-                    <div class="result-box show" id="vertResult" style="background: rgba(0,0,0,0.2)">
-                        <div>True Vertical Displacement: <span class="result-value" id="vertValue">71.0 cm</span></div>
-                        <div class="output-data-list" id="ballisticOutputs">
-                            <!-- Populated dynamically via JS -->
-                        </div>
-                    </div>
+                <h3><span class="card-icon">🎯</span> Jump Engine</h3>
+                <div class="input-group">
+                    <label>Standing Reach (cm)</label>
+                    <input type="number" id="calcReach" value="229" oninput="calculateVertical()">
+                </div>
+                <div class="input-group">
+                    <label>Max Touch (cm)</label>
+                    <input type="number" id="calcMaxReach" value="300" oninput="calculateVertical()">
+                </div>
+                <div class="result-box show" id="vertResult">
+                    <div>Vertical: <span class="result-value" id="vertValue">71.0 cm</span></div>
                 </div>
             </div>
 
-            <!-- Strength Standards -->
             <div class="card">
-                <h3><span class="card-icon">⚖️</span> Absolute & Relative Load Standard</h3>
-                <div class="calculator">
-                    <div class="input-group">
-                        <label>Target Bodymass (kg)</label>
-                        <input type="number" id="calcBW" value="77" oninput="updateStrengthStandards()">
-                    </div>
-                    
-                    <div class="progress-container">
-                        <div class="progress-label"><span>Back Squat Ceiling (1.5x BW)</span><span id="squatGoal">116 kg</span></div>
-                        <div class="progress-bar"><div class="progress-fill" id="squatProgress"></div></div>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-label"><span>Trap Bar DL System (2.0x BW)</span><span id="dlGoal">154 kg</span></div>
-                        <div class="progress-bar"><div class="progress-fill" id="dlProgress"></div></div>
-                    </div>
-                    <div class="progress-container">
-                        <div class="progress-label"><span>Power Clean Turnover (1.0x BW)</span><span id="cleanGoal">77 kg</span></div>
-                        <div class="progress-bar"><div class="progress-fill" id="cleanProgress"></div></div>
-                    </div>
-
-                    <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.5rem; margin-top: 0.5rem;">
-                        <div class="input-group"><label>Squat (kg)</label><input type="number" id="currentSquat" value="91" oninput="updateStrengthStandards()"></div>
-                        <div class="input-group"><label>TBDL (kg)</label><input type="number" id="currentDL" value="127" oninput="updateStrengthStandards()"></div>
-                        <div class="input-group"><label>Clean (kg)</label><input type="number" id="currentClean" value="61" oninput="updateStrengthStandards()"></div>
-                    </div>
+                <h3><span class="card-icon">📊</span> RSI (Fast SSC)</h3>
+                <div class="input-group">
+                    <label>Drop Box Height (cm)</label>
+                    <input type="number" id="rsiBoxHeight" value="30" oninput="calculateRSI()">
                 </div>
-            </div>
-
-            <!-- RSI Calculator -->
-            <div class="card">
-                <h3><span class="card-icon">📊</span> Reactive Strength Index (Fast SSC)</h3>
-                <div class="calculator">
-                    <div class="input-group">
-                        <label>Drop-Jump Box Height (cm)</label>
-                        <input type="number" id="rsiBoxHeight" value="30" oninput="calculateRSI()">
-                    </div>
-                    <div class="input-group">
-                        <label>Flight Displacement Height (cm)</label>
-                        <input type="number" id="rsiJump" value="35" oninput="calculateRSI()">
-                    </div>
-                    <div class="input-group">
-                        <label>Amortization / Contact Time (s)</label>
-                        <input type="number" id="rsiTime" value="0.25" step="0.01" oninput="calculateRSI()">
-                    </div>
-                    <div class="result-box show" id="rsiResult" style="background: rgba(0,0,0,0.2)">
-                        <div>System RSI Ratio: <span class="result-value" id="rsiValue">1.40</span></div>
-                        <div style="margin-top: 0.5rem; font-size:0.85rem;" id="rsiRating">-</div>
-                        <div class="output-data-list" id="rsiOutputs"></div>
-                    </div>
+                <div class="input-group">
+                    <label>Flight Height (cm)</label>
+                    <input type="number" id="rsiJump" value="35" oninput="calculateRSI()">
                 </div>
-            </div>
-
-            <!-- Approach Jump Optimizer -->
-            <div class="card">
-                <h3><span class="card-icon">🏃</span> Vector Conversion Optimization</h3>
-                <div class="calculator">
-                    <div class="input-group">
-                        <label>True Static Standing Vertical (cm)</label>
-                        <input type="number" id="standVert" value="71" oninput="updateApproach(); calculateApproach();">
-                    </div>
-                    <div class="input-group">
-                        <label>Horizontal Intake Speed (Scale 1-10)</label>
-                        <input type="range" id="approachSpeed" min="1" max="10" value="7" oninput="updateApproach(); calculateApproach();">
-                        <div class="speed-visualizer">
-                            <span>Controlled</span>
-                            <div class="speed-bar-container"><div class="speed-bar-fill" id="speedBarFill"></div></div>
-                            <span>Maximum</span>
-                        </div>
-                        <div id="speedDisplay" style="font-size:0.85rem; font-weight:700; text-align:center; color: var(--primary);">7</div>
-                    </div>
-
-                    <div class="approach-diagram">
-                        <div class="step-box active" id="step1"><div class="step-title">Drive Phase</div><div class="step-desc">Acceleration profile</div></div>
-                        <div class="step-box" id="step2"><div class="step-title">Penultimate</div><div class="step-desc">CM center drop</div></div>
-                        <div class="step-box" id="step3"><div class="step-title">Block Plant</div><div class="step-desc">Kinetic brake force</div></div>
-                    </div>
-
-                    <div class="result-box show" id="approachResult" style="background: rgba(0,0,0,0.2)">
-                        <div>Projected Approach Jump: <span class="result-value" id="approachValue">81.7 cm</span></div>
-                        <div class="output-data-list" id="approachOutputs"></div>
-                    </div>
+                <div class="input-group">
+                    <label>Contact Time (s)</label>
+                    <input type="number" id="rsiTime" value="0.25" step="0.01" oninput="calculateRSI()">
+                </div>
+                <div class="result-box show" id="rsiResult">
+                    <div>System RSI: <span class="result-value" id="rsiValue">1.40</span></div>
+                    <div style="margin-top: 0.5rem; font-size:0.85rem;" id="rsiRating">-</div>
                 </div>
             </div>
         </div>
@@ -668,14 +425,16 @@
     <!-- Workouts Section -->
     <section id="workouts" class="content-section">
         <div class="card">
-            <h3><span class="card-icon">💪</span> Microcycle Phase Isolation</h3>
-            <div style="display: flex; gap: 0.5rem; margin-bottom: 2rem; flex-wrap: wrap;">
-                <button class="btn btn-secondary" onclick="loadWorkout('monday')">Mon: Max Strength</button>
-                <button class="btn btn-secondary" onclick="loadWorkout('wednesday')">Wed: Fast SSC Plyo</button>
-                <button class="btn btn-secondary" onclick="loadWorkout('friday')">Fri: Rate of Force</button>
-                <button class="btn btn-secondary" onclick="loadWorkout('saturday')">Sat: Bio-Kinematics</button>
+            <h3><span class="card-icon">💪</span> Select Microcycle</h3>
+            <div class="input-group">
+                <select onchange="loadWorkout(this.value)">
+                    <option value="monday">Monday: Max Strength</option>
+                    <option value="wednesday">Wednesday: Fast SSC Plyo</option>
+                    <option value="friday">Friday: Rate of Force</option>
+                    <option value="saturday">Saturday: Bio-Kinematics</option>
+                </select>
             </div>
-            <div id="workoutDisplay"></div>
+            <div id="workoutDisplay" style="margin-top: 1.5rem;"></div>
         </div>
     </section>
 
@@ -683,32 +442,19 @@
     <section id="timer" class="content-section">
         <div class="card-grid">
             <div class="card">
-                <h3><span class="card-icon">⏱️</span> System Density Rest Timer</h3>
+                <h3><span class="card-icon">⏱️</span> Rest Timer</h3>
                 <div class="timer-display" id="mainTimer">00:00</div>
                 <div class="timer-controls">
                     <button class="btn" onclick="startTimer()">▶️ Start</button>
                     <button class="btn btn-secondary" onclick="pauseTimer()">⏸️ Pause</button>
                     <button class="btn btn-secondary" onclick="resetTimer()">🔄 Reset</button>
                 </div>
-                <div style="display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;">
-                    <button class="btn" style="padding:0.4rem 0.8rem; font-size:0.8rem" onclick="setTimer(60)">60s</button>
-                    <button class="btn" style="padding:0.4rem 0.8rem; font-size:0.8rem" onclick="setTimer(90)">90s</button>
-                    <button class="btn" style="padding:0.4rem 0.8rem; font-size:0.8rem" onclick="setTimer(120)">2m</button>
-                    <button class="btn" style="padding:0.4rem 0.8rem; font-size:0.8rem" onclick="setTimer(180)">3m</button>
+                <div class="timer-presets">
+                    <button class="btn btn-secondary" onclick="setTimer(60)">60s</button>
+                    <button class="btn btn-secondary" onclick="setTimer(90)">90s</button>
+                    <button class="btn btn-secondary" onclick="setTimer(120)">2m</button>
+                    <button class="btn btn-secondary" onclick="setTimer(180)">3m</button>
                 </div>
-            </div>
-
-            <div class="card">
-                <h3><span class="card-icon">⚡</span> Amortization Frame Timer</h3>
-                <div class="timer-display" id="rsiTimer" style="color:var(--accent)">0.000s</div>
-                <div class="timer-controls">
-                    <button class="btn" style="width:100%" onmousedown="startRSITimer()" onmouseup="stopRSITimer()" ontouchstart="startRSITimer()" ontouchend="stopRSITimer()">
-                        Hold Ground Contact Window
-                    </button>
-                </div>
-                <p style="font-size:0.8rem; text-align:center; color:rgba(255,255,255,0.5)">
-                    Simulate contact intervals. Release to push structural output reading into RSI fields.
-                </p>
             </div>
         </div>
     </section>
@@ -716,313 +462,146 @@
     <!-- Progress Section -->
     <section id="progress" class="content-section">
         <div class="card">
-            <h3><span class="card-icon">📊</span> Neurological Adaptations Tracker</h3>
-            <div class="chart-container">
-                <div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
-                    <button class="btn" onclick="addDataPoint()">➕ Append Data Point</button>
-                    <button class="btn btn-secondary" onclick="clearChart()">Reset Array</button>
-                </div>
-                <div class="chart-bar" id="progressChart"></div>
-            </div>
-        </div>
-
-        <div class="card">
-            <h3><span class="card-icon">🏆</span> True Metric Performance Records</h3>
-            <table class="pr-table">
-                <thead>
-                    <tr><th>Performance Matrix</th><th>Absolute PR</th><th>Target Baseline</th><th>Displacement Status</th></tr>
-                </thead>
-                <tbody id="prTableBody">
-                    <tr><td>Static CMJ Vertical</td><td class="new-pr">71 cm</td><td>76 cm</td><td>🔥 Structural Delta: -5 cm</td></tr>
-                    <tr><td>Velocity Running Approach</td><td>81 cm</td><td>86 cm</td><td>📈 Neuro-Drive Active</td></tr>
-                    <tr><td>Structural Back Squat</td><td>91 kg</td><td>116 kg</td><td>Systemic Force Deficit</td></tr>
-                    <tr><td>Systemic Trap Bar DL</td><td>127 kg</td><td>154 kg</td><td>Elastic Tissue Base</td></tr>
-                </tbody>
-            </table>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="content-section">
-        <div class="card-grid">
-            <div class="card">
-                <h3>🦶 Plant Kinematics</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item"><div><strong>Penultimate Step Elastic Loading</strong><div style="font-size:0.8rem; color:rgba(255,255,255,0.6)">Z-line drop mapping</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Brake Mechanism Conversion</strong><div style="font-size:0.8rem; color:rgba(255,255,255,0.6)">Anterior vector isolation</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>🏀 Motor Control Drills</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item"><div><strong>Momentum Catch Integration</strong><div style="font-size:0.8rem; color:rgba(255,255,255,0.6)">Rotational trunk stabilization</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                </ul>
+            <h3><span class="card-icon">🏆</span> True Metric Records</h3>
+            <div class="pr-table-wrapper">
+                <table class="pr-table">
+                    <thead>
+                        <tr><th>Matrix</th><th>Absolute</th><th>Target</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Static Vertical</td><td style="color:var(--primary); font-weight:bold;">71 cm</td><td>76 cm</td></tr>
+                        <tr><td>Running Approach</td><td style="color:var(--primary); font-weight:bold;">81 cm</td><td>86 cm</td></tr>
+                        <tr><td>Back Squat</td><td style="color:var(--primary); font-weight:bold;">91 kg</td><td>116 kg</td></tr>
+                        <tr><td>Trap Bar DL</td><td style="color:var(--primary); font-weight:bold;">127 kg</td><td>154 kg</td></tr>
+                    </tbody>
+                </table>
             </div>
         </div>
     </section>
-
-    <footer class="footer">
-        <p>Advanced Jump Biomechanics Dashboard. System Engine Scaled dynamically in Metric Units.</p>
-    </footer>
 
     <script>
-        // System Config & Global States
-        const TargetRimHeight = 305; // Official Rim Height (cm)
-        const BallClearanceDelta = 15; // Net structural clearance needed to execute clean overhead dunk (cm)
-        let chartData = [61, 66, 71, 74, 78, 81, 84];
+        const TargetRimHeight = 305;
+        const BallClearanceDelta = 15;
 
         function showSection(event, sectionId) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
             document.getElementById(sectionId).classList.add('active');
             event.target.classList.add('active');
+            
+            // Scroll to top of section for mobile
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        // Comprehensive Calculations Engine
         function updateProfile() {
             const h = parseFloat(document.getElementById('profileHeight').value) || 178;
             const w = parseFloat(document.getElementById('profileWeight').value) || 77;
             const r = parseFloat(document.getElementById('profileReach').value) || 229;
-            const currentVertValue = parseFloat(document.getElementById('calcMaxReach').value) - parseFloat(document.getElementById('calcReach').value) || 71;
+            const currentVertValue = parseFloat(document.getElementById('calcMaxReach')?.value || 300) - parseFloat(document.getElementById('calcReach')?.value || 229);
 
             document.getElementById('pillHeight').textContent = `${h} cm`;
             document.getElementById('pillWeight').textContent = `${w.toFixed(1)} kg`;
-            document.getElementById('currentVert').textContent = `${currentVertValue.toFixed(0)} cm`;
-            
-            // Scaled relative tracking
-            document.getElementById('calcReach').value = r;
-            document.getElementById('calcBW').value = w;
-            document.getElementById('standVert').value = currentVertValue;
+            if(document.getElementById('currentVert')) document.getElementById('currentVert').textContent = `${currentVertValue.toFixed(0)} cm`;
 
             const currentApex = r + currentVertValue;
-            const absoluteDunkThreshold = TargetRimHeight + BallClearanceDelta; // 320 cm target apex
+            const absoluteDunkThreshold = TargetRimHeight + BallClearanceDelta; 
             const deficit = absoluteDunkThreshold - currentApex;
 
             const textContainer = document.getElementById('dunkProgressText');
             const progressFill = document.getElementById('dunkProgress');
 
-            if(deficit > 0) {
-                textContainer.textContent = `Need ${deficit.toFixed(0)} cm structural lift`;
-                textContainer.style.color = "var(--warning)";
-                let percentage = Math.max(10, Math.min(100, (currentApex / absoluteDunkThreshold) * 100));
-                progressFill.style.width = `${percentage}%`;
-            } else {
-                textContainer.textContent = `DUNK READY! Threshold Surplus: +${Math.abs(deficit).toFixed(0)} cm`;
-                textContainer.style.color = "var(--accent)";
-                progressFill.style.width = "100%";
+            if(textContainer) {
+                if(deficit > 0) {
+                    textContainer.textContent = `Need ${deficit.toFixed(0)} cm lift`;
+                    textContainer.style.color = "var(--warning)";
+                    let percentage = Math.max(10, Math.min(100, (currentApex / absoluteDunkThreshold) * 100));
+                    progressFill.style.width = `${percentage}%`;
+                } else {
+                    textContainer.textContent = `DUNK READY! (+${Math.abs(deficit).toFixed(0)} cm)`;
+                    textContainer.style.color = "var(--accent)";
+                    progressFill.style.width = "100%";
+                }
             }
-            
-            // Sync Quick stats card
-            const currentSquatLoad = parseFloat(document.getElementById('currentSquat').value) || 0;
-            document.getElementById('quickSquat').textContent = `${(currentSquatLoad / w).toFixed(2)}x`;
         }
 
         function calculateVertical() {
             const reach = parseFloat(document.getElementById('calcReach').value) || 229;
             const maxReach = parseFloat(document.getElementById('calcMaxReach').value) || 300;
             const vert = maxReach - reach;
-            const mass = parseFloat(document.getElementById('calcBW').value) || 77;
-
             document.getElementById('vertValue').textContent = vert.toFixed(1) + ' cm';
-            
-            // Comprehensive Biophysical Physics Outputs
-            // 1. Flight time equation: t = sqrt(2d / g) -> total time = 2 * t
-            const g = 9.81;
-            const distMeters = vert / 100;
-            const flightTimeOneWay = Math.sqrt((2 * distMeters) / g);
-            const totalFlightTime = flightTimeOneWay * 2;
-
-            // 2. Takeoff Velocity equation: v = sqrt(2 * g * d)
-            const takeoffVelocity = Math.sqrt(2 * g * distMeters);
-
-            // 3. Peak Peak Kinetic Power Estimate via Sayers Equation: Peak Power (W) = 60.7 * (Jump Height cm) + 45.3 * (BodyMass kg) - 2000
-            const peakPowerWatts = (60.7 * vert) + (45.3 * mass) - 2000;
-            const relativePower = peakPowerWatts / mass;
-
-            const outputContainer = document.getElementById('ballisticOutputs');
-            outputContainer.innerHTML = `
-                <div><strong>Flight Time:</strong> ${totalFlightTime.toFixed(3)} seconds (Total air window)</div>
-                <div><strong>Instantaneous Velocity:</strong> ${takeoffVelocity.toFixed(2)} m/s at platform break</div>
-                <div><strong>Estimated Peak Kinetic Power Output:</strong> ${peakPowerWatts.toFixed(0)} W (${relativePower.toFixed(1)} W/kg ratio)</div>
-            `;
-            
-            document.getElementById('currentVert').textContent = `${vert.toFixed(0)} cm`;
             updateProfile();
-        }
-
-        function updateStrengthStandards() {
-            const bw = parseFloat(document.getElementById('calcBW').value) || 77;
-            const squat = parseFloat(document.getElementById('currentSquat').value) || 0;
-            const dl = parseFloat(document.getElementById('currentDL').value) || 0;
-            const clean = parseFloat(document.getElementById('currentClean').value) || 0;
-
-            const squatGoal = bw * 1.5;
-            const dlGoal = bw * 2.0;
-            const cleanGoal = bw * 1.0;
-
-            document.getElementById('squatGoal').textContent = `${squatGoal.toFixed(0)} kg`;
-            document.getElementById('dlGoal').textContent = `${dlGoal.toFixed(0)} kg`;
-            document.getElementById('cleanGoal').textContent = `${cleanGoal.toFixed(0)} kg`;
-
-            document.getElementById('squatProgress').style.width = Math.min(100, (squat / squatGoal) * 100) + '%';
-            document.getElementById('dlProgress').style.width = Math.min(100, (dl / dlGoal) * 100) + '%';
-            document.getElementById('cleanProgress').style.width = Math.min(100, (clean / cleanGoal) * 100) + '%';
-
-            document.getElementById('quickSquat').textContent = `${(squat / bw).toFixed(2)}x`;
         }
 
         function calculateRSI() {
             const jump = parseFloat(document.getElementById('rsiJump').value) || 35;
             const time = parseFloat(document.getElementById('rsiTime').value) || 0.25;
-            const boxH = parseFloat(document.getElementById('rsiBoxHeight').value) || 30;
-            const bw = parseFloat(document.getElementById('calcBW').value) || 77;
-
             const rsi = (jump / 100) / time;
+            
             document.getElementById('rsiValue').textContent = rsi.toFixed(2);
-            document.getElementById('quickRSI').textContent = rsi.toFixed(2);
+            if(document.getElementById('quickRSI')) document.getElementById('quickRSI').textContent = rsi.toFixed(2);
 
             let rating = '';
-            if (rsi < 1.5) rating = '🚨 Low Reactive Base - Focus on landing stiffness & short-response sub-maximal pogos.';
-            else if (rsi < 2.0) rating = '⚡ Functional Adaptive Zone - Highly efficient elasticity. Ready for advanced plyometrics.';
-            else rating = '🚀 Elite Systemic Return - Exceptional reflex stiffness profile.';
-
+            if (rsi < 1.5) rating = '🚨 Low Reactive Base';
+            else if (rsi < 2.0) rating = '⚡ Functional Adaptive Zone';
+            else rating = '🚀 Elite Systemic Return';
             document.getElementById('rsiRating').textContent = rating;
-
-            // Kinetic Ground Energy Metrics Estimator
-            const g = 9.81;
-            const dropVelocity = Math.sqrt(2 * g * (boxH / 100));
-            const reboundVelocity = Math.sqrt(2 * g * (jump / 100));
-            // Average Acceleration estimate across amortization phase: a = delta v / delta t
-            const accelerationEst = (reboundVelocity - (-dropVelocity)) / time;
-            const reactiveForceEst = bw * (g + accelerationEst); // F = m(g+a)
-
-            document.getElementById('rsiOutputs').innerHTML = `
-                <div><strong>Systemic Influx Speed:</strong> ${dropVelocity.toFixed(2)} m/s during structural load</div>
-                <div><strong>Mean Kinetic Structural Force:</strong> ~${reactiveForceEst.toFixed(0)} Newtons (${(reactiveForceEst / 9.81).toFixed(0)} kg equivalent compression)</div>
-            `;
         }
 
-        function updateApproach() {
-            const speed = parseInt(document.getElementById('approachSpeed').value);
-            document.getElementById('speedBarFill').style.width = (speed * 10) + '%';
-            document.getElementById('speedDisplay').textContent = `System Vector Rating: ${speed}/10`;
-            
-            const stepBoxes = document.querySelectorAll('.step-box');
-            stepBoxes.forEach((box, index) => {
-                box.classList.remove('active');
-                if (speed >= 7 && index === 2) box.classList.add('active'); // Block focus
-                else if (speed >= 4 && index === 1 && speed < 7) box.classList.add('active');
-                else if (speed < 4 && index === 0) box.classList.add('active');
-            });
-        }
-
-        function calculateApproach() {
-            const staticVert = parseFloat(document.getElementById('standVert').value) || 71;
-            const scaleSpeed = parseFloat(document.getElementById('approachSpeed').value) || 7;
-            
-            // Dynamic Conversion coefficient scaling model
-            // High approach speeds can unlock up to 25% height gains IF transformation mechanics are highly trained
-            let scalingFactor = 0.02 + (scaleSpeed * 0.022); 
-            const projectedApproachVert = staticVert * (1 + scalingFactor);
-            const netGain = projectedApproachVert - staticVert;
-
-            document.getElementById('approachValue').textContent = `${projectedApproachVert.toFixed(1)} cm`;
-
-            const reach = parseFloat(document.getElementById('calcReach').value) || 229;
-            const totalProjectedApex = reach + projectedApproachVert;
-            const targetDelta = (TargetRimHeight + BallClearanceDelta) - totalProjectedApex;
-
-            document.getElementById('approachOutputs').innerHTML = `
-                <div><strong>Kinetic Vector Gain:</strong> +${netGain.toFixed(1)} cm (${(scalingFactor * 100).toFixed(1)}% conversion efficiency)</div>
-                <div><strong>Projected Running Reach:</strong> ${totalProjectedApex.toFixed(1)} cm</div>
-                <div><strong>Rim Clearance Metric:</strong> ${targetDelta > 0 ? `Deficit: -${targetDelta.toFixed(0)} cm to clean dunk` : `Surplus: +${Math.abs(targetDelta).toFixed(0)} cm clear Above Rim`}</div>
-            `;
-        }
-
-        // Workouts Database Component
         const workoutDatabase = {
-    monday: {
-        title: 'Maximal Strength + Slow Stretch Shortening Cycle (Home Edition)',
-        meta: 'Target: Mechanical Force Capacity using Dumbbells and Mechanical Disadvantage',
-        badgeClass: 'strength',
-        list: [
-            { name: 'Deficit DB Suitcase Deadlift', detail: '4 sets x 6 reps. Stand on a slight ledge/book to increase range of motion. Focus on pulling heavy DBs with aggressive hip extension. Rest 2-3m.' },
-            { name: 'DB Goblet 1.5-Rep Squats', detail: '4 sets x 6-8 reps. Go all the way down, come up halfway, go back down, then stand completely up. Explode out of the bottom hole. Rest 2m.' },
-            { name: 'Rear-Foot Elevated (Bulgarian) Split Squats', detail: '3 sets x 8 reps/leg. Hold DBs at your sides. Drive through the front heel to maximize quad and glute recruitment. Rest 90s.' },
-            { name: 'Seated Box Jumps (Floor to Chair/Ledge)', detail: '4 sets x 3 reps. Sit completely on a low stool or chair to eliminate elastic momentum, then explode upward onto a secure target. Rest 2m.' }
-        ]
-    },
-    wednesday: {
-        title: 'Fast SSC Reactive Plyometrics (Strict Bodyweight)',
-        meta: 'Target: Neurological Stiffness & Ankle Tendon Elastic Pool Activation',
-        badgeClass: 'plyo',
-        list: [
-            { name: 'Vertical Elastic Ankle Pogos', detail: '3 sets x 20 reps. Minimal knee bend. Act like a stiff spring, keeping ground contact time under 200 milliseconds.' },
-            { name: 'Stair / Low Ledge Depth Jumps', detail: '4 sets x 3 reps. Step off a standard house step or low sturdy box (30cm), hit the floor with stiff ankles, and immediately rebound maximum vertical.' },
-            { name: 'Continuous Horizontal Broad Jumps', detail: '3 sets x 5 bounds. Maximize horizontal travel, land softly, and instantly redirect into the next jump without resetting.' },
-            { name: 'Single-Leg ISO-Stiff Hurdles (Line Hops)', detail: '3 sets x 8 reactive snaps per leg. Jump rapidly back and forth across a line on the floor. Stay exclusively on the ball of your foot.' }
-        ]
-    },
-    friday: {
-        title: 'Rate of Force Development & Power-Speed Translation',
-        meta: 'Target: Dumbbell Triple Extension & Aggressive Single-Leg Acceleration',
-        badgeClass: 'power',
-        list: [
-            { name: 'Single-Arm Dumbbell Snatch', detail: '5 sets x 3 reps per arm. Pull the dumbbell from between your knees and violently explode it overhead using your hips and calves. Max speed.' },
-            { name: 'Bodyweight Skater Bounds (With Stick & Hold)', detail: '3 sets x 8 reps/leg. Leap laterally as far as possible, catch your balance on one leg instantly, hold for 1 second, then explode back.' },
-            { name: 'Dumbbell Jump Squats (Light Load)', detail: '4 sets x 4 reps. Hold light dumbbells at your sides. Drop quickly into a quarter squat and launch into the air as high as possible.' },
-            { name: 'Pro-Agility Shuttle Matrix (5-10-5 Lines)', detail: '4 runs. Tape out a grid at home or in the driveway. Max effort sprinting, dropping your hips sharply to change directions.' }
-        ]
-    },
-    saturday: {
-        title: 'Kinematics Technique & Running Approach Optimization',
-        meta: 'Target: Converting Floor Power into Airborne Max Displacement',
-        badgeClass: 'tech',
-        list: [
-            { name: 'Penultimate Low Center of Gravity Slides', detail: '10 minutes structured approach shadow pacing. Focus on a long, low second-to-last step on a driveway or open floor.' },
-            { name: 'Max Effort Running Approach Grass/Court Touches', detail: '6 attempts. Find a high wall, basketball hoop, or tree branch outside. Execute full approaches and try to break your apex record.' },
-            { name: 'Sub-Maximal Ball Control Approach Enforcements', detail: '4 sets x 3 repetitions. Practice your approach step-pattern while actively holding a basketball or heavily weighted object to lock in core control.' }
-        ]
-    }
-};
+            monday: {
+                title: 'Maximal Strength',
+                list: [
+                    { name: 'Deficit DB Deadlift', detail: '4 sets x 6 reps. Rest 2-3m.' },
+                    { name: 'DB 1.5-Rep Squats', detail: '4 sets x 6-8 reps. Rest 2m.' },
+                    { name: 'Bulgarian Split Squats', detail: '3 sets x 8 reps/leg. Rest 90s.' }
+                ]
+            },
+            wednesday: {
+                title: 'Fast SSC Reactive Plyo',
+                list: [
+                    { name: 'Vertical Ankle Pogos', detail: '3 sets x 20 reps. Stiff spring.' },
+                    { name: 'Low Ledge Depth Jumps', detail: '4 sets x 3 reps. Max rebound.' },
+                    { name: 'Continuous Broad Jumps', detail: '3 sets x 5 bounds.' }
+                ]
+            },
+            friday: {
+                title: 'Rate of Force',
+                list: [
+                    { name: 'Single-Arm DB Snatch', detail: '5 sets x 3 reps/arm.' },
+                    { name: 'DB Jump Squats', detail: '4 sets x 4 reps. Light load.' },
+                    { name: 'Pro-Agility 5-10-5', detail: '4 runs. Max effort.' }
+                ]
+            },
+            saturday: {
+                title: 'Bio-Kinematics Tech',
+                list: [
+                    { name: 'Low COG Slides', detail: '10 mins approach pacing.' },
+                    { name: 'Max Effort Approaches', detail: '6 attempts on grass/court.' }
+                ]
+            }
+        };
 
         function loadWorkout(dayKey) {
             const targetData = workoutDatabase[dayKey];
-            let listHtml = '<ul class="exercise-list">';
+            let listHtml = '<ul style="list-style:none; padding:0;">';
             targetData.list.forEach(ex => {
                 listHtml += `
                     <li class="exercise-item">
                         <div>
-                            <strong>${ex.name}</strong>
-                            <div style="font-size:0.85rem; color:rgba(255,255,255,0.6); margin-top:0.2rem;">${ex.detail}</div>
+                            <strong style="color:var(--light)">${ex.name}</strong>
+                            <div style="font-size:0.8rem; color:rgba(255,255,255,0.6); margin-top:0.2rem;">${ex.detail}</div>
                         </div>
-                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
                     </li>
                 `;
             });
             listHtml += '</ul>';
-
             document.getElementById('workoutDisplay').innerHTML = `
-                <div style="animation: fadeIn 0.3s">
-                    <span class="workout-type-badge ${targetData.badgeClass}" style="padding: 0.3rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; background:rgba(255,255,255,0.1); text-transform:uppercase; display:inline-block; margin-bottom:0.5rem">${dayKey} profile</span>
-                    <h4>${targetData.title}</h4>
-                    <p style="font-size:0.85rem; color: var(--warning); margin-bottom:1.5rem;">${targetData.meta}</p>
-                    ${listHtml}
-                </div>
+                <h4 style="margin-bottom: 1rem; color: var(--primary);">${targetData.title}</h4>
+                ${listHtml}
             `;
         }
 
-        function toggleComplete(buttonElement) {
-            buttonElement.classList.toggle('completed');
-            const total = document.querySelectorAll('#workoutDisplay .check-btn').length;
-            const done = document.querySelectorAll('#workoutDisplay .check-btn.completed').length;
-            if(total > 0 && total === done) {
-                document.getElementById('badge2').className = "badge unlocked";
-                document.getElementById('badge2').textContent = "Workout Cleared";
-            }
-        }
-
-        // Timer Module Core
         let timerSeconds = 0, timerInterval, timerRunning = false;
         function updateTimerDisplay() {
             const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
@@ -1034,74 +613,11 @@
         function resetTimer() { pauseTimer(); timerSeconds = 0; updateTimerDisplay(); }
         function setTimer(s) { resetTimer(); timerSeconds = s; updateTimerDisplay(); startTimer(); }
 
-        // RSI Contact Timer Simulation Hold System
-        let rsiTimeStart, rsiTimerInterval, holdActive = false;
-        function startRSITimer() {
-            rsiTimeStart = performance.now();
-            holdActive = true;
-            document.getElementById('rsiTimer').textContent = "LOADED...";
-        }
-        function stopRSITimer() {
-            if (holdActive) {
-                const totalWindowSeconds = (performance.now() - rsiTimeStart) / 1000;
-                document.getElementById('rsiTimer').textContent = totalWindowSeconds.toFixed(3) + 's';
-                holdActive = false;
-                // Auto-inject recorded structural contact window into calculating field
-                document.getElementById('rsiTime').value = totalWindowSeconds.toFixed(3);
-                calculateRSI();
-            }
-        }
-
-        // Interactive Linear Trend Graph Construction
-        function updateChart() {
-            const chartArea = document.getElementById('progressChart');
-            chartArea.innerHTML = '';
-            if (chartData.length === 0) return;
-            const highPeak = Math.max(...chartData);
-
-            chartData.forEach((value, index) => {
-                const columnHeightPercentage = (value / highPeak) * 95;
-                const columnNode = document.createElement('div');
-                columnNode.className = 'chart-column';
-                columnNode.style.height = `${columnHeightPercentage}%`;
-                columnNode.innerHTML = `
-                    <span class="chart-value">${value}cm</span>
-                    <span class="chart-label">P-${index + 1}</span>
-                `;
-                chartArea.appendChild(columnNode);
-            });
-        }
-
-        function addDataPoint() {
-            const entry = prompt("Enter documented system vertical vertical displacement (cm):");
-            if(entry && !isNaN(entry)) {
-                chartData.push(parseInt(entry));
-                updateChart();
-            }
-        }
-        function clearChart() { chartData = []; updateChart(); }
-
-        function saveNotes() {
-            const dataText = document.getElementById('trainingNotes').value;
-            if(!dataText.trim()) return;
-            const container = document.getElementById('savedNotes');
-            const row = document.createElement('div');
-            row.style.cssText = "background:rgba(0,0,0,0.3); padding:0.85rem; border-radius:8px; margin-bottom:0.5rem; border-left:2px solid var(--primary); font-size:0.85rem";
-            row.innerHTML = `<strong>Metrics Node Tracking Timestamp:</strong> ${new Date().toLocaleDateString()}<br>${dataText}`;
-            container.prepend(row);
-            document.getElementById('trainingNotes').value = '';
-        }
-
-        // Global Orchestration Initialization Lifecycle Hook
         document.addEventListener('DOMContentLoaded', () => {
-            // Initial sync across matrix equations
+            updateProfile();
             calculateVertical();
-            updateStrengthStandards();
             calculateRSI();
-            updateApproach();
-            calculateApproach();
             loadWorkout('monday');
-            updateChart();
         });
     </script>
 </body>
