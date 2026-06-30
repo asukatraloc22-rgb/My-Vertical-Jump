@@ -1,0 +1,18 @@
+{
+  "name": "5'10\" PG Dunk System",
+  "short_name": "PG Dunk",
+  "description": "Elite Basketball Performance Suite",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "background_color": "#0f0f1a",
+  "theme_color": "#ff6b35",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%230f0f1a'/><text y='.9em' font-size='90'>🏀</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
