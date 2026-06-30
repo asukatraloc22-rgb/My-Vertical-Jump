@@ -1,16 +1,18 @@
-const CACHE_NAME = 'pg-dunk-v1';
+const CACHE_NAME = 'pg-dunk-v2-dynamic';
 
-// Installation du Service Worker
 self.addEventListener('install', (event) => {
     self.skipWaiting();
 });
 
-// Activation et nettoyage immédiat
 self.addEventListener('activate', (event) => {
     event.waitUntil(self.clients.claim());
 });
 
-// Stratégie "Network Only" : laisse Vercel gérer les fichiers en temps réel sans bloquer le cache
 self.addEventListener('fetch', (event) => {
-    event.respondWith(fetch(event.request));
+    // Stratégie Network-first pour garantir la mise à jour instantanée après tes déploiements Vercel
+    event.respondWith(
+        fetch(event.request).catch(() => {
+            return caches.match(event.request);
+        })
+    );
 });
