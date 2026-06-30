@@ -7,25 +7,25 @@
     <meta name="theme-color" content="#0f0f1a">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="PG Dunk">
+    <meta name="apple-mobile-web-app-title" content="PG Flight">
     
     <link rel="manifest" href="./manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f0f1a%22/><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
 
-    <title>5'10" PG Dunk System - Elite Performance Suite</title>
+    <title>5'10" PG Flight & IQ Suite</title>
     
     <style>
         :root {
             --primary: #ff6b35;
-            --primary-glow: rgba(255, 107, 53, 0.2);
+            --primary-glow: rgba(255, 107, 53, 0.25);
             --secondary: #004e89;
             --accent: #1a936f;
-            --dark-bg: #0f0f1a;
-            --card-bg: rgba(255, 255, 255, 0.04);
-            --card-border: rgba(255, 255, 255, 0.1);
+            --dark-bg: #090911;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --card-border: rgba(255, 255, 255, 0.12);
             --light: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.85);
+            --text-muted: rgba(255, 255, 255, 0.88);
             --danger: #e63946;
             --warning: #f4a261;
             --safe-bottom: env(safe-area-inset-bottom, 20px);
@@ -48,20 +48,18 @@
         }
 
         .header {
-            background: linear-gradient(135deg, #00223e, var(--dark-bg));
-            padding: 2.5rem 1.5rem;
+            background: linear-gradient(135deg, #00152b, var(--dark-bg));
+            padding: 3rem 1.5rem 2rem;
             text-align: center;
             border-bottom: 3px solid var(--primary);
-            position: relative;
-            overflow: hidden;
         }
 
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
             margin-bottom: 0.5rem;
             text-transform: uppercase;
             letter-spacing: 2px;
-            font-weight: 800;
+            font-weight: 900;
             background: linear-gradient(to right, #ffffff, #ffb396);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
@@ -70,45 +68,44 @@
         .header p {
             color: var(--primary);
             font-size: 1.1rem;
-            font-weight: 600;
-            letter-spacing: 1px;
+            font-weight: 700;
         }
 
         .nav-tabs {
             display: flex;
-            background: rgba(15, 15, 26, 0.9);
-            padding: 0.75rem 1rem;
-            gap: 0.5rem;
+            background: rgba(9, 9, 17, 0.95);
+            padding: 0.8rem 1rem;
+            gap: 0.6rem;
             border-bottom: 1px solid var(--card-border);
             position: sticky;
             top: 0;
             z-index: 100;
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
         .nav-tabs::-webkit-scrollbar { display: none; }
 
         .nav-tab {
-            padding: 0.75rem 1.25rem;
-            border: 1px solid transparent;
-            background: rgba(255, 255, 255, 0.05);
-            color: rgba(255, 255, 255, 0.8);
+            padding: 0.75rem 1.35rem;
+            border: 1px solid var(--card-border);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.85);
             cursor: pointer;
-            border-radius: 20px;
-            transition: all 0.25s ease;
-            font-weight: 600;
-            font-size: 0.9rem;
-            flex-shrink: 0;
+            border-radius: 24px;
+            transition: all 0.2s ease;
+            font-weight: 700;
+            font-size: 0.85rem;
+            text-transform: uppercase;
         }
 
         .nav-tab.active {
             background: var(--primary);
             color: white;
-            box-shadow: 0 4px 12px var(--primary-glow);
+            border-color: var(--primary);
+            box-shadow: 0 4px 14px var(--primary-glow);
         }
 
         .content-section {
@@ -116,46 +113,45 @@
             padding: 1.5rem 1rem;
             max-width: 1300px;
             margin: 0 auto;
-            animation: fadeIn 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: fadeIn 0.3s ease-out;
         }
         .content-section.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         @media (min-width: 768px) {
-            .card-grid { grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); }
+            .card-grid { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
         }
 
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
+            border-radius: 20px;
+            padding: 1.75rem;
             border: 1px solid var(--card-border);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
         .card h3 {
             color: #ffffff;
-            font-size: 1.25rem;
-            margin-bottom: 1.25rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: 2px solid var(--card-border);
             padding-bottom: 0.75rem;
         }
 
-        .card-icon { color: var(--primary); }
+        .card-icon { color: var(--primary); font-weight: 900; }
 
         .metric-badge-container {
             display: grid;
@@ -165,275 +161,279 @@
         }
 
         .metric-pill {
-            background: rgba(0, 0, 0, 0.3);
-            padding: 0.75rem;
-            border-radius: 10px;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.85rem;
+            border-radius: 12px;
             border: 1px solid var(--card-border);
             text-align: center;
         }
-        .metric-pill .label { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; }
-        .metric-pill .val { font-size: 1.15rem; font-weight: 700; color: var(--warning); margin-top: 0.25rem; }
+        .metric-pill .label { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; font-weight: 600; }
+        .metric-pill .val { font-size: 1.25rem; font-weight: 800; color: var(--warning); margin-top: 0.25rem; }
 
         .progress-container { margin: 1.25rem 0; }
-        .progress-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.85rem; color: rgba(255,255,255,0.9); font-weight: 600;}
-        .progress-bar { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border-radius: 6px; transition: width 0.8s ease; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: #fff; font-weight: 700;}
+        .progress-bar { height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border-radius: 6px; }
 
         .input-group { margin-bottom: 1.25rem; }
         .input-group label {
             display: block;
             margin-bottom: 0.5rem;
-            color: var(--text-muted);
-            font-weight: 600;
+            color: #ffffff;
+            font-weight: 700;
             font-size: 0.85rem;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .input-group input, .input-group select {
             width: 100%;
-            padding: 0.85rem 1rem;
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            background: rgba(0, 0, 0, 0.4);
-            color: var(--light);
-            border-radius: 10px;
+            padding: 0.95rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            background: #000000;
+            color: #ffffff;
+            border-radius: 12px;
             font-size: 16px;
+            font-weight: 600;
         }
         .input-group input:focus, .input-group select:focus {
             outline: none;
             border-color: var(--primary);
-            background: rgba(255, 107, 53, 0.05);
+            box-shadow: 0 0 10px var(--primary-glow);
         }
 
-        .input-group select option {
-            background-color: var(--dark-bg);
-            color: var(--light);
-        }
+        .input-group select option { background-color: var(--dark-bg); color: var(--light); }
         
         .btn {
             width: 100%;
-            padding: 0.85rem;
+            padding: 1rem;
             background: var(--primary);
             color: white;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 700;
+            font-size: 1rem;
+            font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            transition: all 0.2s;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 0.5rem;
-            margin-bottom: 0.5rem;
         }
-        @media (min-width: 768px) { .btn { width: auto; display: inline-flex; margin-bottom: 0; } }
-        .btn:hover { background: #ff8354; transform: translateY(-1px); }
+        .btn:hover { background: #ff8354; }
         .btn-secondary { background: var(--secondary); }
-        .btn-secondary:hover { background: #0063ad; }
 
         .result-box {
-            background: rgba(26, 147, 111, 0.15);
-            border: 1px solid rgba(26, 147, 111, 0.4);
-            border-radius: 12px;
-            padding: 1.25rem;
-            margin-top: 1rem;
+            background: rgba(26, 147, 111, 0.18);
+            border: 1.5px solid rgba(26, 147, 111, 0.5);
+            border-radius: 14px;
+            padding: 1.5rem;
+            margin-top: 1.25rem;
             display: none;
         }
-        .result-box.show { display: block; animation: fadeIn 0.3s; }
-        .result-value { font-size: 2.2rem; color: var(--accent); font-weight: 800; display: block; margin-bottom: 0.5rem; }
+        .result-box.show { display: block; }
+        .result-value { font-size: 2.4rem; color: #22c55e; font-weight: 900; display: block; margin-bottom: 0.4rem; }
 
         .output-data-list {
             margin-top: 0.75rem;
             padding-top: 0.75rem;
-            border-top: 1px dashed rgba(255,255,255,0.2);
-            font-size: 0.9rem;
+            border-top: 1px dashed rgba(255,255,255,0.3);
+            font-size: 0.95rem;
             display: flex;
             flex-direction: column;
-            gap: 0.6rem;
-            color: var(--text-muted);
-            line-height: 1.4;
+            gap: 0.5rem;
+            color: #ffffff;
         }
 
-        .timer-display {
-            font-size: 4.5rem;
-            font-weight: 800;
-            text-align: center;
-            color: var(--primary);
-            font-family: system-ui, monospace;
-            letter-spacing: -2px;
-            margin: 1.5rem 0;
-        }
-
+        .timer-display { font-size: 4.5rem; font-weight: 900; text-align: center; color: var(--primary); font-family: monospace; margin: 1rem 0; }
         .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
         .timer-controls .btn:first-child { grid-column: span 2; }
         .timer-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
-        .timer-presets .btn { padding: 0.75rem 0; font-size: 0.8rem; }
 
+        /* HIGH-CONTRAST SKILLS & EXERCISES */
         .exercise-list { list-style: none; }
         .exercise-item {
-            background: rgba(255, 255, 255, 0.08);
-            border-left: 4px solid var(--primary);
-            padding: 1rem 1.25rem;
-            margin-bottom: 0.75rem;
-            border-radius: 0 12px 12px 0;
+            background: rgba(255, 255, 255, 0.1);
+            border-left: 5px solid var(--primary);
+            padding: 1.25rem;
+            margin-bottom: 0.85rem;
+            border-radius: 0 14px 14px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid var(--card-border);
+            border-right: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
         }
-        .exercise-item strong {
-            color: #ffffff;
-            font-size: 1.05rem;
-            display: block;
+        .exercise-item strong { color: #ffffff; font-size: 1.1rem; display: block; margin-bottom: 0.3rem; font-weight: 800; }
+        .exercise-item .detail-text { color: #f1f5f9; font-size: 0.95rem; line-height: 1.4; font-weight: 500; }
+        
+        /* Masterclass Read System Badges */
+        .read-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border-radius: 6px;
+            text-transform: uppercase;
             margin-bottom: 0.4rem;
-        }
-        .exercise-item .detail-text {
-            color: rgba(255, 255, 255, 0.85);
-            font-size: 0.9rem;
-            line-height: 1.4;
         }
 
         .check-btn {
-            width: 32px; height: 32px; border: 2px solid rgba(255,255,255,0.4);
-            background: rgba(0,0,0,0.3); border-radius: 50%; cursor: pointer; flex-shrink: 0; margin-left: 1rem;
+            width: 36px; height: 36px; border: 2px solid #ffffff;
+            background: rgba(0,0,0,0.5); border-radius: 50%; cursor: pointer; flex-shrink: 0;
         }
         .check-btn.completed { background: var(--accent); border-color: var(--accent); }
-        .check-btn.completed::after { content: '✓'; color: white; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;}
-
-        .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
-        .day-card { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 1rem; border: 1px solid var(--card-border); border-top: 3px solid var(--secondary); }
-        .day-card.active-day { border-top-color: var(--primary); background: rgba(255, 107, 53, 0.1); border-color: rgba(255, 107, 53, 0.3); }
-        .day-title { font-weight: 700; color: var(--primary); margin-bottom: 0.25rem; }
+        .check-btn.completed::after { content: '✓'; color: white; font-weight: 900; font-size: 1.3rem; display: flex; justify-content: center; align-items: center; }
 
         .speed-visualizer { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; }
-        .speed-bar-container { flex: 1; height: 12px; background: rgba(255,255,255,0.15); border-radius: 6px; overflow: hidden; }
-        .speed-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 70%; transition: width 0.3s; }
+        .speed-bar-container { flex: 1; height: 12px; background: rgba(255,255,255,0.2); border-radius: 6px; }
+        .speed-bar-fill { height: 100%; background: linear-gradient(90deg, var(--accent), var(--primary)); width: 70%; }
         
-        .approach-diagram { display: flex; justify-content: space-between; gap: 0.5rem; margin: 1.5rem 0; overflow-x: auto; padding: 0.5rem 0; }
-        .step-box { background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 8px; padding: 0.75rem; text-align: center; flex: 1; min-width: 80px; }
+        .approach-diagram { display: flex; gap: 0.5rem; margin: 1.5rem 0; overflow-x: auto; padding-bottom: 0.5rem; }
+        .step-box { background: #000000; border: 2px solid var(--card-border); border-radius: 10px; padding: 0.85rem; text-align: center; flex: 1; min-width: 95px; }
         .step-box.active { border-color: var(--primary); background: rgba(255,107,53,0.15); }
-        .step-title { font-size: 0.85rem; font-weight: 700; color: var(--primary); }
-        .step-desc { font-size: 0.75rem; color: rgba(255,255,255,0.8); margin-top: 0.3rem; }
+        .step-title { font-size: 0.9rem; font-weight: 800; color: var(--primary); }
+        .step-desc { font-size: 0.8rem; color: #fff; margin-top: 0.25rem; }
 
-        .badge-container { display: flex; gap: 0.7rem; flex-wrap: wrap; }
-        .badge { padding: 0.5rem 1rem; border-radius: 30px; font-size: 0.8rem; font-weight: 700; text-transform: uppercase; }
-        .badge.locked { background: rgba(255,255,255,0.1); color: rgba(255,255,255,0.4); }
-        .badge.unlocked { background: var(--accent); color: white; box-shadow: 0 0 12px rgba(26,147,111,0.4); }
-
-        .notes-area { width: 100%; min-height: 120px; background: rgba(0,0,0,0.3); border: 1px solid var(--card-border); border-radius: 10px; padding: 1rem; color: var(--light); font-size: 16px; margin-bottom: 0.75rem; }
-
-        .pr-table-wrapper { overflow-x: auto; }
-        .pr-table { width: 100%; border-collapse: collapse; margin-top: 1rem; font-size: 0.9rem; min-width: 400px; }
-        .pr-table th, .pr-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--card-border); }
-        .pr-table th { color: var(--primary); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
-
-        .chart-container { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--card-border); }
-        .chart-bar { display: flex; align-items: flex-end; height: 220px; gap: 0.75rem; margin-top: 1.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.2); position: relative; }
-        .chart-column { flex: 1; background: linear-gradient(to top, var(--secondary), var(--primary)); border-radius: 6px 6px 0 0; transition: height 0.6s ease; position: relative; min-height: 15px; }
-        .chart-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: rgba(255,255,255,0.8); }
-        .chart-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.85rem; font-weight: 700; color: var(--warning); }
+        .pr-table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+        .pr-table th, .pr-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--card-border); color: #fff; font-weight: 600; }
+        .pr-table th { color: var(--primary); font-weight: 800; text-transform: uppercase; font-size: 0.8rem; }
     </style>
 </head>
 <body>
 
     <header class="header">
-        <div style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.4)); margin-bottom: 0.5rem; line-height: 1;">🏀</div>
-        <h1>PG Dunk System</h1>
-        <p>Elite Performance Suite</p>
+        <div style="font-size: 3.8rem; filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.5)); margin-bottom: 0.5rem;">🏀</div>
+        <h1>PG Dunk & IQ System</h1>
+        <p>The Ultimate 5'10" Prototype Suite</p>
     </header>
 
     <nav class="nav-tabs">
-        <button class="nav-tab active" onclick="showSection(event, 'dashboard')">📊 Dashboard</button>
-        <button class="nav-tab" onclick="showSection(event, 'calculator')">🧮 Calculators</button>
-        <button class="nav-tab" onclick="showSection(event, 'workouts')">💪 Workouts</button>
-        <button class="nav-tab" onclick="showSection(event, 'timer')">⏱️ Timer</button>
-        <button class="nav-tab" onclick="showSection(event, 'progress')">📈 Progress</button>
-        <button class="nav-tab" onclick="showSection(event, 'skills')">🎯 Skills</button>
-        <button class="nav-tab" onclick="showSection(event, 'euroleague')">🇪🇺 EuroLeague PG</button>
+        <button class="nav-tab active" onclick="showSection(event, 'dashboard')">📊 HQ Dashboard</button>
+        <button class="nav-tab" onclick="showSection(event, 'skills')">🧠 Masterclass IQ & Skills</button>
+        <button class="nav-tab" onclick="showSection(event, 'calculator')">🧮 Engines</button>
+        <button class="nav-tab" onclick="showSection(event, 'workouts')">💪 Routines</button>
+        <button class="nav-tab" onclick="showSection(event, 'timer')">⏱️ Timers</button>
+        <button class="nav-tab" onclick="showSection(event, 'progress')">📈 Analytics</button>
     </nav>
 
     <section id="dashboard" class="content-section active">
         <div class="card-grid">
             <div class="card">
-                <h3><span class="card-icon">📏</span> Biometrics & Profile</h3>
+                <h3><span class="card-icon">📏</span> Biometrics Engine</h3>
                 <div class="metric-badge-container">
                     <div class="metric-pill"><div class="label">Height</div><div class="val" id="pillHeight">178 cm</div></div>
                     <div class="metric-pill"><div class="label">Weight</div><div class="val" id="pillWeight">77.0 kg</div></div>
                 </div>
-                <div class="input-group">
-                    <label>Height (cm)</label>
-                    <input type="number" id="profileHeight" value="178" onchange="updateProfile()">
-                </div>
-                <div class="input-group">
-                    <label>Weight (kg)</label>
-                    <input type="number" id="profileWeight" value="77" onchange="updateProfile()">
-                </div>
-                <div class="input-group">
-                    <label>Standing Reach (cm)</label>
-                    <input type="number" id="profileReach" value="229" onchange="updateProfile()">
-                </div>
+                <div class="input-group"><label>Height (cm)</label><input type="number" id="profileHeight" value="178" onchange="updateProfile()"></div>
+                <div class="input-group"><label>Weight (kg)</label><input type="number" id="profileWeight" value="77" onchange="updateProfile()"></div>
+                <div class="input-group"><label>Standing Reach (cm)</label><input type="number" id="profileReach" value="229" onchange="updateProfile()"></div>
                 <div class="progress-container">
-                    <div class="progress-label"><span>Current Vertical Jump</span><span id="currentVert">71 cm</span></div>
+                    <div class="progress-label"><span>True Vertical Load</span><span id="currentVert">71 cm</span></div>
                     <div class="progress-bar"><div class="progress-fill" id="vertProgress" style="width: 70%"></div></div>
                 </div>
                 <div class="progress-container">
-                    <div class="progress-label"><span>Dunk Clearance Progress</span><span id="dunkProgressText">Loading...</span></div>
+                    <div class="progress-label"><span>Rim Apex Margin</span><span id="dunkProgressText">Loading...</span></div>
                     <div class="progress-bar"><div class="progress-fill" id="dunkProgress" style="width: 85%"></div></div>
                 </div>
             </div>
 
             <div class="card">
-                <h3><span class="card-icon">🏆</span> Power Milestones</h3>
-                <div class="badge-container">
-                    <div class="badge unlocked" id="badge1">Rim Touch</div>
-                    <div class="badge locked" id="badge2">First Dunk</div>
-                    <div class="badge locked" id="badge3">76cm Vert</div>
-                    <div class="badge locked" id="badge4">Windmill</div>
-                    <div class="badge locked" id="badge5">360 Finish</div>
-                </div>
-                <p style="margin-top: 1.5rem; color: var(--text-muted); font-size: 0.85rem; line-height: 1.4;">
-                    Your baseline power capacities scale dynamically based on current Strength-to-Weight metrics.
-                </p>
-            </div>
-
-            <div class="card">
-                <h3><span class="card-icon">📅</span> Microcycle Schedule</h3>
-                <div class="week-grid">
-                    <div class="day-card" id="day1"><div class="day-title">Mon</div><div style="font-size:0.8rem; color:var(--text-muted)">Max Force / SSC</div></div>
-                    <div class="day-card" id="day2"><div class="day-title">Wed</div><div style="font-size:0.8rem; color:var(--text-muted)">Fast SSC Plyos</div></div>
-                    <div class="day-card" id="day3"><div class="day-title">Fri</div><div style="font-size:0.8rem; color:var(--text-muted)">Rate of Force</div></div>
-                    <div class="day-card" id="day4"><div class="day-title">Sat</div><div style="font-size:0.8rem; color:var(--text-muted)">Kinematics Tech</div></div>
-                </div>
-            </div>
-
-            <div class="card">
-                <h3><span class="card-icon">⚡</span> Neuro-Kinetic Metrics</h3>
+                <h3><span class="card-icon">⚡</span> Neuro-Kinetic Benchmarks</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1.25rem;">
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight:800; color: var(--primary);" id="quickRSI">1.40</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted)">Reactive Strength (RSI)</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight:800; color: var(--accent);" id="quickSquat">1.18x</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted)">Relative Squat Multiplier</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight:800; color: var(--warning);" id="quickBroad">280 cm</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted)">Horizontal Elastic Pool</div>
-                    </div>
-                    <div style="text-align: center;">
-                        <div style="font-size: 2rem; font-weight:800; color: var(--danger);" id="quickSprint">4.50s</div>
-                        <div style="font-size: 0.8rem; color: var(--text-muted)">CODA Shuttle (5-10-5)</div>
-                    </div>
+                    <div class="metric-pill"><div class="val" style="color: var(--primary);" id="quickRSI">1.40</div><div class="label">Reactive Elasticity (RSI)</div></div>
+                    <div class="metric-pill"><div class="val" style="color: var(--accent);" id="quickSquat">1.18x</div><div class="label">Relative Squat Ratio</div></div>
+                    <div class="metric-pill"><div class="val" style="color: var(--warning);" id="quickBroad">280 cm</div><div class="label">Horizontal Force Deck</div></div>
+                    <div class="metric-pill"><div class="val" style="color: var(--danger);" id="quickSprint">4.50s</div><div class="label">CODA 5-10-5 Matrix</div></div>
                 </div>
             </div>
         </div>
+    </section>
 
-        <div class="card">
-            <h3><span class="card-icon">📝</span> Performance Log</h3>
-            <textarea class="notes-area" id="trainingNotes" placeholder="Log physiological feelings, velocity changes, neurological fatigue..."></textarea>
-            <button class="btn" onclick="saveNotes()">💾 Store Log Entry</button>
-            <div id="savedNotes" style="margin-top: 1.25rem;"></div>
+    <section id="skills" class="content-section">
+        <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, #001f3f, #000); border-color: var(--primary);">
+            <h3 style="color: var(--primary);">🇪🇺 EuroLeague PG Structural Tactics</h3>
+            <p style="font-size: 0.95rem; color: #f8fafc; line-height: 1.6;">
+                À 1m78, pour dominer la compétition FIBA la plus fermée du globe, la technique doit servir une lecture mentale immédiate. Chaque move ci-dessous est associé au <strong>"Read" (la lecture)</strong> et au <strong>"Play" (l'impact collectif)</strong>. Devienne le cauchemar tactique de l'adversaire.
+            </p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card">
+                <h3><span class="card-icon">🧠</span> Pick & Roll Dissection & Reads</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs Drop Defense</span>
+                            <strong>The Hostage Dribble (In-Jail)</strong>
+                            <div class="detail-text">Bloquer le défenseur direct sur sa hanche arrière juste après l'écran. Play : Force le pivot adverse à monter sur toi, ouvrant le lob ou le floater de manière chirurgicale.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs Soft Hedge</span>
+                            <strong>The Snake Cross-Over</strong>
+                            <div class="detail-text">Changer brutalement de trajectoire au milieu de l'écran pour passer devant le pivot adverse. Play : Brise la couverture et annihile toute possibilité de récupération défensive.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs Under Defense</span>
+                            <strong>Pull-Up Metric Snapping</strong>
+                            <div class="detail-text">Si le défenseur passe sous l'écran, s'arrêter net derrière la ligne. Play : Sanction immédiate à 3 points avec un transfert d'énergie ultra-rapide des hanches vers le haut.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">⚡</span> Space Creation & Shifty Handling</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs High Pressure</span>
+                            <strong>Inverted Hesitation Pocket</strong>
+                            <div class="detail-text">Feinter l'arrêt complet en suspendant la balle sur le côté opposé au drive (Pocket Dribble). Play : Figurer les appuis du défenseur pour ensuite déclencher un premier pas dévastateur.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs Lateral Shifting</span>
+                            <strong>The Punch Drag & Wrap</strong>
+                            <div class="detail-text">Dribble foudroyant vers l'avant, arrêt brutal sur un pas (Punch) et ramener la balle derrière le dos ou entre les jambes. Play : Crée instantanément 2 mètres de séparation pour le tir.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
+                    </li>
+                </ul>
+            </div>
+
+            <div class="card">
+                <h3><span class="card-icon">🪶</span> Elite Paint Finishes & Contact Absorption</h3>
+                <ul class="exercise-list">
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs Shot Blocker Rim-Protection</span>
+                            <strong>Two-Foot Amortized Floater</strong>
+                            <div class="detail-text">S'arrêter sur un saut synchrone (2 pieds) à haut niveau d'absorption mécanique et lâcher un tir en cloche très haut. Play : Évite le contre des pivots de plus de 2m10 en relâchant la balle avant l'aide.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
+                    </li>
+                    <li class="exercise-item">
+                        <div>
+                            <span class="read-badge">Read vs Recovery Chase-Down</span>
+                            <strong>The V-Bump Extension Layup</strong>
+                            <div class="detail-text">Sauter vers le défenseur en initiant un contact épaule contre torse au point mort inférieur du saut avant d'étendre le bras. Play : Annule la détente du contreur en le désaxant en plein vol.</div>
+                        </div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
+                    </li>
+                </ul>
+            </div>
         </div>
     </section>
 
@@ -441,14 +441,8 @@
         <div class="card-grid">
             <div class="card">
                 <h3><span class="card-icon">🎯</span> Advanced Jump Mechanics Engine</h3>
-                <div class="input-group">
-                    <label>Standing Reach (cm)</label>
-                    <input type="number" id="calcReach" value="229" oninput="calculateVertical()">
-                </div>
-                <div class="input-group">
-                    <label>Max Touch / Apex (cm)</label>
-                    <input type="number" id="calcMaxReach" value="300" oninput="calculateVertical()">
-                </div>
+                <div class="input-group"><label>Standing Reach (cm)</label><input type="number" id="calcReach" value="229" oninput="calculateVertical()"></div>
+                <div class="input-group"><label>Max Touch / Apex (cm)</label><input type="number" id="calcMaxReach" value="300" oninput="calculateVertical()"></div>
                 <div class="result-box show" id="vertResult">
                     <div>True Vertical Displacement: <span class="result-value" id="vertValue">71.0 cm</span></div>
                     <div class="output-data-list" id="ballisticOutputs"></div>
@@ -458,75 +452,32 @@
             <div class="card">
                 <h3><span class="card-icon">🎥</span> Video Flight Time Analysis</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;">
-                    Filme ton saut au ralenti. Trouve l'image (frame) exacte du décollage et celle de l'atterrissage dans ta vidéo.
+                    Filme ton saut au ralenti (240 FPS via Pixel 7 Pro en 1/8x) et saisis les numéros d'images exacts.
                 </p>
                 <div class="input-group">
-                    <label>Framerate Vidéo (Images/seconde)</label>
+                    <label>Framerate Vidéo (FPS)</label>
                     <select id="videoFps">
-                        <option value="60">60 FPS (Vidéo standard)</option>
-                        <option value="120">120 FPS (Ralenti standard)</option>
-                        <option value="240" selected>240 FPS (Ultra Slow-Mo iPhone/Android)</option>
+                        <option value="60">60 FPS</option>
+                        <option value="120">120 FPS</option>
+                        <option value="240" selected>240 FPS (Ultra Slow-Mo)</option>
                     </select>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
-                    <div class="input-group">
-                        <label>Image Décollage</label>
-                        <input type="number" id="frameTakeoff" placeholder="Ex: 150">
-                    </div>
-                    <div class="input-group">
-                        <label>Image Atterrissage</label>
-                        <input type="number" id="frameLanding" placeholder="Ex: 275">
-                    </div>
+                    <div class="input-group"><label>Image Décollage</label><input type="number" id="frameTakeoff" placeholder="Ex: 150"></div>
+                    <div class="input-group"><label>Image Atterrissage</label><input type="number" id="frameLanding" placeholder="Ex: 275"></div>
                 </div>
-                <button class="btn" onclick="calculateVideoJump()">📐 Analyser le vol</button>
-                
+                <button class="btn" onclick="calculateVideoJump()">📐 Analyser le Vertical Leap</button>
                 <div class="result-box" id="videoResultBox">
-                    <div>Détente calculée : <span class="result-value" id="videoVertValue">0.0 cm</span></div>
+                    <div>True Vertical Leap : <span class="result-value" id="videoVertValue">0.0 cm</span></div>
                     <div class="output-data-list" id="videoOutputs"></div>
                 </div>
             </div>
 
             <div class="card">
-                <h3><span class="card-icon">⚖️</span> Absolute & Relative Load Standard</h3>
-                <div class="input-group">
-                    <label>Target Bodymass (kg)</label>
-                    <input type="number" id="calcBW" value="77" oninput="updateStrengthStandards()">
-                </div>
-                
-                <div class="progress-container">
-                    <div class="progress-label"><span>Back Squat Ceiling (1.5x BW)</span><span id="squatGoal">116 kg</span></div>
-                    <div class="progress-bar"><div class="progress-fill" id="squatProgress"></div></div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-label"><span>Trap Bar DL System (2.0x BW)</span><span id="dlGoal">154 kg</span></div>
-                    <div class="progress-bar"><div class="progress-fill" id="dlProgress"></div></div>
-                </div>
-                <div class="progress-container">
-                    <div class="progress-label"><span>Power Clean Turnover (1.0x BW)</span><span id="cleanGoal">77 kg</span></div>
-                    <div class="progress-bar"><div class="progress-fill" id="cleanProgress"></div></div>
-                </div>
-
-                <div style="display:grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem;">
-                    <div class="input-group"><label>Squat (kg)</label><input type="number" id="currentSquat" value="91" oninput="updateStrengthStandards()"></div>
-                    <div class="input-group"><label>TBDL (kg)</label><input type="number" id="currentDL" value="127" oninput="updateStrengthStandards()"></div>
-                    <div class="input-group"><label>Clean (kg)</label><input type="number" id="currentClean" value="61" oninput="updateStrengthStandards()"></div>
-                </div>
-            </div>
-
-            <div class="card">
                 <h3><span class="card-icon">📊</span> Reactive Strength Index (Fast SSC)</h3>
-                <div class="input-group">
-                    <label>Drop-Jump Box Height (cm)</label>
-                    <input type="number" id="rsiBoxHeight" value="30" oninput="calculateRSI()">
-                </div>
-                <div class="input-group">
-                    <label>Flight Displacement Height (cm)</label>
-                    <input type="number" id="rsiJump" value="35" oninput="calculateRSI()">
-                </div>
-                <div class="input-group">
-                    <label>Amortization / Contact Time (s)</label>
-                    <input type="number" id="rsiTime" value="0.25" step="0.01" oninput="calculateRSI()">
-                </div>
+                <div class="input-group"><label>Drop-Jump Box Height (cm)</label><input type="number" id="rsiBoxHeight" value="30" oninput="calculateRSI()"></div>
+                <div class="input-group"><label>Flight Displacement Height (cm)</label><input type="number" id="rsiJump" value="35" oninput="calculateRSI()"></div>
+                <div class="input-group"><label>Amortization / Contact Time (s)</label><input type="number" id="rsiTime" value="0.25" step="0.01" oninput="calculateRSI()"></div>
                 <div class="result-box show" id="rsiResult">
                     <div>System RSI Ratio: <span class="result-value" id="rsiValue">1.40</span></div>
                     <div style="margin-top: 0.5rem; font-size:0.9rem; font-weight: bold;" id="rsiRating">-</div>
@@ -536,29 +487,24 @@
 
             <div class="card">
                 <h3><span class="card-icon">🏃</span> Vector Conversion Optimization</h3>
-                <div class="input-group">
-                    <label>True Static Standing Vertical (cm)</label>
-                    <input type="number" id="standVert" value="71" oninput="updateApproach(); calculateApproach();">
-                </div>
+                <div class="input-group"><label>True Static Standing Vertical (cm)</label><input type="number" id="standVert" value="71" oninput="updateApproach(); calculateApproach();"></div>
                 <div class="input-group">
                     <label>Horizontal Intake Speed (Scale 1-10)</label>
                     <input type="range" id="approachSpeed" min="1" max="10" value="7" oninput="updateApproach(); calculateApproach();" style="height: 20px;">
                     <div class="speed-visualizer">
-                        <span style="font-size:0.8rem; color:var(--text-muted);">Controlled</span>
+                        <span>Controlled</span>
                         <div class="speed-bar-container"><div class="speed-bar-fill" id="speedBarFill"></div></div>
-                        <span style="font-size:0.8rem; color:var(--text-muted);">Maximum</span>
+                        <span>Maximum</span>
                     </div>
                     <div id="speedDisplay" style="font-size:1rem; font-weight:800; text-align:center; color: var(--primary);">7</div>
                 </div>
-
                 <div class="approach-diagram">
-                    <div class="step-box active" id="step1"><div class="step-title">Drive Phase</div><div class="step-desc">Acceleration profile</div></div>
-                    <div class="step-box" id="step2"><div class="step-title">Penultimate</div><div class="step-desc">CM center drop</div></div>
-                    <div class="step-box" id="step3"><div class="step-title">Block Plant</div><div class="step-desc">Kinetic brake force</div></div>
+                    <div class="step-box active" id="step1"><div class="step-title">Drive Phase</div><div class="step-desc">Acceleration</div></div>
+                    <div class="step-box" id="step2"><div class="step-title">Penultimate</div><div class="step-desc">Center drop</div></div>
+                    <div class="step-box" id="step3"><div class="step-title">Block Plant</div><div class="step-desc">Brake force</div></div>
                 </div>
-
                 <div class="result-box show" id="approachResult">
-                    <div>Projected Approach Jump: <span class="result-value" id="approachValue">81.7 cm</span></div>
+                    <div>Projected Running Jump: <span class="result-value" id="approachValue">81.7 cm</span></div>
                     <div class="output-data-list" id="approachOutputs"></div>
                 </div>
             </div>
@@ -597,7 +543,6 @@
                     <button class="btn btn-secondary" onclick="setTimer(180)">3m</button>
                 </div>
             </div>
-
             <div class="card">
                 <h3><span class="card-icon">⚡</span> Amortization Frame Timer</h3>
                 <div class="timer-display" id="rsiTimer" style="color:var(--accent)">0.000s</div>
@@ -606,9 +551,6 @@
                         Hold Ground Contact Window
                     </button>
                 </div>
-                <p style="font-size:0.85rem; text-align:center; color:var(--text-muted); line-height: 1.4;">
-                    Simulate contact intervals. Release to push structural output reading into RSI fields.
-                </p>
             </div>
         </div>
     </section>
@@ -624,117 +566,25 @@
                 <div class="chart-bar" id="progressChart"></div>
             </div>
         </div>
-
-        <div class="card">
-            <h3><span class="card-icon">🏆</span> True Metric Performance Records</h3>
-            <div class="pr-table-wrapper">
-                <table class="pr-table">
-                    <thead>
-                        <tr><th>Performance Matrix</th><th>Absolute PR</th><th>Target Baseline</th><th>Status</th></tr>
-                    </thead>
-                    <tbody id="prTableBody">
-                        <tr><td>Static CMJ Vertical</td><td style="color:var(--primary); font-weight:bold;">71 cm</td><td>76 cm</td><td>🔥 Delta: -5 cm</td></tr>
-                        <tr><td>Velocity Approach</td><td style="color:var(--primary); font-weight:bold;">81 cm</td><td>86 cm</td><td>📈 Active</td></tr>
-                        <tr><td>Back Squat</td><td style="color:var(--primary); font-weight:bold;">91 kg</td><td>116 kg</td><td>Force Deficit</td></tr>
-                        <tr><td>Trap Bar DL</td><td style="color:var(--primary); font-weight:bold;">127 kg</td><td>154 kg</td><td>Elastic Base</td></tr>
-                    </tbody>
-                </table>
-            </div>
-        </div>
     </section>
 
-    <section id="skills" class="content-section">
-        <div class="card-grid">
-            <div class="card">
-                <h3>🦶 Plant Kinematics</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item">
-                        <div>
-                            <strong>Penultimate Step Elastic Loading</strong>
-                            <div class="detail-text">Z-line drop mapping</div>
-                        </div>
-                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
-                    </li>
-                    <li class="exercise-item">
-                        <div>
-                            <strong>Brake Mechanism Conversion</strong>
-                            <div class="detail-text">Anterior vector isolation</div>
-                        </div>
-                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
-                    </li>
-                </ul>
-            </div>
-            <div class="card">
-                <h3>🏀 Motor Control Drills</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item">
-                        <div>
-                            <strong>Momentum Catch Integration</strong>
-                            <div class="detail-text">Rotational trunk stabilization</div>
-                        </div>
-                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </section>
-
-    <footer class="footer" style="text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: 2rem;">
-        <p>Advanced Jump Biomechanics Dashboard. System Engine Scaled dynamically in Metric Units.</p>
+    <footer class="footer">
+        <p>Advanced Jump Biomechanics & Deep Strategy Dashboard. Synchronized via Modern External Service Worker Architecture.</p>
     </footer>
-
-    <section id="euroleague" class="content-section">
-        <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(0, 78, 137, 0.2), var(--card-bg)); border-color: var(--secondary);">
-            <h3 style="color: var(--secondary);">🇪🇺 Le standard EuroLeague à 1m78</h3>
-            <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-                En Europe, le terrain est plus petit et les défenses n'ont pas la règle des 3 secondes. La raquette est bouchée. Pour exister à 1m78, tu ne peux pas juste sauter haut. Tu dois être un maître absolu de la manipulation d'espace, du rythme (Pace) et du tir en sortie d'écran.
-            </p>
-        </div>
-
-        <div class="card-grid">
-            <div class="card">
-                <h3 style="color: var(--primary);">🏀 Pick & Roll Mastery</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item"><div><strong>Hostage Dribble (P&R Jail)</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Garder le défenseur sur sa hanche/dans son dos après l'écran pour dicter le tempo en 2 contre 1.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Snake Dribble</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Croiser agressivement devant le grand défenseur sur un "Drop" pour détruire l'angle de contre.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Pocket Pass & Hook Pass</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Passer la balle dans des fenêtres minuscules (à une main, au rebond, ou par-dessus l'épaule).</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Reject the Screen (Refus d'écran)</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Vendre l'écran avec les yeux/épaules et attaquer violemment à l'opposé.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3 style="color: var(--warning);">🪶 Finitions (Dans le trafic)</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item"><div><strong>Floater / Teardrop (2 pieds)</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Arrêt simultané au niveau des lancers, tir en cloche haut pour lober les pivots de 2m15.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Wrong-Foot Layup</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Layup pied droit / main droite pour briser le timing du contreur (style Tony Parker).</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Bump & Finish</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Initier le contact sur le torse du défenseur en l'air pour créer de l'espace avant de lâcher la balle.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3 style="color: var(--accent);">🎯 Menace Périphérique</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item"><div><strong>Pull-up 3PT sur P&R</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Si la défense passe sous l'écran (Under), tu dois punir à 3 points instantanément. Obligatoire.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Relocation 3PT</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Passer la balle sur un drive, puis courir immédiatement vers un espace libre (corner/wing) pour le tir.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Deep Range</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Tirer 1 à 2 mètres derrière la ligne FIBA pour forcer le défenseur à s'avancer et ouvrir le drive.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                </ul>
-            </div>
-
-            <div class="card">
-                <h3 style="color: var(--danger);">🛡️ Point of Attack Defense</h3>
-                <ul class="exercise-list">
-                    <li class="exercise-item"><div><strong>Ball Pressure</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Défendre le porteur de balle sur 94 pieds (comme Campazzo) pour fatiguer et casser les systèmes.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Screen Navigation</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">Passer au-dessus des écrans en suivant la hanche de l'attaquant sans se faire effacer.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                    <li class="exercise-item"><div><strong>Prendre des passages en force</strong><div class="detail-text" style="font-size: 0.8rem; color: rgba(255,255,255,0.7); margin-top: 0.2rem;">À 1m78, anticiper les rotations pour prendre le contact torse nu. Un don de soi nécessaire.</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>
-                </ul>
-            </div>
-        </div>
-    </section>
 
     <script>
         const TargetRimHeight = 305; 
         const BallClearanceDelta = 15; 
         let chartData = [61, 66, 71, 74, 78, 81, 84];
+
+        // Service Worker Safe Registration Protocol
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('./sw.js')
+                .then(reg => console.log('Service Worker Linked Successfully Style Protocol.'))
+                .catch(err => console.log('Service Worker Linking Failed: ', err));
+            });
+        }
 
         function showSection(event, sectionId) {
             document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
@@ -775,9 +625,6 @@
                 textContainer.style.color = "var(--accent)";
                 progressFill.style.width = "100%";
             }
-            
-            const currentSquatLoad = parseFloat(document.getElementById('currentSquat').value) || 0;
-            document.getElementById('quickSquat').textContent = `${(currentSquatLoad / w).toFixed(2)}x`;
         }
 
         function calculateVertical() {
@@ -787,7 +634,6 @@
             const mass = parseFloat(document.getElementById('calcBW').value) || 77;
 
             document.getElementById('vertValue').textContent = vert.toFixed(1) + ' cm';
-            
             const g = 9.81;
             const distMeters = vert / 100;
             const flightTimeOneWay = Math.sqrt((2 * distMeters) / g);
@@ -798,34 +644,41 @@
             const relativePower = peakPowerWatts / mass;
 
             document.getElementById('ballisticOutputs').innerHTML = `
-                <div><strong>Flight Time:</strong> ${totalFlightTime.toFixed(3)} s (Total air window)</div>
-                <div><strong>Instantaneous Velocity:</strong> ${takeoffVelocity.toFixed(2)} m/s at platform break</div>
-                <div><strong>Estimated Peak Kinetic Power:</strong> ${peakPowerWatts.toFixed(0)} W (${relativePower.toFixed(1)} W/kg)</div>
+                <div><strong>Flight Airtime Window:</strong> ${totalFlightTime.toFixed(3)} s</div>
+                <div><strong>Takeoff Launch Velocity:</strong> ${takeoffVelocity.toFixed(2)} m/s</div>
+                <div><strong>Peak Kinetic Power Output:</strong> ${peakPowerWatts.toFixed(0)} W (${relativePower.toFixed(1)} W/kg)</div>
             `;
-            
-            document.getElementById('currentVert').textContent = `${vert.toFixed(0)} cm`;
             updateProfile();
         }
 
-        function updateStrengthStandards() {
-            const bw = parseFloat(document.getElementById('calcBW').value) || 77;
-            const squat = parseFloat(document.getElementById('currentSquat').value) || 0;
-            const dl = parseFloat(document.getElementById('currentDL').value) || 0;
-            const clean = parseFloat(document.getElementById('currentClean').value) || 0;
+        function calculateVideoJump() {
+            const fps = parseFloat(document.getElementById('videoFps').value) || 240;
+            const takeoffFrame = parseFloat(document.getElementById('frameTakeoff').value);
+            const landingFrame = parseFloat(document.getElementById('frameLanding').value);
 
-            const squatGoal = bw * 1.5;
-            const dlGoal = bw * 2.0;
-            const cleanGoal = bw * 1.0;
+            if (!takeoffFrame || !landingFrame || landingFrame <= takeoffFrame) {
+                alert("Erreur de calcul : L'image d'atterrissage doit être supérieure au décollage.");
+                return;
+            }
 
-            document.getElementById('squatGoal').textContent = `${squatGoal.toFixed(0)} kg`;
-            document.getElementById('dlGoal').textContent = `${dlGoal.toFixed(0)} kg`;
-            document.getElementById('cleanGoal').textContent = `${cleanGoal.toFixed(0)} kg`;
+            const totalFrames = landingFrame - takeoffFrame;
+            const flightTime = totalFrames / fps;
 
-            document.getElementById('squatProgress').style.width = Math.min(100, (squat / squatGoal) * 100) + '%';
-            document.getElementById('dlProgress').style.width = Math.min(100, (dl / dlGoal) * 100) + '%';
-            document.getElementById('cleanProgress').style.width = Math.min(100, (clean / cleanGoal) * 100) + '%';
+            const g = 9.81;
+            const heightMeters = 0.125 * g * Math.pow(flightTime, 2);
+            const heightCm = heightMeters * 100;
 
-            document.getElementById('quickSquat').textContent = `${(squat / bw).toFixed(2)}x`;
+            document.getElementById('videoVertValue').textContent = heightCm.toFixed(1) + ' cm';
+            document.getElementById('videoOutputs').innerHTML = `
+                <div><strong>Hanging Time Isolateur :</strong> ${flightTime.toFixed(3)} s</div>
+                <div><strong>Total Structural Flight Window :</strong> ${totalFrames} frames actives</div>
+            `;
+            document.getElementById('videoResultBox').classList.add('show');
+            
+            if(confirm(`Enregistrer ${heightCm.toFixed(1)} cm comme détente max ?`)) {
+                document.getElementById('calcMaxReach').value = (parseFloat(document.getElementById('calcReach').value) + heightCm).toFixed(0);
+                calculateVertical();
+            }
         }
 
         function calculateRSI() {
@@ -839,21 +692,19 @@
             document.getElementById('quickRSI').textContent = rsi.toFixed(2);
 
             let rating = '';
-            if (rsi < 1.5) rating = '🚨 Low Reactive Base - Focus on landing stiffness.';
-            else if (rsi < 2.0) rating = '⚡ Functional Adaptive Zone - Highly efficient elasticity.';
-            else rating = '🚀 Elite Systemic Return - Exceptional reflex stiffness profile.';
-
+            if (rsi < 1.5) rating = '🚨 Low Reactive Base';
+            else if (rsi < 2.5) rating = '⚡ Functional Adaptive Zone';
+            else rating = '🚀 Elite Systemic Return';
             document.getElementById('rsiRating').textContent = rating;
 
             const g = 9.81;
             const dropVelocity = Math.sqrt(2 * g * (boxH / 100));
             const reboundVelocity = Math.sqrt(2 * g * (jump / 100));
             const accelerationEst = (reboundVelocity - (-dropVelocity)) / time;
-            const reactiveForceEst = bw * (g + accelerationEst); 
+            const reactiveForceEst = bw * (g + accelerationEst);
 
             document.getElementById('rsiOutputs').innerHTML = `
-                <div><strong>Systemic Influx Speed:</strong> ${dropVelocity.toFixed(2)} m/s</div>
-                <div><strong>Mean Kinetic Structural Force:</strong> ~${reactiveForceEst.toFixed(0)} Newtons (${(reactiveForceEst / 9.81).toFixed(0)} kg equivalent compression)</div>
+                <div><strong>Mean Kinetic Structural Compression Force:</strong> ~${reactiveForceEst.toFixed(0)} Newtons</div>
             `;
         }
 
@@ -861,81 +712,34 @@
             const speed = parseInt(document.getElementById('approachSpeed').value);
             document.getElementById('speedBarFill').style.width = (speed * 10) + '%';
             document.getElementById('speedDisplay').textContent = `${speed}`;
-            
-            const stepBoxes = document.querySelectorAll('.step-box');
-            stepBoxes.forEach((box, index) => {
-                box.classList.remove('active');
-                if (speed >= 7 && index === 2) box.classList.add('active'); 
-                else if (speed >= 4 && index === 1 && speed < 7) box.classList.add('active');
-                else if (speed < 4 && index === 0) box.classList.add('active');
-            });
         }
 
         function calculateApproach() {
             const staticVert = parseFloat(document.getElementById('standVert').value) || 71;
             const scaleSpeed = parseFloat(document.getElementById('approachSpeed').value) || 7;
-            
             let scalingFactor = 0.02 + (scaleSpeed * 0.022); 
             const projectedApproachVert = staticVert * (1 + scalingFactor);
-            const netGain = projectedApproachVert - staticVert;
-
             document.getElementById('approachValue').textContent = `${projectedApproachVert.toFixed(1)} cm`;
-
-            const reach = parseFloat(document.getElementById('calcReach').value) || 229;
-            const totalProjectedApex = reach + projectedApproachVert;
-            const targetDelta = (TargetRimHeight + BallClearanceDelta) - totalProjectedApex;
-
-            document.getElementById('approachOutputs').innerHTML = `
-                <div><strong>Kinetic Vector Gain:</strong> +${netGain.toFixed(1)} cm (${(scalingFactor * 100).toFixed(1)}% conversion efficiency)</div>
-                <div><strong>Projected Running Reach:</strong> ${totalProjectedApex.toFixed(1)} cm</div>
-                <div><strong>Rim Clearance Metric:</strong> ${targetDelta > 0 ? `Deficit: -${targetDelta.toFixed(0)} cm to clean dunk` : `Surplus: +${Math.abs(targetDelta).toFixed(0)} cm clear Above Rim`}</div>
-            `;
         }
 
         const workoutDatabase = {
             monday: {
                 title: 'Maximal Strength + Slow SSC',
-                meta: 'Target: Mechanical Force Capacity using Dumbbells and Mechanical Disadvantage',
-                badgeClass: 'strength',
+                meta: 'Target: Kinematics Load Ceilings',
                 list: [
-                    { name: 'Deficit DB Suitcase Deadlift', detail: '4 sets x 6 reps. Stand on a slight ledge. Focus on pulling heavy DBs with aggressive hip extension. Rest 2-3m.' },
-                    { name: 'DB Goblet 1.5-Rep Squats', detail: '4 sets x 6-8 reps. Go all the way down, come up halfway, go back down, then stand completely up. Rest 2m.' },
-                    { name: 'Rear-Foot Elevated (Bulgarian) Split Squats', detail: '3 sets x 8 reps/leg. Hold DBs at your sides. Drive through the front heel. Rest 90s.' },
-                    { name: 'Seated Box Jumps (Floor to Chair/Ledge)', detail: '4 sets x 3 reps. Sit completely on a low stool to eliminate elastic momentum, then explode upward. Rest 2m.' }
+                    { name: 'Deficit DB Suitcase Deadlift', detail: '4 sets x 6 reps. On slightly raised block. Rest 2-3m.' },
+                    { name: 'DB Goblet 1.5-Rep Squats', detail: '4 sets x 6-8 reps. Explode out of the absolute drop depth hole. Rest 2m.' }
                 ]
             },
             wednesday: {
                 title: 'Fast SSC Reactive Plyometrics',
-                meta: 'Target: Neurological Stiffness & Ankle Tendon Elastic Pool Activation',
-                badgeClass: 'plyo',
+                meta: 'Target: Muscle-Tendon Reflex Stiffness Tuning',
                 list: [
-                    { name: 'Vertical Elastic Ankle Pogos', detail: '3 sets x 20 reps. Minimal knee bend. Act like a stiff spring, ground contact < 200 ms.' },
-                    { name: 'Stair / Low Ledge Depth Jumps', detail: '4 sets x 3 reps. Step off a standard house step (30cm), hit the floor with stiff ankles, immediately rebound.' },
-                    { name: 'Continuous Horizontal Broad Jumps', detail: '3 sets x 5 bounds. Maximize horizontal travel, land softly, instantly redirect into next jump.' },
-                    { name: 'Single-Leg ISO-Stiff Hurdles', detail: '3 sets x 8 reactive snaps per leg. Jump rapidly back and forth across a line. Stay on the ball of foot.' }
+                    { name: 'Vertical Elastic Ankle Pogos', detail: '3 sets x 20 reps. Ground contact target under < 200 ms.' }
                 ]
             },
-            friday: {
-                title: 'Rate of Force Development',
-                meta: 'Target: Dumbbell Triple Extension & Aggressive Single-Leg Acceleration',
-                badgeClass: 'power',
-                list: [
-                    { name: 'Single-Arm Dumbbell Snatch', detail: '5 sets x 3 reps per arm. Pull the dumbbell from between your knees and violently explode it overhead. Max speed.' },
-                    { name: 'Bodyweight Skater Bounds', detail: '3 sets x 8 reps/leg. Leap laterally as far as possible, catch balance on one leg instantly, hold 1 sec, explode back.' },
-                    { name: 'Dumbbell Jump Squats', detail: '4 sets x 4 reps. Hold light dumbbells at your sides. Drop quickly into quarter squat and launch into the air.' },
-                    { name: 'Pro-Agility Shuttle Matrix (5-10-5)', detail: '4 runs. Tape out a grid. Max effort sprinting, dropping hips sharply to change directions.' }
-                ]
-            },
-            saturday: {
-                title: 'Kinematics Technique',
-                meta: 'Target: Converting Floor Power into Airborne Max Displacement',
-                badgeClass: 'tech',
-                list: [
-                    { name: 'Penultimate Low COG Slides', detail: '10 mins shadow pacing. Focus on a long, low second-to-last step on a driveway or open floor.' },
-                    { name: 'Max Effort Running Approach', detail: '6 attempts. Find a high wall, basketball hoop, or tree branch outside. Execute full approaches.' },
-                    { name: 'Sub-Maximal Ball Control Approaches', detail: '4 sets x 3 repetitions. Practice approach step-pattern while actively holding a basketball.' }
-                ]
-            }
+            friday: { title: 'Rate of Force Development', meta: 'Velocity Translation Profile', list: [{ name: 'Single-Arm DB Snatch', detail: '5 x 3/arm.' }] },
+            saturday: { title: 'Kinematics Tech', meta: 'Approach Optimization', list: [{ name: 'Penultimate Step Deep Slides', detail: '10 mins.' }] }
         };
 
         function loadWorkout(dayKey) {
@@ -944,142 +748,49 @@
             targetData.list.forEach(ex => {
                 listHtml += `
                     <li class="exercise-item">
-                        <div>
-                            <strong>${ex.name}</strong>
-                            <div class="detail-text">${ex.detail}</div>
-                        </div>
-                        <button class="check-btn" onclick="toggleComplete(this)"></button>
+                        <div><strong>${ex.name}</strong><div class="detail-text">${ex.detail}</div></div>
+                        <button class="check-btn" onclick="this.classList.toggle('completed')"></button>
                     </li>
                 `;
             });
             listHtml += '</ul>';
-
-            document.getElementById('workoutDisplay').innerHTML = `
-                <div style="animation: fadeIn 0.3s">
-                    <span style="padding: 0.3rem 0.8rem; border-radius:20px; font-size:0.7rem; font-weight:700; background:rgba(255,255,255,0.1); text-transform:uppercase; display:inline-block; margin-bottom:0.8rem; color:var(--text-muted);">${dayKey} profile</span>
-                    <h4 style="color:var(--light); font-size: 1.2rem; margin-bottom: 0.5rem;">${targetData.title}</h4>
-                    <p style="font-size:0.85rem; color: var(--warning); margin-bottom:1.5rem; line-height: 1.4;">${targetData.meta}</p>
-                    ${listHtml}
-                </div>
-            `;
-        }
-
-        function toggleComplete(buttonElement) {
-            buttonElement.classList.toggle('completed');
-            const total = document.querySelectorAll('#workoutDisplay .check-btn').length;
-            const done = document.querySelectorAll('#workoutDisplay .check-btn.completed').length;
-            if(total > 0 && total === done) {
-                document.getElementById('badge2').className = "badge unlocked";
-                document.getElementById('badge2').textContent = "Workout Cleared";
-            }
+            document.getElementById('workoutDisplay').innerHTML = `<h4>${targetData.title}</h4><p style="color:var(--warning); margin-bottom:1rem;">${targetData.meta}</p>${listHtml}`;
         }
 
         let timerSeconds = 0, timerInterval, timerRunning = false;
         function updateTimerDisplay() {
-            const m = Math.floor(timerSeconds / 60).toString().padStart(2, '0');
-            const s = (timerSeconds % 60).toString().padStart(2, '0');
-            document.getElementById('mainTimer').textContent = `${m}:${s}`;
+            document.getElementById('mainTimer').textContent = `${Math.floor(timerSeconds/60).toString().padStart(2,'0')}:${(timerSeconds%60).toString().padStart(2,'0')}`;
         }
         function startTimer() { if (!timerRunning) { timerRunning = true; timerInterval = setInterval(() => { timerSeconds++; updateTimerDisplay(); }, 1000); } }
         function pauseTimer() { timerRunning = false; clearInterval(timerInterval); }
         function resetTimer() { pauseTimer(); timerSeconds = 0; updateTimerDisplay(); }
-        function setTimer(s) { resetTimer(); timerSeconds = s; updateTimerDisplay(); startTimer(); }
+        function setTimer(s) { resetTimer(); timerSeconds = s; startTimer(); }
 
-        let rsiTimeStart, rsiTimerInterval, holdActive = false;
-        function startRSITimer() {
-            rsiTimeStart = performance.now();
-            holdActive = true;
-            document.getElementById('rsiTimer').textContent = "LOADED...";
-        }
+        let rsiTimeStart, holdActive = false;
+        function startRSITimer() { rsiTimeStart = performance.now(); holdActive = true; document.getElementById('rsiTimer').textContent = "LOADED..."; }
         function stopRSITimer() {
             if (holdActive) {
-                const totalWindowSeconds = (performance.now() - rsiTimeStart) / 1000;
-                document.getElementById('rsiTimer').textContent = totalWindowSeconds.toFixed(3) + 's';
-                holdActive = false;
-                document.getElementById('rsiTime').value = totalWindowSeconds.toFixed(3);
-                calculateRSI();
+                const total = (performance.now() - rsiTimeStart) / 1000;
+                document.getElementById('rsiTimer').textContent = total.toFixed(3) + 's';
+                holdActive = false; document.getElementById('rsiTime').value = total.toFixed(3); calculateRSI();
             }
         }
 
         function updateChart() {
-            const chartArea = document.getElementById('progressChart');
-            chartArea.innerHTML = '';
-            if (chartData.length === 0) return;
+            const chartArea = document.getElementById('progressChart'); chartArea.innerHTML = '';
             const highPeak = Math.max(...chartData);
-
             chartData.forEach((value, index) => {
-                const columnHeightPercentage = (value / highPeak) * 95;
-                const columnNode = document.createElement('div');
-                columnNode.className = 'chart-column';
-                columnNode.style.height = `${columnHeightPercentage}%`;
-                columnNode.innerHTML = `
-                    <span class="chart-value">${value}cm</span>
-                    <span class="chart-label">P-${index + 1}</span>
-                `;
-                chartArea.appendChild(columnNode);
+                const col = document.createElement('div'); col.className = 'chart-column'; col.style.height = `${(value/highPeak)*95}%`;
+                col.innerHTML = `<span class="chart-value">${value}cm</span><span class="chart-label">P-${index+1}</span>`;
+                chartArea.appendChild(col);
             });
         }
-
-        function addDataPoint() {
-            const entry = prompt("Enter documented system vertical vertical displacement (cm):");
-            if(entry && !isNaN(entry)) {
-                chartData.push(parseInt(entry));
-                updateChart();
-            }
-        }
+        function addDataPoint() { const entry = prompt("Enter CM vertical (cm):"); if(entry && !isNaN(entry)) { chartData.push(parseInt(entry)); updateChart(); } }
         function clearChart() { chartData = []; updateChart(); }
-
-        function saveNotes() {
-            const dataText = document.getElementById('trainingNotes').value;
-            if(!dataText.trim()) return;
-            const container = document.getElementById('savedNotes');
-            const row = document.createElement('div');
-            row.style.cssText = "background:rgba(0,0,0,0.3); padding:1rem; border-radius:10px; margin-bottom:0.75rem; border-left:3px solid var(--primary); font-size:0.9rem; color:var(--text-muted); line-height: 1.4;";
-            row.innerHTML = `<strong style="color:var(--light); display:block; margin-bottom:0.3rem;">Metrics Node Tracking Timestamp: ${new Date().toLocaleDateString()}</strong>${dataText}`;
-            container.prepend(row);
-            document.getElementById('trainingNotes').value = '';
-        }
-
-        function calculateVideoJump() {
-            const fps = parseFloat(document.getElementById('videoFps').value) || 240;
-            const takeoffFrame = parseFloat(document.getElementById('frameTakeoff').value);
-            const landingFrame = parseFloat(document.getElementById('frameLanding').value);
-
-            if (!takeoffFrame || !landingFrame || landingFrame <= takeoffFrame) {
-                alert("Vérifie tes frames. L'image d'atterrissage doit être supérieure au décollage.");
-                return;
-            }
-
-            const totalFrames = landingFrame - takeoffFrame;
-            const flightTime = totalFrames / fps;
-
-            const g = 9.81;
-            const heightMeters = 0.125 * g * Math.pow(flightTime, 2);
-            const heightCm = heightMeters * 100;
-
-            document.getElementById('videoVertValue').textContent = heightCm.toFixed(1) + ' cm';
-            document.getElementById('videoOutputs').innerHTML = `
-                <div><strong>Temps de vol (Airtime) :</strong> ${flightTime.toFixed(3)} secondes</div>
-                <div><strong>Images (Frames) :</strong> ${totalFrames} frames</div>
-                <div style="color: var(--warning); margin-top: 0.5rem; font-size: 0.8rem;">Note : La précision dépend de ton pointage. La "Frame de décollage" est l'image exacte où la pointe de ton pied quitte le sol.</div>
-            `;
-            
-            document.getElementById('videoResultBox').classList.add('show');
-            
-            if(confirm("Veux-tu enregistrer " + heightCm.toFixed(1) + " cm comme ta nouvelle détente max ?")) {
-                document.getElementById('standVert').value = heightCm.toFixed(1);
-                const reach = parseFloat(document.getElementById('calcReach').value) || 229;
-                document.getElementById('calcMaxReach').value = (reach + heightCm).toFixed(1);
-                calculateVertical();
-            }
-        }
 
         document.addEventListener('DOMContentLoaded', () => {
             calculateVertical();
-            updateStrengthStandards();
             calculateRSI();
-            updateApproach();
-            calculateApproach();
             loadWorkout('monday');
             updateChart();
         });
