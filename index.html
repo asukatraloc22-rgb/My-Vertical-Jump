@@ -9,9 +9,9 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PG Dunk">
     
+    <link rel="manifest" href="./manifest.json">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
     <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%230f0f1a%22/><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
-    <link rel="manifest" href='data:application/manifest+json,{"name":"PG Dunk System","short_name":"PG Dunk","display":"standalone","background_color":"#0f0f1a","theme_color":"#ff6b35","icons":[{"src":"data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>","sizes":"512x512","type":"image/svg+xml"}]}'>
 
     <title>5'10" PG Dunk System - Elite Performance Suite</title>
     
@@ -74,7 +74,6 @@
             letter-spacing: 1px;
         }
 
-        /* Mobile Scrollable Nav */
         .nav-tabs {
             display: flex;
             background: rgba(15, 15, 26, 0.9);
@@ -180,7 +179,6 @@
         .progress-bar { height: 12px; background: rgba(255,255,255,0.1); border-radius: 6px; overflow: hidden; }
         .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border-radius: 6px; transition: width 0.8s ease; }
 
-        /* Mobile Inputs */
         .input-group { margin-bottom: 1.25rem; }
         .input-group label {
             display: block;
@@ -197,7 +195,7 @@
             background: rgba(0, 0, 0, 0.4);
             color: var(--light);
             border-radius: 10px;
-            font-size: 16px; /* Empêche le zoom sur iOS */
+            font-size: 16px;
         }
         .input-group input:focus, .input-group select:focus {
             outline: none;
@@ -205,7 +203,6 @@
             background: rgba(255, 107, 53, 0.05);
         }
 
-/* Correction du fond des options du menu déroulant */
         .input-group select option {
             background-color: var(--dark-bg);
             color: var(--light);
@@ -273,10 +270,9 @@
         .timer-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
         .timer-presets .btn { padding: 0.75rem 0; font-size: 0.8rem; }
 
-        /* FIX: CONSTRASTE DES EXERCICES (Haute lisibilité) */
         .exercise-list { list-style: none; }
         .exercise-item {
-            background: rgba(255, 255, 255, 0.08); /* Fond plus clair */
+            background: rgba(255, 255, 255, 0.08);
             border-left: 4px solid var(--primary);
             padding: 1rem 1.25rem;
             margin-bottom: 0.75rem;
@@ -286,13 +282,13 @@
             align-items: center;
         }
         .exercise-item strong {
-            color: #ffffff; /* Titre en blanc pur */
+            color: #ffffff;
             font-size: 1.05rem;
             display: block;
             margin-bottom: 0.4rem;
         }
         .exercise-item .detail-text {
-            color: rgba(255, 255, 255, 0.85); /* Texte gris très clair */
+            color: rgba(255, 255, 255, 0.85);
             font-size: 0.9rem;
             line-height: 1.4;
         }
@@ -304,7 +300,6 @@
         .check-btn.completed { background: var(--accent); border-color: var(--accent); }
         .check-btn.completed::after { content: '✓'; color: white; font-weight: bold; font-size: 1.2rem; display: flex; justify-content: center; align-items: center;}
 
-        /* Section Diagrams & Grids */
         .week-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 0.75rem; }
         .day-card { background: rgba(0,0,0,0.3); border-radius: 10px; padding: 1rem; border: 1px solid var(--card-border); border-top: 3px solid var(--secondary); }
         .day-card.active-day { border-top-color: var(--primary); background: rgba(255, 107, 53, 0.1); border-color: rgba(255, 107, 53, 0.3); }
@@ -332,18 +327,14 @@
         .pr-table th, .pr-table td { padding: 1rem; text-align: left; border-bottom: 1px solid var(--card-border); }
         .pr-table th { color: var(--primary); text-transform: uppercase; font-size: 0.8rem; letter-spacing: 0.5px; }
 
-        /* Charts */
         .chart-container { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--card-border); }
         .chart-bar { display: flex; align-items: flex-end; height: 220px; gap: 0.75rem; margin-top: 1.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.2); position: relative; }
         .chart-column { flex: 1; background: linear-gradient(to top, var(--secondary), var(--primary)); border-radius: 6px 6px 0 0; transition: height 0.6s ease; position: relative; min-height: 15px; }
         .chart-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: rgba(255,255,255,0.8); }
         .chart-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.85rem; font-weight: 700; color: var(--warning); }
-
     </style>
 </head>
 <body>
-
-    <body>
 
     <header class="header">
         <div style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.4)); margin-bottom: 0.5rem; line-height: 1;">🏀</div>
@@ -446,11 +437,8 @@
         </div>
     </section>
 
-    <!-- Calculator Section -->
     <section id="calculator" class="content-section">
         <div class="card-grid">
-            
-            <!-- 1. Advanced Jump Mechanics Engine -->
             <div class="card">
                 <h3><span class="card-icon">🎯</span> Advanced Jump Mechanics Engine</h3>
                 <div class="input-group">
@@ -467,7 +455,6 @@
                 </div>
             </div>
 
-            <!-- 2. LE NOUVEAU CALCULATEUR VIDÉO EST LÀ -->
             <div class="card">
                 <h3><span class="card-icon">🎥</span> Video Flight Time Analysis</h3>
                 <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; line-height: 1.4;">
@@ -499,7 +486,6 @@
                 </div>
             </div>
 
-            <!-- 3. Absolute & Relative Load Standard -->
             <div class="card">
                 <h3><span class="card-icon">⚖️</span> Absolute & Relative Load Standard</h3>
                 <div class="input-group">
@@ -527,7 +513,6 @@
                 </div>
             </div>
 
-            <!-- 4. RSI (Fast SSC) -->
             <div class="card">
                 <h3><span class="card-icon">📊</span> Reactive Strength Index (Fast SSC)</h3>
                 <div class="input-group">
@@ -549,7 +534,6 @@
                 </div>
             </div>
 
-            <!-- 5. Vector Conversion Optimization -->
             <div class="card">
                 <h3><span class="card-icon">🏃</span> Vector Conversion Optimization</h3>
                 <div class="input-group">
@@ -578,9 +562,9 @@
                     <div class="output-data-list" id="approachOutputs"></div>
                 </div>
             </div>
-            
         </div>
     </section>
+
     <section id="workouts" class="content-section">
         <div class="card">
             <h3><span class="card-icon">💪</span> Microcycle Phase Isolation</h3>
@@ -699,7 +683,6 @@
         <p>Advanced Jump Biomechanics Dashboard. System Engine Scaled dynamically in Metric Units.</p>
     </footer>
 
-    <!-- ⬇️ COLLE LA NOUVELLE SECTION ICI ⬇️ -->
     <section id="euroleague" class="content-section">
         <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(0, 78, 137, 0.2), var(--card-bg)); border-color: var(--secondary);">
             <h3 style="color: var(--secondary);">🇪🇺 Le standard EuroLeague à 1m78</h3>
@@ -709,7 +692,6 @@
         </div>
 
         <div class="card-grid">
-            <!-- P&R Mastery -->
             <div class="card">
                 <h3 style="color: var(--primary);">🏀 Pick & Roll Mastery</h3>
                 <ul class="exercise-list">
@@ -720,7 +702,6 @@
                 </ul>
             </div>
 
-            <!-- Finitions sous la taille -->
             <div class="card">
                 <h3 style="color: var(--warning);">🪶 Finitions (Dans le trafic)</h3>
                 <ul class="exercise-list">
@@ -730,7 +711,6 @@
                 </ul>
             </div>
 
-            <!-- Tir & Menace -->
             <div class="card">
                 <h3 style="color: var(--accent);">🎯 Menace Périphérique</h3>
                 <ul class="exercise-list">
@@ -740,7 +720,6 @@
                 </ul>
             </div>
 
-            <!-- Défense & Dureté -->
             <div class="card">
                 <h3 style="color: var(--danger);">🛡️ Point of Attack Defense</h3>
                 <ul class="exercise-list">
@@ -751,10 +730,8 @@
             </div>
         </div>
     </section>
-    <!-- ⬆️ FIN DE LA NOUVELLE SECTION ⬆️ -->
 
     <script>
-        // Le reste de ton code JavaScript commence ici...
         const TargetRimHeight = 305; 
         const BallClearanceDelta = 15; 
         let chartData = [61, 66, 71, 74, 78, 81, 84];
@@ -1063,7 +1040,6 @@
             document.getElementById('trainingNotes').value = '';
         }
 
-        // ⬇️ LE NOUVEAU CALCULATEUR VIDÉO EST PLACÉ ICI ⬇️
         function calculateVideoJump() {
             const fps = parseFloat(document.getElementById('videoFps').value) || 240;
             const takeoffFrame = parseFloat(document.getElementById('frameTakeoff').value);
@@ -1097,7 +1073,6 @@
                 calculateVertical();
             }
         }
-        // ⬆️ FIN DU NOUVEAU CODE ⬆️
 
         document.addEventListener('DOMContentLoaded', () => {
             calculateVertical();
