@@ -288,13 +288,32 @@
         function addDataPoint() { const v = prompt("Rentre ta détente calculée (cm) :"); if(v && !isNaN(v)) { chartData.push(parseInt(v)); updateChart(); } }
         function clearChart() { chartData = []; updateChart(); }
 
-        function saveNotes() {
-            const text = document.getElementById('trainingNotes').value; if(!text.trim()) return;
-            const entry = document.createElement('div');
-            entry.style.cssText = "background:rgba(0,0,0,0.4); padding:1rem; border-radius:10px; margin-bottom:0.75rem; border-left:3px solid var(--primary); font-size:0.95rem;";
-            entry.innerHTML = `<strong style="display:block; margin-bottom:0.25rem;">Timestamp Session: ${new Date().toLocaleDateString()}</strong>${text}`;
-            document.getElementById('savedNotes').prepend(entry);
-            document.getElementById('trainingNotes').value = '';
+        // Générateur de Super Prompt pour Gemini IA
+        function generateAIPrompt() {
+            const energy = document.getElementById('logEnergy').value;
+            const focus = document.getElementById('logFocus').value;
+            const tactics = document.getElementById('logTactics').value;
+            
+            if(!tactics.trim()) {
+                alert("Erreur Système : Remplis l'Analyse Clinique pour nourrir l'IA.");
+                return;
+            }
+
+            const prompt = `Salut Gemini. Agis comme le meilleur préparateur physique et coach individuel NBA. Je suis un meneur de jeu de 1m78 à Madagascar (jeu très physique, hand-checking agressif). Mon but est d'avoir l'arsenal d'isolation de SGA/Kyrie, la fluidité de tir de Curry et l'explosivité d'Edwards.
+
+Voici la télémétrie de ma session du jour :
+- Énergie neurologique et physique actuelle : ${energy}/10.
+- Axe de travail principal : ${focus}.
+- Mon auto-évaluation clinique : "${tactics}".
+
+Instructions pour toi :
+1. Analyse mon problème tactique ou biomécanique en te basant sur ma morphologie (1m78).
+2. Génère-moi ma prochaine routine d'entraînement sur-mesure (échauffement, exercices spécifiques avec séries/réps, et focus mental).
+3. Adapte le volume d'effort à mon niveau d'énergie (${energy}/10).`;
+
+            document.getElementById('generatedPromptText').textContent = prompt;
+            document.getElementById('aiPromptOutput').classList.add('show');
+            document.getElementById('logTactics').value = '';
         }
 
         // Init Lifecycle
