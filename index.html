@@ -247,26 +247,34 @@
 
     <section id="ia-gemini-log" class="content-section">
         <div class="card">
-            <h3>🤖 Performance Log (Pre-Câblage IA Gemini)</h3>
-            <textarea class="notes-area" id="trainingNotes" placeholder="Raconte ta séance : 'Aujourd'hui la défense faisait du hand-checking agressif, mon tir était raide à 9m...' L'IA s'occupera du reste."></textarea>
-            <button class="btn" onclick="saveNotes()">💾 Enregistrer les Sensation</button>
-            <div id="savedNotes" style="margin-top:1.25rem;"></div>
-        </div>
-    </section>
+            <h3><span class="card-icon">🤖</span> Cerveau IA & Super Prompt</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem; line-height: 1.5;">Remplis ce rapport clinique post-session. Le système va générer un "Super Prompt" parfait. Copie-le et colle-le dans Gemini pour obtenir ton programme sur-mesure du lendemain.</p>
 
-    <section id="timer" class="content-section">
-        <div class="card" style="max-width:500px; margin:0 auto;">
-            <h3>⏱️ High-Density Rest Timer</h3>
-            <div class="timer-display" id="mainTimer">02:00</div>
-            <div class="timer-controls">
-                <button class="btn" onclick="startTimer()">▶️ Start</button>
-                <button class="btn btn-secondary" onclick="pauseTimer()">⏸️ Pause</button>
-                <button class="btn btn-secondary" onclick="resetTimer()">🔄 Reset</button>
+            <div class="input-group">
+                <label>Niveau de Fatigue Neurologique (1 = Épuisé, 10 = Surpuissant)</label>
+                <input type="range" id="logEnergy" min="1" max="10" value="7" style="height: 20px;">
             </div>
-            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem;">
-                <button class="btn btn-secondary" onclick="setTimer(60)">60s</button>
-                <button class="btn btn-secondary" onclick="setTimer(120)">2m (Plyo)</button>
-                <button class="btn btn-secondary" onclick="setTimer(180)">3m (Heavy)</button>
+
+            <div class="input-group">
+                <label>Focus Tactique / Physique du jour</label>
+                <select id="logFocus">
+                    <option value="Shooting Mechanics (Sway & Dip)">🎯 Tir (Fluidité, Séquençage 1-Motion)</option>
+                    <option value="Traffic Finishing (Veer Step)">🪶 Finition (Contact, Acrobatique)</option>
+                    <option value="Pace & Space Creation">🛑 Pace & Manipulation (Iso, P&R)</option>
+                    <option value="Athleticism & Fast SSC">⚡ Athlétisme (Plyométrie, Force)</option>
+                </select>
+            </div>
+
+            <div class="input-group">
+                <label>Analyse Clinique (Frictions, Échecs, Réussites)</label>
+                <textarea class="notes-area" id="logTactics" placeholder="Ex: Mon tir à 9m était raide au 3ème QT, j'ai oublié de relâcher mes épaules. J'ai subi le hand-checking du meneur adverse..."></textarea>
+            </div>
+
+            <button class="btn" onclick="generateAIPrompt()">⚙️ Générer le Protocole IA</button>
+
+            <div id="aiPromptOutput" class="result-box" style="margin-top: 1.5rem; border: 1px solid var(--primary); background: rgba(255, 107, 53, 0.1);">
+                <strong style="color:var(--primary); display:block; margin-bottom:0.5rem; font-size: 0.9rem; text-transform: uppercase;">📋 Ton Super Prompt (Sélectionne et Copie) :</strong>
+                <p id="generatedPromptText" style="font-size: 0.9rem; color: white; line-height: 1.6; user-select: all; cursor: text; padding: 0.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;"></p>
             </div>
         </div>
     </section>
