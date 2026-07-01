@@ -164,70 +164,56 @@
         }
 
         // Live Algorithmic Decisions Trees
-        function triggerPnrRead(val) {
-            const out = document.getElementById('pnrReadOutput');
-            const title = document.getElementById('pnrMoveTitle');
-            const details = document.getElementById('pnrMoveDetail');
-            
-            if(val) document.getElementById('isoSituation').value = ""; 
-            
-            if(!val) { out.classList.remove('show'); return; }
-            out.classList.add('show');
-            document.getElementById('pnrBadge').textContent = "P&R Read Loaded";
-            document.getElementById('pnrBadge').style.background = "var(--secondary)";
+        // ---------------------------------------------------------
+        // THE ULTIMATE IQ SIMULATOR (Offense & Defense)
+        // ---------------------------------------------------------
+        const tacticsDB = {
+            // --- OFFENSE ---
+            drop: { type: 'offense', title: "The Under Drag Speed Stop (Kyrie Kill)", detail: "<strong>Read :</strong> Le pivot recule, la mi-distance est ouverte.<br><br><strong>Play :</strong> Dribble agressif vers l'avant, bloque tes appuis en passant la balle sous la jambe. Pull-up immédiat. Séquençage fluide." },
+            blitz: { type: 'offense', title: "Retreat Dribble & Pocket Pass", detail: "<strong>Read :</strong> Prise à deux agressive pour t'asphyxier.<br><br><strong>Play :</strong> Ne panique pas. Fais 2 pas chassés arrière (Retreat) pour étirer leur défense. Dès que l'angle s'ouvre, lâche une passe laser au sol (Pocket Pass) vers ton pivot qui roule." },
+            under: { type: 'offense', title: "Behind The Screen Snap", detail: "<strong>Read :</strong> Le défenseur passe sous l'écran, reniant ton tir.<br><br><strong>Play :</strong> Sanction immédiate. Arrêt net derrière l'écran, Drop Stance bas, et tir en 1-Motion. Tu dois les punir pour ce manque de respect." },
+            handcheck: { type: 'offense', title: "Physical Bump & Punch Drag", detail: "<strong>Read :</strong> Défenseur collé qui utilise ses mains et son poids vers l'avant.<br><br><strong>Play :</strong> Initie un contact épaule-torse pour le forcer à résister. Plante un appui sec (Punch) et recule. Son poids va l'entraîner vers l'avant. Tire dans l'espace créé." },
+            overplay: { type: 'offense', title: "Drop Stance & Inside-Hand Layup", detail: "<strong>Read :</strong> Il oriente son corps pour te couper ta main forte.<br><br><strong>Play :</strong> Drop stance immédiat. Attaque agressivement son pied avant (Splitting the feet). Passe l'épaule et finis main opposée (Inside hand) pour le garder dans ton dos." },
+            cushion: { type: 'offense', title: "Float Dribble to Deep 3", detail: "<strong>Read :</strong> Il recule par peur de ta vitesse (Coussin d'espace).<br><br><strong>Play :</strong> Endors-le avec un dribble flottant (Pace). Dès qu'il fige ses appuis, dégaine un tir profond sans follow-through rigide." },
+            zone23: { type: 'offense', title: "Gap Penetration & Kick", detail: "<strong>Read :</strong> Zone 2-3. La raquette est bouchée, les extérieurs attendent sur les lignes de passe.<br><br><strong>Play :</strong> N'attaque pas un joueur, attaque l'espace ENTRE deux joueurs (le Gap). Force deux défenseurs à se resserrer sur toi, puis sors la balle sur le shooteur ouvert." },
+            transition: { type: 'offense', title: "Middle Lane Lock & Pitch Ahead", detail: "<strong>Read :</strong> Surnombre en contre-attaque.<br><br><strong>Play :</strong> Dribble plein axe (Middle Lane) à pleine vitesse. Fixe le dernier défenseur avec tes yeux (Look-off). S'il monte sur toi, passe au shooteur. S'il recule, Pull-up 3." },
 
-            if(val === 'drop') {
-                title.textContent = "The Under Drag Speed Stop (Kyrie Kill)";
-                details.innerHTML = `
-                    <div><strong>Le Concept Tactique :</strong> Le pivot adverse recule pour protéger l'arceau. Tu as de l'espace libre à mi-distance.</div>
-                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action :</strong> Enchaîne un dribble violent vers l'avant puis bloque tes appuis en glissant la balle sous les jambes pour un pull-up immédiat. Séquençage fluide et nonchalant exigé.</div>
-                `;
-            } else if(val === 'blitz') {
-                title.textContent = "The Retreat Dribble & Pocket Laser Pass";
-                details.innerHTML = `
-                    <div><strong>Le Concept Tactique :</strong> On te prend à deux de manière agressive pour t'asphyxier et bloquer ta vision périphérique.</div>
-                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action :</strong> Fais deux grands pas chassés vers l'arrière pour étirer la prise à deux. Dès que l'espace s'ouvre, lâche une Pocket Pass au sol ultra-rapide ou une passe laser vers le Short-Roll de ton pivot.</div>
-                `;
+            // --- DEFENSE ---
+            shifty: { type: 'defense', title: "Angle Cut-off & Chest Alignment", detail: "<strong>Read :</strong> Le meneur adverse est ultra-rapide et shifty.<br><br><strong>Play :</strong> Ne regarde JAMAIS la balle, regarde son nombril. Garde un centre de gravité plus bas que lui. S'il cross, ne croise pas tes pieds : fais un grand pas de glissement (Slide) pour couper l'angle de son épaule, pas le ballon." },
+            heavy: { type: 'defense', title: "Low Leverage & Pre-emptive Bump", detail: "<strong>Read :</strong> Un arrière lourd (Bumper) veut t'enfoncer sur le drive.<br><br><strong>Play :</strong> À 1m78, si tu le laisses prendre de la vitesse, tu es mort. Frappe le premier avec ton avant-bras sur sa hanche <em>avant</em> qu'il ne s'organise (Legal bump). Baisse ton centre de gravité pour devenir un mur de briques intassable." },
+            shooter: { type: 'defense', title: "Top-Lock & Trail Pursuit", detail: "<strong>Read :</strong> Un shooteur d'élite qui court à travers les écrans.<br><br><strong>Play :</strong> Refuse-lui l'accès à la balle (Top-Lock). Oblige-le à couper vers le panier (Backdoor). S'il prend un écran, poursuis-le collé dans son dos (Trail) pour contester par-dessus, jamais en passant sous l'écran." },
+            tall_post: { type: 'defense', title: "Post Fronting & Pull The Chair", detail: "<strong>Read :</strong> Un grand/lourd te prend au poste bas. Tu ne peux pas contester son tir.<br><br><strong>Play :</strong> Gagne avant la passe ! Passe devant lui (Front the post) pour empêcher la passe lobée. S'il reçoit la balle et commence à reculer lourdement sur toi, esquive l'impact au dernier moment (Pull the chair) : il va perdre l'équilibre et marcher." },
+            switch_big: { type: 'defense', title: "Stunt & Recover / Speed Harassment", detail: "<strong>Read :</strong> Tu es resté bloqué sur le Pivot adverse au large après un écran.<br><br><strong>Play :</strong> Harcèle son dribble ! Un grand déteste dribbler face à un petit rapide. Mets une pression folle sur le ballon pour le faire paniquer avant qu'il ne s'approche de la raquette. Demande un <em>Stunt</em> (aide éclair) d'un coéquipier." }
+        };
+
+        function triggerRead(mode, val) {
+            const out = document.getElementById('universalReadOutput');
+            const badge = document.getElementById('readBadge');
+            const title = document.getElementById('readMoveTitle');
+            const details = document.getElementById('readMoveDetail');
+
+            // Réinitialiser les autres menus pour garder l'UI propre
+            document.querySelectorAll('#live-reads select').forEach(s => {
+                if (s.value !== val) s.value = "";
+            });
+
+            if (!val) { out.classList.remove('show'); return; }
+
+            const data = tacticsDB[val];
+            if (!data) return;
+
+            out.classList.add('show');
+            title.textContent = data.title;
+            details.innerHTML = data.detail;
+
+            if (data.type === 'offense') {
+                badge.textContent = "OFFENSIVE READ";
+                badge.style.background = "var(--primary)";
+                out.style.borderColor = "var(--primary)";
             } else {
-                title.textContent = "Behind The Screen Shot Snapping";
-                details.innerHTML = `
-                    <div><strong>Le Concept Tactique :</strong> Le défenseur passe en dessous de l'écran (Under). Il t'abandonne l'espace à 3 points.</div>
-                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action :</strong> Sanction immédiate. Arrêt net derrière l'écran, ancrage bas des hanches (Drop Stance) et tir fluide à 9m sans follow-through exagéré.</div>
-                `;
-            }
-        }
-        
-        // Algorithme de lecture d'Isolation 1v1 (Spécial Impact & Hand-checking)
-        function triggerIsoRead(val) {
-            const out = document.getElementById('pnrReadOutput');
-            const title = document.getElementById('pnrMoveTitle');
-            const details = document.getElementById('pnrMoveDetail');
-            
-            if(val) document.getElementById('pnrSituation').value = ""; 
-            else { if(!document.getElementById('pnrSituation').value) out.classList.remove('show'); return; }
-            
-            out.classList.add('show');
-            document.getElementById('pnrBadge').textContent = "ISO Read Loaded";
-            document.getElementById('pnrBadge').style.background = "var(--danger)";
-
-            if(val === 'handcheck') {
-                title.textContent = "The Physical Bump & Punch Drag Stop";
-                details.innerHTML = `
-                    <div><strong>La Lecture (Read) :</strong> Le défenseur joue physique avec ses mains sur tes hanches. S'il te hand-check, il met du poids vers l'avant et commet un déni d'espace.</div>
-                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action (Play) :</strong> Initie volontairement un contact épaule contre torse en plein dribble pour le forcer à pousser encore plus fort en opposition. Au moment de l'impact, plante ton appui opposé pour un <em>Punch Drag Stop</em> brutal. Son propre poids va l'emporter vers l'avant. Tu crées 2 mètres de séparation nette pour ton step-back à gauche.</div>
-                `;
-            } else if(val === 'overplay') {
-                title.textContent = "Drop Stance Counter & Inside-Hand Attack";
-                details.innerHTML = `
-                    <div><strong>La Lecture (Read) :</strong> Le défenseur sur-oriente ses appuis de biais pour interdire ton côté préférentiel et te forcer à aller sur ton angle mort.</div>
-                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action (Play) :</strong> Passe immédiatement en <em>Drop Stance</em> large et bas. Attaque d'un pas de cross agressif son pied avant pour le forcer à pivoter à 180°, puis explose en ligne droite à l'opposé. Utilise ta puissance pour garder l'avantage sur l'épaule et finis en <em>Inside-Hand Layup</em> (main gauche ou droite inversée) pour empêcher son contre en filature.</div>
-                `;
-            } else if(val === 'cushion') {
-                title.textContent = "The Float Dribble & Sniper 9m Trigger";
-                details.innerHTML = `
-                    <div><strong>La Lecture (Read) :</strong> Le défenseur a peur de ton premier pas et de ton cross. Il te laisse un "coussin" d'1m50 d'espace pour anticiper ton drive.</div>
-                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action (Play) :</strong> Avance lentement avec un <em>Float Dribble</em> nonchalant pour endormir ses appuis (Pace control). Dès qu'il fige son centre de gravité en attendant ton attaque, déclenche instantanément ton tir à longue distance en 1-Motion. Profite du relâchement du haut de ton corps (Sway) : pas de follow-through rigide, juste de la fluidité pure.</div>
-                `;
+                badge.textContent = "DEFENSIVE READ";
+                badge.style.background = "var(--accent)";
+                out.style.borderColor = "var(--accent)";
             }
         }
 
