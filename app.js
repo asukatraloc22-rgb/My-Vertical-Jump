@@ -137,8 +137,29 @@
         function updateCourtDisplay() {
             Object.keys(shootingData).forEach(key => {
                 const z = shootingData[key];
-                const pct = z.att > 0 ? ((z.made / z.att) * 100).toFixed(0) + '%' : '0%';
-                document.getElementById(`stat-${key}`).innerHTML = `${z.made}/${z.att} <span style="font-size:0.75rem; display:block; color:var(--text-muted);">${pct}</span>`;
+                const pct = z.att > 0 ? Math.round((z.made / z.att) * 100) : 0;
+                const element = document.getElementById(`stat-${key}`);
+                const btn = document.getElementById(`zone-${key}`);
+                
+                // Mise à jour du texte
+                element.innerHTML = `${z.made}/${z.att} <span style="font-size:0.75rem; display:block; color:rgba(255,255,255,0.8);">${pct}%</span>`;
+                
+                // Moteur Heatmap (Actif après 5 tirs minimum par zone)
+                if (z.att >= 5) {
+                    if (pct >= 45) {
+                        btn.style.background = 'rgba(220, 38, 38, 0.4)'; // Hot (Rouge)
+                        btn.style.borderColor = 'rgba(220, 38, 38, 0.8)';
+                    } else if (pct >= 33) {
+                        btn.style.background = 'rgba(245, 158, 11, 0.4)'; // Warm (Orange)
+                        btn.style.borderColor = 'rgba(245, 158, 11, 0.8)';
+                    } else {
+                        btn.style.background = 'rgba(37, 99, 235, 0.4)'; // Cold (Bleu)
+                        btn.style.borderColor = 'rgba(37, 99, 235, 0.8)';
+                    }
+                } else {
+                    btn.style.background = 'rgba(0,0,0,0.4)'; // Neutre
+                    btn.style.borderColor = 'var(--card-border)';
+                }
             });
         }
 
@@ -288,7 +309,7 @@
         function addDataPoint() { const v = prompt("Rentre ta détente calculée (cm) :"); if(v && !isNaN(v)) { chartData.push(parseInt(v)); updateChart(); } }
         function clearChart() { chartData = []; updateChart(); }
 
-        // Générateur de Super Prompt pour Gemini IA
+        // Générateur de Super Prompt pour Gemini IA (Avec Synchro Data)
         function generateAIPrompt() {
             const energy = document.getElementById('logEnergy').value;
             const focus = document.getElementById('logFocus').value;
@@ -299,23 +320,28 @@
                 return;
             }
 
+            // Calcul Data Sniper Global
+            let totalMade = 0, totalAtt = 0;
+            Object.values(shootingData).forEach(z => { totalMade += z.made; totalAtt += z.att; });
+            const totalPct = totalAtt > 0 ? Math.round((totalMade/totalAtt)*100) : 0;
+
             const prompt = `Salut Gemini. Agis comme le meilleur préparateur physique et coach individuel NBA. Je suis un meneur de jeu de 1m78 à Madagascar (jeu très physique, hand-checking agressif). Mon but est d'avoir l'arsenal d'isolation de SGA/Kyrie, la fluidité de tir de Curry et l'explosivité d'Edwards.
 
 Voici la télémétrie de ma session du jour :
-- Énergie neurologique et physique actuelle : ${energy}/10.
-- Axe de travail principal : ${focus}.
-- Mon auto-évaluation clinique : "${tactics}".
+- Énergie actuelle : ${energy}/10.
+- Focus du jour : ${focus}.
+- Bilan Clinique : "${tactics}".
+- Stats de Tir du jour (Heatmap) : ${totalMade}/${totalAtt} (${totalPct}% global).
 
 Instructions pour toi :
-1. Analyse mon problème tactique ou biomécanique en te basant sur ma morphologie (1m78).
-2. Génère-moi ma prochaine routine d'entraînement sur-mesure (échauffement, exercices spécifiques avec séries/réps, et focus mental).
-3. Adapte le volume d'effort à mon niveau d'énergie (${energy}/10).`;
+1. Analyse ma session en fonction de ma morphologie (1m78) et de mes stats de tir.
+2. Génère ma prochaine routine sur-mesure (échauffement, exercices, séries/réps).
+3. Adapte l'effort à ma récupération (${energy}/10).`;
 
             document.getElementById('generatedPromptText').textContent = prompt;
             document.getElementById('aiPromptOutput').classList.add('show');
             document.getElementById('logTactics').value = '';
         }
-
         // Init Lifecycle
         document.addEventListener('DOMContentLoaded', () => {
             updateProfile();
