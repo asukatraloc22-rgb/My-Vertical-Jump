@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pg-dunk-v2-dynamic';
+const CACHE_NAME = 'pg-flight-v2';
 
 self.addEventListener('install', (event) => {
     self.skipWaiting();
@@ -9,10 +9,8 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-    // Stratégie Network-first pour garantir la mise à jour instantanée après tes déploiements Vercel
+    // Stratégie Network-First : Priorité au réseau pour tes mises à jour Vercel, fallback sur le cache si tu es sur le terrain sans réseau
     event.respondWith(
-        fetch(event.request).catch(() => {
-            return caches.match(event.request);
-        })
+        fetch(event.request).catch(() => caches.match(event.request))
     );
 });
