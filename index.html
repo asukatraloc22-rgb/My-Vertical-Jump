@@ -129,32 +129,73 @@
 
 
     <section id="live-reads" class="content-section">
-        <div class="card">
-            <h3>⚡ Pick & Roll Live Decision Simulator</h3>
-            <p style="font-size:0.9rem; color:var(--text-muted); margin-bottom:1.5rem;">Simule la réaction défensive adverse en plein match pour charger le read immédiat.</p>
-            <div class="input-group">
-                <label>Le pivot défenseur fait quoi ?</label>
-                <select id="pnrSituation" onchange="triggerPnrRead(this.value)">
-                    <option value="">-- Choisis l'action adverse --</option>
-                    <option value="drop">Drop Defense (Le grand recule dans la raquette)</option>
-                    <option value="blitz">Blitz / Trap (Prise à deux ultra-agressive)</option>
-                    <option value="under">Under Screen (Le défenseur passe en dessous de l'écran)</option>
-                </select>
+        <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), var(--card-bg)); border-color: var(--danger);">
+            <h3 style="color: white;">⚡ The Ultimate IQ Simulator</h3>
+            <p style="font-size:0.9rem; color:var(--text-muted);">Simule n'importe quelle situation des deux côtés du terrain. En attaque, lis les espaces. En défense, à 1m78, tu dois gagner la bataille avant même que l'attaquant ne pose son premier dribble.</p>
+        </div>
+
+        <div class="card-grid">
+            <div class="card" style="border-top: 3px solid var(--primary);">
+                <h3>🗡️ Offensive Reads</h3>
+                
+                <div class="input-group">
+                    <label>Pick & Roll (Pivot adverse)</label>
+                    <select onchange="triggerRead('offense', this.value)">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="drop">Drop (Recule dans la raquette)</option>
+                        <option value="blitz">Blitz / Trap (Prise à deux agressive)</option>
+                        <option value="under">Under (Passe sous l'écran)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Isolation 1v1 (Défenseur direct)</label>
+                    <select onchange="triggerRead('offense', this.value)">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="handcheck">Hand-checking (Te pousse avec les mains)</option>
+                        <option value="overplay">Overplay (Coupe ta main forte)</option>
+                        <option value="cushion">Cushion (Te laisse 2 mètres d'espace)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Situations Globales</label>
+                    <select onchange="triggerRead('offense', this.value)">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="zone23">Face à une Zone 2-3 fermée</option>
+                        <option value="transition">Transition / Contre-attaque (Surnombre)</option>
+                    </select>
+                </div>
             </div>
-            <div class="input-group" style="margin-top: 1.5rem;">
-                <label>Situation d'Iso 1v1 (Défense agressive / Hand-checking)</label>
-                <select id="isoSituation" onchange="triggerIsoRead(this.value)">
-                    <option value="">-- Choisis le comportement du défenseur --</option>
-                    <option value="handcheck">Hand-checking agressif (Il pose les mains et te pousse)</option>
-                    <option value="overplay">Overplay / Interdiction (Il coupe complètement ta main forte)</option>
-                    <option value="cushion">Sagging / Coussin d'espace (Il recule par peur de ta vitesse)</option>
-                </select>
+
+            <div class="card" style="border-top: 3px solid var(--accent);">
+                <h3>🛡️ Defensive Matrix (1m78 POV)</h3>
+                
+                <div class="input-group">
+                    <label>Défense sur Porteur (Point of Attack)</label>
+                    <select onchange="triggerRead('defense', this.value)">
+                        <option value="">-- Profil du porteur --</option>
+                        <option value="shifty">Shifty / Ultra-rapide (Style Kyrie)</option>
+                        <option value="heavy">Lourd / Bumper (Style Luka/Brunson)</option>
+                        <option value="shooter">Shooteur d'élite (Style Curry)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Mismatchs & Post-Up</label>
+                    <select onchange="triggerRead('defense', this.value)">
+                        <option value="">-- Situation critique --</option>
+                        <option value="tall_post">Grand/Lourd te poste (Dos au panier)</option>
+                        <option value="switch_big">Switch sur Pivot au large</option>
+                    </select>
+                </div>
             </div>
-            <div class="result-box" id="pnrReadOutput">
-                <span class="read-badge" id="pnrBadge">Read Loaded</span>
-                <strong id="pnrMoveTitle" style="display:block; font-size:1.2rem; margin:0.4rem 0; color:white;">-</strong>
-                <div class="output-data-list" id="pnrMoveDetail"></div>
-            </div>
+        </div>
+
+        <div class="result-box" id="universalReadOutput" style="margin-top: 1.5rem;">
+            <span class="read-badge" id="readBadge">Read Loaded</span>
+            <strong id="readMoveTitle" style="display:block; font-size:1.3rem; margin:0.5rem 0; color:white;">-</strong>
+            <div class="output-data-list" id="readMoveDetail" style="font-size: 0.95rem; line-height: 1.5;"></div>
         </div>
     </section>
 
