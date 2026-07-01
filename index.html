@@ -10,22 +10,22 @@
     <meta name="apple-mobile-web-app-title" content="PG Flight">
     
     <link rel="manifest" href="./manifest.json">
-    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Ctext%20y%3D%27.9em%27%20font-size%3D%2790%27%3E%F0%9F%8F%80%3C/text%3E%3C/svg%3E">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%20100%20100%27%3E%3Crect%20width%3D%27100%27%20height%3D%27100%27%20fill%3D%27%23090911%27/%3E%3Ctext%20y%3D%27.9em%27%20font-size%3D%2790%27%3E%F0%9F%8F%80%3C/text%3E%3C/svg%3E">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23090911%22/><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
 
     <title>5'10" PG Flight & IQ Suite</title>
     
     <style>
         :root {
             --primary: #ff6b35;
-            --primary-glow: rgba(255, 107, 53, 0.3);
+            --primary-glow: rgba(255, 107, 53, 0.25);
             --secondary: #004e89;
             --accent: #1a936f;
             --dark-bg: #090911;
             --card-bg: rgba(255, 255, 255, 0.05);
             --card-border: rgba(255, 255, 255, 0.12);
             --light: #ffffff;
-            --text-muted: rgba(255, 255, 255, 0.85);
+            --text-muted: rgba(255, 255, 255, 0.88);
             --warning: #f4a261;
             --danger: #e63946;
             --safe-bottom: env(safe-area-inset-bottom, 20px);
@@ -52,10 +52,15 @@
             padding: 2.5rem 1.5rem 2rem;
             text-align: center;
             border-bottom: 3px solid var(--primary);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
 
         .header h1 {
-            font-size: 2.2rem;
+            font-size: 2.4rem;
+            margin-bottom: 0.5rem;
             text-transform: uppercase;
             letter-spacing: 2px;
             font-weight: 900;
@@ -64,7 +69,13 @@
             -webkit-text-fill-color: transparent;
         }
 
-        /* Dual Engine Switch App Layout */
+        .header p {
+            color: var(--primary);
+            font-size: 1.1rem;
+            font-weight: 700;
+        }
+
+        /* Bilateral App Engine Switch */
         .engine-switch {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -92,31 +103,39 @@
         /* Navigation horizontal scroll for Mobile */
         .nav-tabs {
             display: flex;
-            background: #0d0d1a;
-            padding: 0.75rem 1rem;
-            gap: 0.5rem;
+            background: rgba(9, 9, 17, 0.95);
+            padding: 0.8rem 1rem;
+            gap: 0.6rem;
+            border-bottom: 1px solid var(--card-border);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
             overflow-x: auto;
             white-space: nowrap;
             -webkit-overflow-scrolling: touch;
-            border-bottom: 1px solid var(--card-border);
         }
         .nav-tabs::-webkit-scrollbar { display: none; }
 
         .nav-tab {
-            padding: 0.6rem 1.25rem;
+            padding: 0.75rem 1.35rem;
             border: 1px solid var(--card-border);
-            background: rgba(255, 255, 255, 0.02);
-            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.03);
+            color: rgba(255, 255, 255, 0.85);
             cursor: pointer;
-            border-radius: 20px;
+            border-radius: 24px;
+            transition: all 0.2s ease;
             font-weight: 700;
             font-size: 0.85rem;
+            text-transform: uppercase;
         }
+
         .nav-tab.active {
             background: var(--primary);
             color: white;
             border-color: var(--primary);
-            box-shadow: 0 4px 12px var(--primary-glow);
+            box-shadow: 0 4px 14px var(--primary-glow);
         }
 
         .content-section {
@@ -124,20 +143,20 @@
             padding: 1.5rem 1rem;
             max-width: 1300px;
             margin: 0 auto;
-            animation: fadeIn 0.3s ease;
+            animation: fadeIn 0.3s ease-out;
         }
         .content-section.active { display: block; }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
+            from { opacity: 0; transform: translateY(8px); }
             to { opacity: 1; transform: translateY(0); }
         }
 
         .card-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(100%, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
         }
         @media (min-width: 768px) {
             .card-grid { grid-template-columns: repeat(auto-fit, minmax(340px, 1fr)); }
@@ -145,22 +164,24 @@
 
         .card {
             background: var(--card-bg);
-            border-radius: 16px;
-            padding: 1.5rem;
+            border-radius: 20px;
+            padding: 1.75rem;
             border: 1px solid var(--card-border);
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
         }
 
         .card h3 {
             color: #ffffff;
-            font-size: 1.25rem;
-            margin-bottom: 1.25rem;
+            font-size: 1.3rem;
+            margin-bottom: 1.5rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
-            border-bottom: 1px solid var(--card-border);
+            border-bottom: 2px solid var(--card-border);
             padding-bottom: 0.75rem;
         }
+
+        .card-icon { color: var(--primary); font-weight: 900; }
 
         /* High-Contrast Inputs & Dropdowns Fix */
         .input-group { margin-bottom: 1.25rem; }
@@ -171,11 +192,12 @@
             font-weight: 700;
             font-size: 0.85rem;
             text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         .input-group input, .input-group select {
             width: 100%;
-            padding: 0.9rem 1.25rem;
-            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 0.95rem 1.25rem;
+            border: 1px solid rgba(255, 255, 255, 0.25);
             background: #000000;
             color: #ffffff;
             border-radius: 12px;
@@ -214,17 +236,33 @@
         /* High-Contrast Exercise Items */
         .exercise-list { list-style: none; }
         .exercise-item {
-            background: rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.1);
             border-left: 5px solid var(--primary);
             padding: 1.25rem;
-            margin-bottom: 0.75rem;
+            margin-bottom: 0.85rem;
             border-radius: 0 14px 14px 0;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            border-top: 1px solid var(--card-border);
+            border-right: 1px solid var(--card-border);
+            border-bottom: 1px solid var(--card-border);
         }
         .exercise-item strong { color: #ffffff; font-size: 1.1rem; display: block; margin-bottom: 0.3rem; font-weight: 800; }
         .exercise-item .detail-text { color: #f1f5f9; font-size: 0.95rem; line-height: 1.4; font-weight: 500; }
+
+        /* Masterclass Read System Badges */
+        .read-badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            background: var(--secondary);
+            color: white;
+            font-size: 0.75rem;
+            font-weight: 800;
+            border-radius: 6px;
+            text-transform: uppercase;
+            margin-bottom: 0.4rem;
+        }
 
         .check-btn {
             width: 36px; height: 36px; border: 2px solid #ffffff;
@@ -238,6 +276,7 @@
             border-radius: 12px; cursor: pointer; font-size: 1rem; font-weight: 800; text-transform: uppercase;
             display: flex; align-items: center; justify-content: center; gap: 0.5rem;
         }
+        .btn:hover { background: #ff8354; }
         .btn-secondary { background: var(--secondary); }
 
         .result-box {
@@ -245,24 +284,39 @@
             border-radius: 14px; padding: 1.5rem; margin-top: 1.25rem; display: none;
         }
         .result-box.show { display: block; }
-        .result-value { font-size: 2.2rem; color: #22c55e; font-weight: 900; }
+        .result-value { font-size: 2.4rem; color: #22c55e; font-weight: 900; display: block; margin-bottom: 0.4rem; }
+
+        .output-data-list {
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px dashed rgba(255,255,255,0.3);
+            font-size: 0.95rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            color: #ffffff;
+        }
 
         .timer-display { font-size: 4.5rem; font-weight: 900; text-align: center; color: var(--primary); font-family: monospace; margin: 1rem 0; }
-        .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; .btn:first-child { grid-column: span 2; } }
-        
-        .read-badge {
-            display: inline-block; padding: 0.25rem 0.6rem; background: var(--secondary); color: white;
-            font-size: 0.75rem; font-weight: 800; border-radius: 6px; text-transform: uppercase; margin-bottom: 0.4rem;
-        }
+        .timer-controls { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-bottom: 1rem; }
+        .timer-controls .btn:first-child { grid-column: span 2; }
+        .timer-presets { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; }
 
         .metric-pill { background: rgba(0,0,0,0.4); padding: 0.85rem; border-radius: 12px; border: 1px solid var(--card-border); text-align: center; }
         .metric-pill .label { font-size: 0.75rem; color: rgba(255, 255, 255, 0.6); text-transform: uppercase; font-weight: 600; }
         .metric-pill .val { font-size: 1.25rem; font-weight: 800; color: var(--warning); margin-top: 0.25rem; }
 
-        .chart-bar { display: flex; align-items: flex-end; height: 200px; gap: 0.75rem; margin-top: 1.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.2); }
+        .progress-container { margin: 1.25rem 0; }
+        .progress-label { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.9rem; color: #fff; font-weight: 700;}
+        .progress-bar { height: 12px; background: rgba(255,255,255,0.08); border-radius: 6px; overflow: hidden; border: 1px solid rgba(255,255,255,0.05); }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--secondary), var(--primary)); border-radius: 6px; transition: width 0.8s ease; }
+
+        .chart-container { background: rgba(0, 0, 0, 0.3); border-radius: 12px; padding: 1.5rem; margin-bottom: 1.5rem; border: 1px solid var(--card-border); }
+        .chart-bar { display: flex; align-items: flex-end; height: 220px; gap: 0.75rem; margin-top: 1.5rem; padding-bottom: 2rem; border-bottom: 2px solid rgba(255,255,255,0.2); position: relative; }
         .chart-column { flex: 1; background: linear-gradient(to top, var(--secondary), var(--primary)); border-radius: 6px 6px 0 0; position: relative; min-height: 15px; }
         .chart-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: #fff; }
         .chart-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.85rem; font-weight: 700; color: var(--warning); }
+        .footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: 2rem; }
     </style>
 </head>
 <body>
@@ -270,36 +324,36 @@
     <header class="header">
         <div style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.5)); margin-bottom: 0.5rem; line-height: 1;">🏀</div>
         <h1>PG Dunk & IQ Suite</h1>
-        <p>The Ultimate Prototype System</p>
+        <p>The Ultimate 5'10" Prototype System</p>
     </header>
 
-    <!-- Bilateral App Engine Switch -->
     <div class="engine-switch">
         <button id="btnAthleticEngine" class="engine-btn active" onclick="switchEngine('athletic')">🏋️ Athletic Engine</button>
         <button id="btnTacticalEngine" class="engine-btn" onclick="switchEngine('tactical')">🧠 Tactical Neural</button>
     </div>
 
-    <!-- SUB-NAV 1: Athletic Engine Tabs -->
     <nav id="navAthletic" class="nav-tabs">
         <button class="nav-tab active" onclick="showSection(event, 'dash-athletic')">📊 HQ Metrics</button>
         <button class="nav-tab" onclick="showSection(event, 'calc-athletic')">🧮 Video Jump & RSI</button>
-        <button class="nav-tab" onclick="showSection(event, 'routines-athletic')">💪 Plyo Routines</button>
-        <button class="nav-tab" onclick="showSection(event, 'analytics-athletic')">📈 Track Analytics</button>
+        <button class="nav-tab" onclick="showSection(event, 'routines-athletic')">💪 Routines</button>
+        <button class="nav-tab" onclick="showSection(event, 'analytics-athletic')">📈 Analytics</button>
     </nav>
 
-    <!-- SUB-NAV 2: Tactical Engine Tabs (Hidden by default) -->
     <nav id="navTactical" class="nav-tabs" style="display: none;">
-        <button class="nav-tab active" onclick="showSection(event, 'live-reads')">⚡ Live Decision Trees</button>
-        <button class="nav-tab" onclick="showSection(event, 'sniper-tracker')">🎯 Sniper Shot Tracker</button>
-        <button class="nav-tab" onclick="showSection(event, 'skills-encyclopedia')">📖 Shifty Encyclopedia</button>
-        <button class="nav-tab" onclick="showSection(event, 'ia-gemini-log')">🤖 Gemini IA Pre-Log</button>
+        <button class="nav-tab active" onclick="showSection(event, 'live-reads')">⚡ Live Decisions</button>
+        <button class="nav-tab" onclick="showSection(event, 'sniper-tracker')">🎯 Sniper Tracker</button>
+        <button class="nav-tab" onclick="showSection(event, 'skills-encyclopedia')">📖 Masterclass Skills</button>
+        <button class="nav-tab" onclick="showSection(event, 'ia-gemini-log')">🤖 Gemini Pre-Log</button>
     </nav>
 
-    <!-- ==================== SYSTEM 1 : ATHLETIC ENGINE SECTIONS ==================== -->
     <section id="dash-athletic" class="content-section active">
         <div class="card-grid">
             <div class="card">
                 <h3>📏 Biometrics Config</h3>
+                <div class="metric-badge-container">
+                    <div class="metric-pill"><div class="label">Height</div><div class="val" id="pillHeight">178 cm</div></div>
+                    <div class="metric-pill"><div class="label">Weight</div><div class="val" id="pillWeight">77.0 kg</div></div>
+                </div>
                 <div class="input-group"><label>Taille (cm)</label><input type="number" id="profileHeight" value="178" onchange="updateProfile()"></div>
                 <div class="input-group"><label>Poids (kg)</label><input type="number" id="profileWeight" value="77" onchange="updateProfile()"></div>
                 <div class="input-group"><label>Standing Reach (cm)</label><input type="number" id="profileReach" value="229" onchange="updateProfile()"></div>
@@ -311,12 +365,13 @@
                     <div class="progress-label"><span>Marge d'Arceau (Target: 320cm)</span><span id="dunkProgressText">Calcul...</span></div>
                     <div class="progress-bar"><div class="progress-fill" id="dunkProgress" style="width: 85%"></div></div>
                 </div>
+                <input type="hidden" id="currentSquat" value="90">
             </div>
             <div class="card">
                 <h3>⚡ Elastic Pools Capacities</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="metric-pill"><div class="val" style="color: var(--primary);" id="quickRSI">1.40</div><div class="label">Tendon Stiffness (RSI)</div></div>
-                    <div class="metric-pill"><div class="val" style="color: var(--accent);" id="quickSquat">1.18x</div><div class="label">Relative Squat Load</div></div>
+                    <div class="metric-pill"><div class="val" style="color: var(--accent);" id="quickSquat">1.17x</div><div class="label">Relative Squat Load</div></div>
                 </div>
             </div>
         </div>
@@ -324,7 +379,6 @@
 
     <section id="calc-athletic" class="content-section">
         <div class="card-grid">
-            <!-- 240 FPS Video Leap Calculator -->
             <div class="card">
                 <h3>🎥 Pixel 7 Pro Video Flight Analyzer</h3>
                 <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Filme en ralenti 1/8x (240 FPS). Saisis l'image exacte du décollage et du contact.</p>
@@ -337,7 +391,6 @@
                     <div class="output-data-list" id="videoOutputs"></div>
                 </div>
             </div>
-            <!-- RSI Monitor Calculator -->
             <div class="card">
                 <h3>📊 Elastic Amortization Index (RSI)</h3>
                 <div class="input-group"><label>Flight Height Target (cm)</label><input type="number" id="rsiJump" value="35" oninput="calculateRSI()"></div>
@@ -378,7 +431,6 @@
     </section>
 
 
-    <!-- ==================== SYSTEM 2 : TACTICAL NEURAL SECTIONS ==================== -->
     <section id="live-reads" class="content-section">
         <div class="card">
             <h3>⚡ Pick & Roll Live Decision Simulator</h3>
@@ -390,6 +442,15 @@
                     <option value="drop">Drop Defense (Le grand recule dans la raquette)</option>
                     <option value="blitz">Blitz / Trap (Prise à deux ultra-agressive)</option>
                     <option value="under">Under Screen (Le défenseur passe en dessous de l'écran)</option>
+                </select>
+            </div>
+            <div class="input-group" style="margin-top: 1.5rem;">
+                <label>Situation d'Iso 1v1 (Défense agressive / Hand-checking)</label>
+                <select id="isoSituation" onchange="triggerIsoRead(this.value)">
+                    <option value="">-- Choisis le comportement du défenseur --</option>
+                    <option value="handcheck">Hand-checking agressif (Il pose les mains et te pousse)</option>
+                    <option value="overplay">Overplay / Interdiction (Il coupe complètement ta main forte)</option>
+                    <option value="cushion">Sagging / Coussin d'espace (Il recule par peur de ta vitesse)</option>
                 </select>
             </div>
             <div class="result-box" id="pnrReadOutput">
@@ -496,10 +557,9 @@
         </div>
     </section>
 
-    <!-- Timers (Shared) -->
     <section id="timer" class="content-section">
         <div class="card" style="max-width:500px; margin:0 auto;">
-            <h3>⏱️ High-Density Density Rest Timer</h3>
+            <h3>⏱️ High-Density Rest Timer</h3>
             <div class="timer-display" id="mainTimer">02:00</div>
             <div class="timer-controls">
                 <button class="btn" onclick="startTimer()">▶️ Start</button>
@@ -560,8 +620,18 @@
             const h = parseFloat(document.getElementById('profileHeight').value) || 178;
             const w = parseFloat(document.getElementById('profileWeight').value) || 77;
             const r = parseFloat(document.getElementById('profileReach').value) || 229;
-            const currentVertValue = parseFloat(document.getElementById('videoVertValue').textContent) || 71;
+            
+            // Fix: Récupération sécurisée pour éviter l'erreur
+            let currentVertValue = 71;
+            const vertEl = document.getElementById('videoVertValue');
+            if(vertEl) {
+                currentVertValue = parseFloat(vertEl.textContent) || 71;
+            }
 
+            document.getElementById('pillHeight').textContent = `${h} cm`;
+            document.getElementById('pillWeight').textContent = `${w.toFixed(1)} kg`;
+            document.getElementById('currentVert').textContent = `${currentVertValue.toFixed(0)} cm`;
+            
             const currentApex = r + currentVertValue;
             const targetRim = 320; 
             const deficit = targetRim - currentApex;
@@ -578,6 +648,11 @@
                 progressText.style.color = "var(--accent)";
                 progressFill.style.width = "100%";
             }
+            
+            // Fix: Récupération sécurisée du squat pour éviter l'erreur
+            const squatEl = document.getElementById('currentSquat');
+            const currentSquatLoad = squatEl ? (parseFloat(squatEl.value) || 90) : 90;
+            document.getElementById('quickSquat').textContent = `${(currentSquatLoad / w).toFixed(2)}x`;
         }
 
         function calculateVideoJump() {
@@ -649,8 +724,12 @@
             const title = document.getElementById('pnrMoveTitle');
             const details = document.getElementById('pnrMoveDetail');
             
+            if(val) document.getElementById('isoSituation').value = ""; 
+            
             if(!val) { out.classList.remove('show'); return; }
             out.classList.add('show');
+            document.getElementById('pnrBadge').textContent = "P&R Read Loaded";
+            document.getElementById('pnrBadge').style.background = "var(--secondary)";
 
             if(val === 'drop') {
                 title.textContent = "The Under Drag Speed Stop (Kyrie Kill)";
@@ -665,9 +744,44 @@
                     <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action :</strong> Fais deux grands pas chassés vers l'arrière pour étirer la prise à deux. Dès que l'espace s'ouvre, lâche une Pocket Pass au sol ultra-rapide ou une passe laser vers le Short-Roll de ton pivot.</div>
                 `;
             } else {
-                title.textContent = "Pull-Up Metric Snapping";
+                title.textContent = "Behind The Screen Shot Snapping";
                 details.innerHTML = `
-                    <div><strong>Le Défenseur passe en dessous :</strong> Sanction immédiate. Arrêt net derrière l'écran, ancrage bas des hanches (Drop Stance) et tir fluide à 9m.</div>
+                    <div><strong>Le Concept Tactique :</strong> Le défenseur passe en dessous de l'écran (Under). Il t'abandonne l'espace à 3 points.</div>
+                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action :</strong> Sanction immédiate. Arrêt net derrière l'écran, ancrage bas des hanches (Drop Stance) et tir fluide à 9m sans follow-through exagéré.</div>
+                `;
+            }
+        }
+        
+        // Algorithme de lecture d'Isolation 1v1 (Spécial Impact & Hand-checking)
+        function triggerIsoRead(val) {
+            const out = document.getElementById('pnrReadOutput');
+            const title = document.getElementById('pnrMoveTitle');
+            const details = document.getElementById('pnrMoveDetail');
+            
+            if(val) document.getElementById('pnrSituation').value = ""; 
+            else { if(!document.getElementById('pnrSituation').value) out.classList.remove('show'); return; }
+            
+            out.classList.add('show');
+            document.getElementById('pnrBadge').textContent = "ISO Read Loaded";
+            document.getElementById('pnrBadge').style.background = "var(--danger)";
+
+            if(val === 'handcheck') {
+                title.textContent = "The Physical Bump & Punch Drag Stop";
+                details.innerHTML = `
+                    <div><strong>La Lecture (Read) :</strong> Le défenseur joue physique avec ses mains sur tes hanches. S'il te hand-check, il met du poids vers l'avant et commet un déni d'espace.</div>
+                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action (Play) :</strong> Initie volontairement un contact épaule contre torse en plein dribble pour le forcer à pousser encore plus fort en opposition. Au moment de l'impact, plante ton appui opposé pour un <em>Punch Drag Stop</em> brutal. Son propre poids va l'emporter vers l'avant. Tu crées 2 mètres de séparation nette pour ton step-back à gauche.</div>
+                `;
+            } else if(val === 'overplay') {
+                title.textContent = "Drop Stance Counter & Inside-Hand Attack";
+                details.innerHTML = `
+                    <div><strong>La Lecture (Read) :</strong> Le défenseur sur-oriente ses appuis de biais pour interdire ton côté préférentiel et te forcer à aller sur ton angle mort.</div>
+                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action (Play) :</strong> Passe immédiatement en <em>Drop Stance</em> large et bas. Attaque d'un pas de cross agressif son pied avant pour le forcer à pivoter à 180°, puis explose en ligne droite à l'opposé. Utilise ta puissance pour garder l'avantage sur l'épaule et finis en <em>Inside-Hand Layup</em> (main gauche ou droite inversée) pour empêcher son contre en filature.</div>
+                `;
+            } else if(val === 'cushion') {
+                title.textContent = "The Float Dribble & Sniper 9m Trigger";
+                details.innerHTML = `
+                    <div><strong>La Lecture (Read) :</strong> Le défenseur a peur de ton premier pas et de ton cross. Il te laisse un "coussin" d'1m50 d'espace pour anticiper ton drive.</div>
+                    <div style="color:var(--warning); margin-top:0.4rem;"><strong>L'Action (Play) :</strong> Avance lentement avec un <em>Float Dribble</em> nonchalant pour endormir ses appuis (Pace control). Dès qu'il fige son centre de gravité en attendant ton attaque, déclenche instantanément ton tir à longue distance en 1-Motion. Profite du relâchement du haut de ton corps (Sway) : pas de follow-through rigide, juste de la fluidité pure.</div>
                 `;
             }
         }
@@ -678,7 +792,7 @@
                 title: 'Monday: Max Force & Slow SSC (Engine Construction)',
                 meta: 'Target: Mechanical Force Capacity using Dumbbells and Mechanical Disadvantage',
                 list: [
-                    {n: 'Deficit DB Suitcase Deadlift', d: '4 x 6 reps. Monte sur un petit support/bloc pour augmenter l'amplitude de tirage excentrique. Rest 2m30s.'},
+                    {n: 'Deficit DB Suitcase Deadlift', d: '4 x 6 reps. Monte sur un petit support/bloc pour augmenter l\'amplitude de tirage excentrique. Rest 2m30s.'},
                     {n: 'DB Goblet 1.5-Rep Squats', d: '4 x 6-8 reps. Descends au max, remonte à moitié, redescends au fond, et explose vers le haut. Rest 2m.'}
                 ]
             },
@@ -687,7 +801,7 @@
                 meta: 'Target: Neurological Stiffness & Ankle Tendon Elastic Pool Activation',
                 list: [
                     {n: 'Vertical Elastic Ankle Pogos', d: '3 x 20 reps. Genoux presque verrouillés. Rebondis comme un ressort en métal. Temps de contact cible < 200ms.'},
-                    {n: 'Stair Depth Jumps', d: '4 x 3 reps. Laisse-toi tomber d'une marche d'escalier (30cm), percute le sol pieds raides, rebondis instantanément au maximum.'}
+                    {n: 'Stair Depth Jumps', d: '4 x 3 reps. Laisse-toi tomber d\'une marche d\'escalier (30cm), percute le sol pieds raides, rebondis instantanément au maximum.'}
                 ]
             },
             sniper: {
@@ -695,19 +809,19 @@
                 meta: 'Objectif : Éliminer la raideur du haut du corps, ancrer le "Sway" et le "Dip".',
                 list: [
                     {n: '1. Form Shooting avec Sway (1 Main)', d: '3 x 10 tirs près du cercle. Focus absolu : tes épaules partent en arrière, tes pieds atterrissent en avant. Zéro tension dans la nuque.'},
-                    {n: '2. Catch & Dip Timing', d: '3 x 10 tirs (Mi-distance). Fais rebondir la balle vers toi. Au moment où tu l'attrapes, tes hanches ET la balle descendent ensemble. Tire sans pause en haut.'},
-                    {n: '3. Deep Range Effortless (Recul progressif)', d: 'Commence à 3 points. Si ça rentre (Swish), recule d'un mètre. Ne change JAMAIS la force de tes bras, pousse juste plus fort sur tes jambes.'},
-                    {n: '4. One-Dribble Pull-Up (Fluidité)', d: '10 tirs à gauche, 10 tirs à droite. Dribble très fort au sol pour que la balle remonte toute seule dans ta poche de tir. Ne casse pas ton poignet à l'avance.'}
+                    {n: '2. Catch & Dip Timing', d: '3 x 10 tirs (Mi-distance). Fais rebondir la balle vers toi. Au moment où tu l\'attrapes, tes hanches ET la balle descendent ensemble. Tire sans pause en haut.'},
+                    {n: '3. Deep Range Effortless (Recul progressif)', d: 'Commence à 3 points. Si ça rentre (Swish), recule d\'un mètre. Ne change JAMAIS la force de tes bras, pousse juste plus fort sur tes jambes.'},
+                    {n: '4. One-Dribble Pull-Up (Fluidité)', d: '10 tirs à gauche, 10 tirs à droite. Dribble très fort au sol pour que la balle remonte toute seule dans ta poche de tir. Ne casse pas ton poignet à l\'avance.'}
                 ]
             },
             pace: {
                 title: '🛑 Pace & Space (Shifty Handling)',
-                meta: 'Objectif : Freins d'urgence, changement de rythme et isolation face au hand-checking.',
+                meta: 'Objectif : Freins d\'urgence, changement de rythme et isolation face au hand-checking.',
                 list: [
-                    {n: '1. The Punch Drag (Freinage d'Urgence)', d: '4 x 5 reps/côté. Sprinte à 100% sur 3 mètres. Frappe la balle au sol (Punch) en t'arrêtant sur un appui, recule instantanément (Drag). Le défenseur va glisser.'},
-                    {n: '2. Under Drag Speed Stop', d: '4 x 5 reps/côté. Accélère, et au lieu de t'arrêter normalement, passe la balle sous ta jambe avant en reculant. Enchaîne direct avec un tir (Sniper mode).'},
+                    {n: '1. The Punch Drag (Freinage d\'Urgence)', d: '4 x 5 reps/côté. Sprinte à 100% sur 3 mètres. Frappe la balle au sol (Punch) en t\'arrêtant sur un appui, recule instantanément (Drag). Le défenseur va glisser.'},
+                    {n: '2. Under Drag Speed Stop', d: '4 x 5 reps/côté. Accélère, et au lieu de t\'arrêter normalement, passe la balle sous ta jambe avant en reculant. Enchaîne direct avec un tir (Sniper mode).'},
                     {n: '3. Hostage Dribble (Simulation P&R)', d: '3 x 8 reps. Passe une chaise (écran), ralentis drastiquement, mets la chaise dans ton dos. Garde le dribble vivant pendant 2 secondes, puis explose vers le cercle.'},
-                    {n: '4. Veer Step Finishes (Contact)', d: '3 x 6 reps. Drive fort, et au moment du lay-up, saute de côté *vers* un obstacle (sac de frappe ou ami avec pad). Encaisse le choc en l'air et finis main opposée.'}
+                    {n: '4. Veer Step Finishes (Contact)', d: '3 x 6 reps. Drive fort, et au moment du lay-up, saute de côté *vers* un obstacle (sac de frappe ou ami avec pad). Encaisse le choc en l\'air et finis main opposée.'}
                 ]
             }
         };
@@ -761,6 +875,7 @@
 
         // Init Lifecycle
         document.addEventListener('DOMContentLoaded', () => {
+            updateProfile();
             calculateVideoJump();
             calculateRSI();
             updateCourtDisplay();
