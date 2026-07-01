@@ -1,7 +1,7 @@
 {
-  "name": "PG Flight & IQ Elite Suite",
+  "name": "5'10\" PG Elite Masterclass",
   "short_name": "PG Flight",
-  "description": "5'10\" Prototype - Biomechanics & EuroLeague Tactical Engine",
+  "description": "Biomechanics, Sniper Training & EuroLeague PG IQ Engine",
   "start_url": "./index.html",
   "display": "standalone",
   "background_color": "#090911",
@@ -9,7 +9,7 @@
   "orientation": "portrait",
   "icons": [
     {
-      "src": "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23090911'/><text y='.9em' font-size='85'>🏀</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏀</text></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any maskable"
