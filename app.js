@@ -346,34 +346,104 @@ let animationInterval;
 let currentFrame = 0;
 
 const coachboardDB = {
-    spain_pnr: {
-        description: "L'arme absolue : Le meneur (1) prend l'écran du pivot (5). Pendant que (5) roule vers le cercle, le shooteur (2) vient poser un écran aveugle (Backscreen) sur le défenseur du pivot, créant une confusion totale.",
+    // ==================== 📍 MODULE SPACING & PLACEMENTS ====================
+    spacing_5out: {
+        description: "<strong>Le 5-Out (Pass & Cut) :</strong> Le placement roi du basket moderne. Personne dans la raquette.<br><br>💡 <em>Tip Coach pour l'équipe :</em> Restez sur la ligne des 3 points. Si le meneur (1) drive, on ne le regarde pas bêtement. Si on fait une passe, on coupe AU SPRINT vers le panier puis on ressort.",
         frames: [
-            // Frame 0 : Setup initial (Top of the key)
-            { o1:[50,15], o2:[50,45], o3:[15,85], o4:[85,85], o5:[40,25], d1:[50,22], d2:[50,52], d3:[20,80], d4:[80,80], d5:[40,32], ball:[50,15] },
-            // Frame 1 : Écran de O5 sur D1, O1 attaque l'axe
-            { o1:[30,35], o2:[50,45], o3:[15,85], o4:[85,85], o5:[45,22], d1:[40,25], d2:[50,52], d3:[20,80], d4:[80,80], d5:[40,32], ball:[30,35] },
-            // Frame 2 : O5 roule (Roll), O2 monte poser le backscreen sur D5
-            { o1:[25,60], o2:[45,35], o3:[15,85], o4:[85,85], o5:[50,50], d1:[35,45], d2:[55,45], d3:[20,80], d4:[80,80], d5:[45,40], ball:[25,60] },
-            // Frame 3 : O2 "Pop" à 3 points, passe lobée de O1 vers O5 seul au cercle
-            { o1:[20,70], o2:[50,20], o3:[15,85], o4:[85,85], o5:[50,85], d1:[30,60], d2:[50,30], d3:[25,75], d4:[80,80], d5:[45,55], ball:[50,80] }
+            { o1:[50,20], o2:[15,45], o3:[85,45], o4:[10,85], o5:[90,85], ball:[50,20] }, // Setup parfait
+            { o1:[30,30], o2:[15,45], o3:[85,45], o4:[10,85], o5:[90,85], ball:[30,30] }, // O1 passe à O2
+            { o1:[50,85], o2:[15,45], o3:[85,45], o4:[10,85], o5:[90,85], ball:[15,45] }, // O1 COUPE FORT (Cut) au panier
+            { o1:[90,85], o2:[15,45], o3:[85,45], o4:[10,85], o5:[50,20], ball:[15,45] }  // Rotation : O5 monte remplacer O1, O1 prend le corner
         ]
     },
-    zone23_overload: {
-        description: "Contre une zone 2-3 : Attaquer l'intervalle avec le meneur (1), forcer l'arrière et l'ailier de la zone à se resserrer, puis surcharger (Overload) un côté avec 3 attaquants pour libérer le corner.",
+    spacing_4out: {
+        description: "<strong>4-Out 1-In (Le Dunker Spot) :</strong> 4 joueurs au large, 1 pivot (5) caché sur la ligne de fond derrière l'arceau.<br><br>💡 <em>Tip pour le Pivot :</em> Ne reste JAMAIS au poste bas à réclamer la balle si ton meneur drive. Cache-toi dans le 'Dunker Spot'. Si le contreur monte sur le meneur, tu seras seul pour la passe lobée.",
         frames: [
-            // Frame 0 : Setup 5-Out face à la 2-3
+            { o1:[50,20], o2:[15,45], o3:[85,45], o4:[15,85], o5:[35,90], d1:[50,30], d5:[50,80], ball:[50,20] }, // O5 est au dunker spot gauche
+            { o1:[35,60], o2:[15,45], o3:[85,45], o4:[15,85], o5:[35,90], d1:[40,50], d5:[50,80], ball:[35,60] }, // O1 drive
+            { o1:[40,75], o2:[15,45], o3:[85,45], o4:[15,85], o5:[35,90], d1:[45,60], d5:[45,75], ball:[40,75] }, // Le pivot défenseur (D5) monte aider
+            { o1:[40,80], o2:[15,45], o3:[85,45], o4:[15,85], o5:[50,85], d1:[45,60], d5:[45,75], ball:[50,85] }  // Passe facile à O5 au cercle
+        ]
+    },
+    spacing_pnr_rules: {
+        description: "<strong>Les Règles du P&R (Lift & Drift) :</strong> Comment les shooteurs doivent bouger pendant un écran.<br><br>💡 <em>Tip pour l'équipe :</em> Si le meneur vient VERS vous = 'Drift' (Glissez dans le corner). S'il s'éloigne de vous = 'Lift' (Montez à 45°). Toujours être dans son champ de vision !",
+        frames: [
+            { o1:[30,30], o2:[10,85], o3:[90,85], o4:[85,45], o5:[35,35], ball:[30,30] }, // O5 pose écran pour O1
+            { o1:[50,40], o2:[15,45], o3:[90,85], o4:[85,45], o5:[40,50], ball:[50,40] }, // O1 drive au milieu. O2 DOIT LIFT (monter)
+            { o1:[70,55], o2:[20,40], o3:[90,85], o4:[90,85], o5:[50,75], ball:[70,55] }, // O1 drive à droite. O4 DOIT DRIFT (descendre au corner)
+            { o1:[70,55], o2:[20,40], o3:[90,85], o4:[90,85], o5:[50,75], ball:[90,85] }  // Passe à O4 (Drift)
+        ]
+    },
+
+    // ==================== ⚔️ ATTAQUE VS INDIVIDUELLE (MAN-TO-MAN) ====================
+    spain_pnr: {
+        description: "<strong>Spain Pick & Roll :</strong> L'arme absolue en EuroLeague.<br><br>💡 <em>Le Play :</em> O1 prend l'écran de O5. O5 roule. O2 vient poser un écran aveugle sur le défenseur de O5. La défense implose.",
+        frames: [
+            { o1:[50,15], o2:[50,45], o3:[15,85], o4:[85,85], o5:[40,25], d1:[50,22], d2:[50,52], d3:[20,80], d4:[80,80], d5:[40,32], ball:[50,15] },
+            { o1:[30,35], o2:[50,45], o3:[15,85], o4:[85,85], o5:[45,22], d1:[40,25], d2:[50,52], d3:[20,80], d4:[80,80], d5:[40,32], ball:[30,35] },
+            { o1:[25,60], o2:[45,35], o3:[15,85], o4:[85,85], o5:[50,50], d1:[35,45], d2:[55,45], d3:[20,80], d4:[80,80], d5:[45,40], ball:[25,60] },
+            { o1:[20,70], o2:[50,20], o3:[15,85], o4:[85,85], o5:[50,85], d1:[30,60], d2:[50,30], d3:[25,75], d4:[80,80], d5:[45,55], ball:[50,85] }
+        ]
+    },
+    horns_flare: {
+        description: "<strong>Horns Flare :</strong> Formation 'Cornes' (O4 et O5 aux coudes).<br><br>💡 <em>Le Play :</em> O1 utilise l'écran de O4. O5 va poser un écran 'Flare' (dans le dos) pour libérer O4 à 3 points. Très dur à défendre.",
+        frames: [
+            { o1:[50,20], o2:[10,85], o3:[90,85], o4:[35,50], o5:[65,50], ball:[50,20] },
+            { o1:[25,40], o2:[10,85], o3:[90,85], o4:[45,45], o5:[65,50], ball:[25,40] },
+            { o1:[20,50], o2:[10,85], o3:[90,85], o4:[60,35], o5:[45,45], ball:[20,50] }, // O5 pose l'écran Flare pour O4
+            { o1:[20,50], o2:[10,85], o3:[90,85], o4:[75,30], o5:[50,55], ball:[75,30] }  // O4 est ouvert pour le tir
+        ]
+    },
+    pistol_action: {
+        description: "<strong>Pistol (21 Action) :</strong> Transition rapide sur le côté.<br><br>💡 <em>Le Play :</em> O1 passe à O2 sur l'aile et sprinte derrière lui. O5 arrive lancé pour un écran sur O2. Crée un surnombre express sur l'aile.",
+        frames: [
+            { o1:[25,25], o2:[15,50], o3:[90,85], o4:[85,45], o5:[50,30], ball:[25,25] },
+            { o1:[15,40], o2:[15,50], o3:[90,85], o4:[85,45], o5:[50,40], ball:[15,50] }, // Passe à O2
+            { o1:[10,60], o2:[25,50], o3:[90,85], o4:[85,45], o5:[30,55], ball:[25,50] }, // O1 sprinte extérieur, O5 pose écran
+            { o1:[15,80], o2:[45,65], o3:[90,85], o4:[85,45], o5:[30,75], ball:[45,65] }  // O2 attaque le milieu, O5 roll
+        ]
+    },
+
+    // ==================== 🛡️ ATTAQUE VS ZONE ====================
+    zone23_overload: {
+        description: "<strong>Surcharge (Overload) vs Zone 2-3 :</strong> L'art de briser la défense de zone.<br><br>💡 <em>Le Play :</em> Forcer l'arrière et l'ailier de la zone à se resserrer sur un seul joueur, puis inonder leur côté avec 3 attaquants.",
+        frames: [
             { o1:[50,15], o2:[15,35], o3:[85,35], o4:[15,85], o5:[85,85], d1:[35,35], d2:[65,35], d3:[20,75], d4:[80,75], d5:[50,80], ball:[50,15] },
-            // Frame 1 : O1 attaque le "Gap" droit, O2 descend (drift), O5 monte poste bas
             { o1:[70,40], o2:[15,50], o3:[85,35], o4:[15,85], o5:[70,70], d1:[50,45], d2:[75,45], d3:[20,75], d4:[80,70], d5:[50,80], ball:[70,40] },
-            // Frame 2 : La zone panique sur l'axe droit. Kick out pass à O3, O4 sprinte à l'opposé.
             { o1:[65,50], o2:[15,50], o3:[90,40], o4:[85,90], o5:[60,75], d1:[55,50], d2:[85,45], d3:[30,65], d4:[85,65], d5:[60,85], ball:[90,40] },
-            // Frame 3 : Extra pass vers O4 grand ouvert dans le corner. Tir.
             { o1:[65,50], o2:[15,50], o3:[85,35], o4:[90,90], o5:[50,80], d1:[60,40], d2:[80,35], d3:[40,65], d4:[90,75], d5:[70,85], ball:[90,90] }
+        ]
+    },
+    zone23_highpost: {
+        description: "<strong>Flash Poste Franc vs Zone 2-3 :</strong> Le point faible fatal de la 2-3 est au milieu.<br><br>💡 <em>Tip Coach :</em> Le pivot (O5) doit sprinter au milieu de la raquette. Dès qu'il a la balle, la zone entière se replie sur lui. Les extérieurs DOIVENT couper vers le cercle à ce moment-là.",
+        frames: [
+            { o1:[50,20], o2:[15,45], o3:[85,45], o4:[15,85], o5:[85,85], d1:[35,35], d2:[65,35], d3:[20,75], d4:[80,75], d5:[50,80], ball:[50,20] },
+            { o1:[30,30], o2:[15,45], o3:[85,45], o4:[15,85], o5:[50,55], d1:[30,40], d2:[60,40], d3:[20,75], d4:[80,75], d5:[50,75], ball:[30,30] }, // O5 flash au milieu
+            { o1:[30,30], o2:[15,45], o3:[85,45], o4:[15,85], o5:[50,55], d1:[35,45], d2:[60,45], d3:[35,65], d4:[65,65], d5:[50,70], ball:[50,55] }, // Passe à O5. La zone collaps!
+            { o1:[30,30], o2:[15,45], o3:[50,85], o4:[15,85], o5:[50,55], d1:[35,45], d2:[60,45], d3:[35,65], d4:[65,65], d5:[50,70], ball:[50,85] }  // O3 coupe backdoor, Lay-up !
+        ]
+    },
+    zone32_baseline: {
+        description: "<strong>Baseline Runner vs Zone 3-2 :</strong> La 3-2 bloque la ligne à 3 pts mais le fond du terrain est vulnérable.<br><br>💡 <em>Le Play :</em> Un joueur (O4) sprinte sur toute la ligne de fond de gauche à droite. La défense ne saura pas qui doit le prendre.",
+        frames: [
+            { o1:[50,20], o2:[20,40], o3:[80,40], o4:[15,85], o5:[50,60], d1:[50,35], d2:[25,45], d3:[75,45], d4:[35,75], d5:[65,75], ball:[50,20] },
+            { o1:[30,25], o2:[20,40], o3:[80,40], o4:[50,90], o5:[50,60], d1:[40,35], d2:[25,45], d3:[75,45], d4:[45,75], d5:[65,75], ball:[30,25] }, // O4 court sous le cercle
+            { o1:[30,25], o2:[20,40], o3:[80,40], o4:[85,85], o5:[50,60], d1:[40,35], d2:[25,45], d3:[75,45], d4:[45,75], d5:[75,70], ball:[85,85] }, // O4 sort corner opposé
+            { o1:[30,25], o2:[20,40], o3:[70,50], o4:[85,85], o5:[50,60], d1:[40,35], d2:[25,45], d3:[75,45], d4:[45,75], d5:[75,70], ball:[85,85] }  // Extra pass possible
+        ]
+    },
+
+    // ==================== 🚀 SORTIE DE PRESSE ====================
+    press_14_flat: {
+        description: "<strong>1-4 Flat Press Break :</strong> Contre une défense tout-terrain ou une zone press.<br><br>💡 <em>Tip Coach :</em> Les 4 joueurs s'alignent à hauteur des lancers francs. Personne ne reste collé à la remise en jeu. Coupes croisées explosives. Le meneur attrape la balle lancé.",
+        frames: [
+            { o1:[50,95], o2:[20,70], o3:[40,70], o4:[60,70], o5:[80,70], d1:[50,85], d2:[25,65], d3:[45,65], d4:[65,65], d5:[85,65], ball:[50,95] }, // Alignement 1-4
+            { o1:[50,95], o2:[40,85], o3:[20,50], o4:[80,50], o5:[60,85], d1:[50,85], d2:[40,80], d3:[25,55], d4:[80,55], d5:[60,80], ball:[50,95] }, // O2 et O5 coupent fort vers la balle
+            { o1:[50,95], o2:[40,85], o3:[20,50], o4:[80,50], o5:[60,85], d1:[50,85], d2:[40,80], d3:[25,55], d4:[80,55], d5:[60,80], ball:[40,85] }, // Passe à O2
+            { o1:[20,80], o2:[40,70], o3:[20,50], o4:[80,50], o5:[60,85], d1:[30,75], d2:[40,65], d3:[25,55], d4:[80,55], d5:[60,80], ball:[40,70] }  // O2 se retourne direct et drive l'axe
         ]
     }
 };
-
 function renderFrame(frame) {
     const keys = ['o1','o2','o3','o4','o5','d1','d2','d3','d4','d5','ball'];
     keys.forEach(key => {
