@@ -339,3 +339,100 @@ Instructions pour toi :
             updateChart();
         });
     
+
+// ==================== ANIMATED COACHBOARD ENGINE ====================
+let currentPlayId = "";
+let animationInterval;
+let currentFrame = 0;
+
+const coachboardDB = {
+    spain_pnr: {
+        description: "L'arme absolue : Le meneur (1) prend l'écran du pivot (5). Pendant que (5) roule vers le cercle, le shooteur (2) vient poser un écran aveugle (Backscreen) sur le défenseur du pivot, créant une confusion totale.",
+        frames: [
+            // Frame 0 : Setup initial (Top of the key)
+            { o1:[50,15], o2:[50,45], o3:[15,85], o4:[85,85], o5:[40,25], d1:[50,22], d2:[50,52], d3:[20,80], d4:[80,80], d5:[40,32], ball:[50,15] },
+            // Frame 1 : Écran de O5 sur D1, O1 attaque l'axe
+            { o1:[30,35], o2:[50,45], o3:[15,85], o4:[85,85], o5:[45,22], d1:[40,25], d2:[50,52], d3:[20,80], d4:[80,80], d5:[40,32], ball:[30,35] },
+            // Frame 2 : O5 roule (Roll), O2 monte poser le backscreen sur D5
+            { o1:[25,60], o2:[45,35], o3:[15,85], o4:[85,85], o5:[50,50], d1:[35,45], d2:[55,45], d3:[20,80], d4:[80,80], d5:[45,40], ball:[25,60] },
+            // Frame 3 : O2 "Pop" à 3 points, passe lobée de O1 vers O5 seul au cercle
+            { o1:[20,70], o2:[50,20], o3:[15,85], o4:[85,85], o5:[50,85], d1:[30,60], d2:[50,30], d3:[25,75], d4:[80,80], d5:[45,55], ball:[50,80] }
+        ]
+    },
+    zone23_overload: {
+        description: "Contre une zone 2-3 : Attaquer l'intervalle avec le meneur (1), forcer l'arrière et l'ailier de la zone à se resserrer, puis surcharger (Overload) un côté avec 3 attaquants pour libérer le corner.",
+        frames: [
+            // Frame 0 : Setup 5-Out face à la 2-3
+            { o1:[50,15], o2:[15,35], o3:[85,35], o4:[15,85], o5:[85,85], d1:[35,35], d2:[65,35], d3:[20,75], d4:[80,75], d5:[50,80], ball:[50,15] },
+            // Frame 1 : O1 attaque le "Gap" droit, O2 descend (drift), O5 monte poste bas
+            { o1:[70,40], o2:[15,50], o3:[85,35], o4:[15,85], o5:[70,70], d1:[50,45], d2:[75,45], d3:[20,75], d4:[80,70], d5:[50,80], ball:[70,40] },
+            // Frame 2 : La zone panique sur l'axe droit. Kick out pass à O3, O4 sprinte à l'opposé.
+            { o1:[65,50], o2:[15,50], o3:[90,40], o4:[85,90], o5:[60,75], d1:[55,50], d2:[85,45], d3:[30,65], d4:[85,65], d5:[60,85], ball:[90,40] },
+            // Frame 3 : Extra pass vers O4 grand ouvert dans le corner. Tir.
+            { o1:[65,50], o2:[15,50], o3:[85,35], o4:[90,90], o5:[50,80], d1:[60,40], d2:[80,35], d3:[40,65], d4:[90,75], d5:[70,85], ball:[90,90] }
+        ]
+    }
+};
+
+function renderFrame(frame) {
+    const keys = ['o1','o2','o3','o4','o5','d1','d2','d3','d4','d5','ball'];
+    keys.forEach(key => {
+        const node = document.getElementById(key === 'ball' ? 'ballNode' : key);
+        if(frame[key] && node) {
+            node.style.opacity = 1; // Rendre visible
+            node.style.left = `${frame[key][0]}%`;
+            node.style.top = `${frame[key][1]}%`;
+        }
+    });
+}
+
+function loadPlay(playId) {
+    clearInterval(animationInterval);
+    currentPlayId = playId;
+    currentFrame = 0;
+    
+    if(!playId) {
+        document.getElementById('playDescription').textContent = "Sélectionne un système pour voir la description et lancer l'animation tactique.";
+        document.querySelectorAll('.player-node, .ball-node').forEach(n => n.style.opacity = 0);
+        return;
+    }
+
+    const playData = coachboardDB[playId];
+    document.getElementById('playDescription').innerHTML = playData.description;
+    
+    // Afficher la position de départ instantanément (Frame 0 sans transition)
+    document.querySelectorAll('.player-node').forEach(n => n.style.transition = 'none');
+    document.getElementById('ballNode').style.transition = 'none';
+    
+    renderFrame(playData.frames[0]);
+    
+    // Remettre les transitions fluides après un petit délai
+    setTimeout(() => {
+        document.querySelectorAll('.player-node').forEach(n => n.style.transition = 'top 1s cubic-bezier(0.4, 0, 0.2, 1), left 1s cubic-bezier(0.4, 0, 0.2, 1)');
+        document.getElementById('ballNode').style.transition = 'top 0.6s linear, left 0.6s linear';
+    }, 50);
+}
+
+function playAnimation() {
+    if(!currentPlayId) return;
+    clearInterval(animationInterval);
+    currentFrame = 1; // Commence à la deuxième image
+    const frames = coachboardDB[currentPlayId].frames;
+    
+    renderFrame(frames[currentFrame]); // Jouer la première action tout de suite
+    
+    animationInterval = setInterval(() => {
+        currentFrame++;
+        if(currentFrame >= frames.length) {
+            clearInterval(animationInterval);
+            return;
+        }
+        renderFrame(frames[currentFrame]);
+    }, 1500); // 1.5 secondes entre chaque étape
+}
+
+function resetAnimation() {
+    if(!currentPlayId) return;
+    clearInterval(animationInterval);
+    loadPlay(currentPlayId); // Recharge la Frame 0
+}
