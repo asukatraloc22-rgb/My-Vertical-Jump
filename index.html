@@ -296,35 +296,40 @@
     </section>
 
     <section id="ia-gemini-log" class="content-section">
-        <div class="card">
-            <h3><span class="card-icon">🤖</span> Cerveau IA & Super Prompt</h3>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem; line-height: 1.5;">Remplis ce rapport clinique post-session. Le système va générer un "Super Prompt" parfait. Copie-le et colle-le dans Gemini pour obtenir ton programme sur-mesure du lendemain.</p>
+        <div class="card" style="border-top: 3px solid #8b5cf6;">
+            <h3>🧠 Cerveau IA Gemini (Live API)</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Génère tes workouts sur-mesure en temps réel. La clé API est sauvegardée localement et en sécurité sur ton téléphone.</p>
 
             <div class="input-group">
-                <label>Niveau de Fatigue Neurologique (1 = Épuisé, 10 = Surpuissant)</label>
-                <input type="range" id="logEnergy" min="1" max="10" value="7" style="height: 20px;">
+                <label>Clé API Gemini (Gratuite)</label>
+                <input type="password" id="geminiApiKey" placeholder="Colle ta clé API ici..." onchange="saveApiKey()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="input-group">
+                    <label>Énergie (1-10)</label>
+                    <input type="number" id="liveEnergy" min="1" max="10" value="7">
+                </div>
+                <div class="input-group">
+                    <label>Temps dispo (Min)</label>
+                    <input type="number" id="liveTime" value="45">
+                </div>
             </div>
 
             <div class="input-group">
-                <label>Focus Tactique / Physique du jour</label>
-                <select id="logFocus">
-                    <option value="Shooting Mechanics (Sway & Dip)">🎯 Tir (Fluidité, Séquençage 1-Motion)</option>
-                    <option value="Traffic Finishing (Veer Step)">🪶 Finition (Contact, Acrobatique)</option>
-                    <option value="Pace & Space Creation">🛑 Pace & Manipulation (Iso, P&R)</option>
-                    <option value="Athleticism & Fast SSC">⚡ Athlétisme (Plyométrie, Force)</option>
-                </select>
+                <label>Besoins / Blocages du jour</label>
+                <textarea class="notes-area" id="liveNeeds" placeholder="Ex: Je veux un workout Solo focus sur mon tir en sortie d'écran. J'ai les jambes lourdes aujourd'hui."></textarea>
             </div>
 
-            <div class="input-group">
-                <label>Analyse Clinique (Frictions, Échecs, Réussites)</label>
-                <textarea class="notes-area" id="logTactics" placeholder="Ex: Mon tir à 9m était raide au 3ème QT, j'ai oublié de relâcher mes épaules. J'ai subi le hand-checking du meneur adverse..."></textarea>
+            <button class="btn" style="background: #8b5cf6; margin-bottom: 1rem;" id="btnGemini" onclick="askGemini()">✨ Générer mon Workout avec l'IA</button>
+
+            <div id="aiLoading" style="display: none; text-align: center; padding: 1rem; color: #8b5cf6; font-weight: bold;">
+                L'IA analyse tes datas... ⏳
             </div>
 
-            <button class="btn" onclick="generateAIPrompt()">⚙️ Générer le Protocole IA</button>
-
-            <div id="aiPromptOutput" class="result-box" style="margin-top: 1.5rem; border: 1px solid var(--primary); background: rgba(255, 107, 53, 0.1);">
-                <strong style="color:var(--primary); display:block; margin-bottom:0.5rem; font-size: 0.9rem; text-transform: uppercase;">📋 Ton Super Prompt (Sélectionne et Copie) :</strong>
-                <p id="generatedPromptText" style="font-size: 0.9rem; color: white; line-height: 1.6; user-select: all; cursor: text; padding: 0.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;"></p>
+            <div id="aiLiveResponseBox" class="result-box" style="border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
+                <strong style="color:#8b5cf6; display:block; margin-bottom:0.5rem; text-transform:uppercase;">📝 Ton Programme :</strong>
+                <div id="aiLiveResponseText" style="font-size: 0.9rem; line-height: 1.6; color: #fff;">Les résultats s'afficheront ici.</div>
             </div>
         </div>
     </section>
