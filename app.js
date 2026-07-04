@@ -506,3 +506,142 @@ function resetAnimation() {
     clearInterval(animationInterval);
     loadPlay(currentPlayId); // Recharge la Frame 0
 }
+
+// ==================== DYNAMIC WEEKLY PLANNER ====================
+// Structure de base sauvegardée dans le téléphone (localStorage)
+const defaultSchedule = {
+    lundi: ['Mobilité Matin & Abdos', 'Workout Solo (Pace & Space)', 'Lifting Soir & Étirements'],
+    mardi: ['Mobilité Matin & Abdos', 'Dunk Workout (AM)', 'Lifting Soir & Étirements'],
+    mercredi: ['Mobilité Matin & Abdos', 'Team Practice (AM)', 'Lifting Soir & Étirements'],
+    jeudi: ['Mobilité Matin & Abdos', 'Récupération Active', 'Lifting Soir & Étirements'],
+    vendredi: ['Mobilité Matin & Abdos', 'Shooting Léger', 'Lifting Soir & Étirements'],
+    samedi: ['Game Day Focus', 'MATCH !'],
+    dimanche: ['Workout Solo (Finition Trafic)', 'Étirements Profonds']
+};
+
+let mySchedule = JSON.parse(localStorage.getItem('pgFlightSchedule')) || defaultSchedule;
+
+function renderSchedule() {
+    const container = document.getElementById('weeklyScheduleContainer');
+    if(!container) return;
+    container.innerHTML = '';
+
+    Object.keys(mySchedule).forEach(day => {
+        let tasksHtml = '';
+        mySchedule[day].forEach((task, index) => {
+            tasksHtml += `
+                <div class="task-item">
+                    <span class="task-text">${task}</span>
+                    <button class="btn-delete-task" onclick="removeTask('${day}', ${index})">×</button>
+                </div>
+            `;
+        });
+
+        const dayCard = `
+            <div class="day-card">
+                <div class="day-header">
+                    <span class="day-title">${day}</span>
+                </div>
+                <div class="task-list" id="list-${day}">
+                    ${tasksHtml}
+                    <button class="btn-add-task" onclick="addTask('${day}')">+ Ajouter une session</button>
+                </div>
+            </div>
+        `;
+        container.innerHTML += dayCard;
+    });
+}
+
+function addTask(day) {
+    const task = prompt(`Quelle session veux-tu ajouter à ${day} ?`);
+    if(task && task.trim() !== '') {
+        mySchedule[day].push(task);
+        localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
+        renderSchedule();
+    }
+}
+
+function removeTask(day, index) {
+    if(confirm('Supprimer cette session ?')) {
+        mySchedule[day].splice(index, 1);
+        localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
+        renderSchedule();
+    }
+}
+
+// Initialisation du calendrier au lancement
+document.addEventListener('DOMContentLoaded', () => {
+    renderSchedule();
+    
+    // Charger la clé API sauvegardée
+    const savedKey = localStorage.getItem('geminiApiKeyLocal');
+    if(savedKey && document.getElementById('geminiApiKey')) {
+        document.getElementById('geminiApiKey').value = savedKey;
+    }
+});
+
+
+// ==================== LIVE GEMINI API ENGINE ====================
+function saveApiKey() {
+    const key = document.getElementById('geminiApiKey').value;
+    localStorage.setItem('geminiApiKeyLocal', key);
+}
+
+async function askGemini() {
+    const apiKey = document.getElementById('geminiApiKey').value;
+    const energy = document.getElementById('liveEnergy').value;
+    const time = document.getElementById('liveTime').value;
+    const needs = document.getElementById('liveNeeds').value;
+
+    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Gemini !"); return; }
+    if (!needs) { alert("⚠️ Décris tes besoins ou blocages du jour."); return; }
+
+    const btn = document.getElementById('btnGemini');
+    const loading = document.getElementById('aiLoading');
+    const responseBox = document.getElementById('aiLiveResponseBox');
+    const responseText = document.getElementById('aiLiveResponseText');
+
+    // UI Loading state
+    btn.disabled = true;
+    loading.style.display = 'block';
+    responseBox.classList.remove('show');
+
+    // Le Super Prompt envoyé à l'IA
+    const promptData = `Tu es un coach NBA d'élite et préparateur physique. Je suis un meneur de 1m78 évoluant à Madagascar (basket très physique). 
+    Voici mon état aujourd'hui :
+    - Énergie : ${energy}/10
+    - Temps dispo : ${time} minutes
+    - Mes besoins/focus : "${needs}"
+    
+    Conçois ma séance sur-mesure étape par étape (Échauffement, Exercices précis avec séries/réps, et Fin). Sois technique, direct et utilise du vocabulaire basket/biomécanique (Pace, Drop Stance, Under Drag, Fast SSC). Utilise un format lisible.`;
+
+    try {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                contents: [{ parts: [{ text: promptData }] }]
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+            responseText.innerHTML = `<span style="color:var(--danger)">Erreur API : ${data.error.message}</span>`;
+        } else {
+            // Formater le texte Markdown basique en HTML pour l'affichage
+            let aiText = data.candidates[0].content.parts[0].text;
+            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--primary);">$1</strong>');
+            aiText = aiText.replace(/\*(.*?)/g, '<br>• $1'); 
+            
+            responseText.innerHTML = aiText;
+        }
+    } catch (error) {
+        responseText.innerHTML = `<span style="color:var(--danger)">Erreur de connexion. Vérifie ta connexion internet.</span>`;
+    } finally {
+        // UI Reset state
+        btn.disabled = false;
+        loading.style.display = 'none';
+        responseBox.classList.add('show');
+    }
+}
