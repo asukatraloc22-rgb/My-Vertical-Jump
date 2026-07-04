@@ -40,6 +40,7 @@
         <button class="nav-tab active" onclick="showSection(event, 'live-reads')">⚡ Live Decisions</button>
         <button class="nav-tab" onclick="showSection(event, 'sniper-tracker')">🎯 Sniper Tracker</button>
         <button class="nav-tab" onclick="showSection(event, 'skills-encyclopedia')">📖 Masterclass Skills</button>
+        <button class="nav-tab" onclick="showSection(event, 'coachboard')">📋 Playbook Animé</button>
         <button class="nav-tab" onclick="showSection(event, 'ia-gemini-log')">🤖 Gemini Pre-Log</button>
     </nav>
 
@@ -316,6 +317,51 @@
             <div id="aiPromptOutput" class="result-box" style="margin-top: 1.5rem; border: 1px solid var(--primary); background: rgba(255, 107, 53, 0.1);">
                 <strong style="color:var(--primary); display:block; margin-bottom:0.5rem; font-size: 0.9rem; text-transform: uppercase;">📋 Ton Super Prompt (Sélectionne et Copie) :</strong>
                 <p id="generatedPromptText" style="font-size: 0.9rem; color: white; line-height: 1.6; user-select: all; cursor: text; padding: 0.5rem; background: rgba(0,0,0,0.5); border-radius: 8px;"></p>
+            </div>
+        </div>
+    </section>
+
+    <section id="coachboard" class="content-section">
+        <div class="card" style="border-top: 3px solid var(--warning);">
+            <h3>📋 Animated Coachboard</h3>
+            <div class="input-group">
+                <select id="playSelector" onchange="loadPlay(this.value)">
+                    <option value="">-- Sélectionner un Système --</option>
+                    <optgroup label="Attaque vs Individuelle">
+                        <option value="spain_pnr">Spain Pick & Roll (L'arme létale absolue)</option>
+                    </optgroup>
+                    <optgroup label="Attaque vs Zone">
+                        <option value="zone23_overload">Overload vs Zone 2-3 (Surcharge)</option>
+                    </optgroup>
+                </select>
+            </div>
+
+            <div id="playDescription" style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem; min-height: 40px;">
+                Sélectionne un système pour voir la description et lancer l'animation tactique.
+            </div>
+
+            <div class="court-container">
+                <div class="court-paint"></div>
+                <div class="court-3pt"></div>
+                
+                <div id="ballNode" class="ball-node"></div>
+                
+                <div id="o1" class="player-node offense">1</div>
+                <div id="o2" class="player-node offense">2</div>
+                <div id="o3" class="player-node offense">3</div>
+                <div id="o4" class="player-node offense">4</div>
+                <div id="o5" class="player-node offense">5</div>
+                
+                <div id="d1" class="player-node defense">1</div>
+                <div id="d2" class="player-node defense">2</div>
+                <div id="d3" class="player-node defense">3</div>
+                <div id="d4" class="player-node defense">4</div>
+                <div id="d5" class="player-node defense">5</div>
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
+                <button class="btn" onclick="playAnimation()">▶️ Lancer le Play</button>
+                <button class="btn btn-secondary" onclick="resetAnimation()">🔄 Reset</button>
             </div>
         </div>
     </section>
