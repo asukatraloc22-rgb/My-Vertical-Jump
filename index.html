@@ -326,12 +326,28 @@
             <h3>📋 Animated Coachboard</h3>
             <div class="input-group">
                 <select id="playSelector" onchange="loadPlay(this.value)">
-                    <option value="">-- Sélectionner un Système --</option>
-                    <optgroup label="Attaque vs Individuelle">
-                        <option value="spain_pnr">Spain Pick & Roll (L'arme létale absolue)</option>
+                    <option value="">-- Sélectionner un Module --</option>
+                    
+                    <optgroup label="📍 Module : Placements & Spacing (Pour l'équipe)">
+                        <option value="spacing_5out">Le 5-Out (Ouvrir la raquette au maximum)</option>
+                        <option value="spacing_4out">Le 4-Out 1-In (Utiliser le Dunker Spot)</option>
+                        <option value="spacing_pnr_rules">Règles du P&R : Le "Lift" et le "Drift"</option>
                     </optgroup>
-                    <optgroup label="Attaque vs Zone">
-                        <option value="zone23_overload">Overload vs Zone 2-3 (Surcharge)</option>
+
+                    <optgroup label="⚔️ Attaque vs Individuelle (Man-to-Man)">
+                        <option value="spain_pnr">Spain Pick & Roll (Confusion totale)</option>
+                        <option value="horns_flare">Horns Flare (Libérer un shooteur)</option>
+                        <option value="pistol_action">Pistol / 21 Action (Jeu rapide sur l'aile)</option>
+                    </optgroup>
+
+                    <optgroup label="🛡️ Attaque vs Zone (2-3 & 3-2)">
+                        <option value="zone23_overload">Surcharge (Overload) vs Zone 2-3</option>
+                        <option value="zone23_highpost">Flash Poste Franc vs Zone 2-3</option>
+                        <option value="zone32_baseline">Baseline Runner vs Zone 3-2</option>
+                    </optgroup>
+
+                    <optgroup label="🚀 Sorties de Presse (Press Break)">
+                        <option value="press_14_flat">Sortie 1-4 Flat (Contre Full Court)</option>
                     </optgroup>
                 </select>
             </div>
