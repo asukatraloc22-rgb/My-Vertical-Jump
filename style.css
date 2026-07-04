@@ -299,4 +299,74 @@
         .chart-label { position: absolute; bottom: -25px; left: 50%; transform: translateX(-50%); font-size: 0.75rem; color: #fff; }
         .chart-value { position: absolute; top: -25px; left: 50%; transform: translateX(-50%); font-size: 0.85rem; font-weight: 700; color: var(--warning); }
         .footer { text-align: center; padding: 2rem 1rem; color: var(--text-muted); font-size: 0.85rem; border-top: 1px solid var(--card-border); margin-top: 2rem; }
+
+
+/* ==================== COACHBOARD ANIMATION ENGINE ==================== */
+.court-container {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1.1;
+    background: #c28851; /* Couleur parquet */
+    border: 3px solid #ffffff;
+    margin: 0 auto;
+    overflow: hidden;
+    border-radius: 4px;
+}
+
+.court-paint {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 32%;
+    height: 45%;
+    background: rgba(0, 78, 137, 0.4);
+    border: 2px solid #ffffff;
+}
+
+.court-3pt {
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    height: 70%;
+    border: 2px solid #ffffff;
+    border-radius: 50% 50% 0 0;
+    border-bottom: none;
+}
+
+.player-node {
+    position: absolute;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 11px;
+    font-weight: 900;
+    color: white;
+    transform: translate(-50%, -50%);
+    transition: top 1s cubic-bezier(0.4, 0, 0.2, 1), left 1s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.5);
+    opacity: 0; /* Caché par défaut jusqu'au chargement du play */
+}
+
+.player-node.offense { background: var(--secondary); z-index: 10; border: 2px solid #fff; }
+.player-node.defense { background: var(--danger); z-index: 5; border: 2px solid #fff; }
+
+.ball-node {
+    position: absolute;
+    width: 14px;
+    height: 14px;
+    background: #f59e0b;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: top 0.6s linear, left 0.6s linear;
+    z-index: 15;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    opacity: 0;
+}
     
