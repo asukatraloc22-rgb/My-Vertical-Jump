@@ -554,7 +554,7 @@ function updateChart() {
 function addDataPoint() { const v = prompt("Rentre ta détente calculée (cm) :"); if(v && !isNaN(v)) { chartData.push(parseInt(v)); updateChart(); } }
 function clearChart() { chartData = []; updateChart(); }
 
-// INIT
+// ==================== INITIALISATION AU DÉMARRAGE ====================
 document.addEventListener('DOMContentLoaded', () => {
     updateProfile();
     calculateVideoJump();
@@ -565,6 +565,10 @@ document.addEventListener('DOMContentLoaded', () => {
     updateChart();
     renderSchedule();
     
+    // 👇 C'EST ÇA L'ÉTAPE C : On lance l'affichage de tes favoris IA au démarrage !
+    renderFavoriteWorkouts(); 
+    
+    // Restaure la clé API si elle était sauvegardée
     const savedKey = localStorage.getItem('geminiApiKeyLocal');
     if(savedKey && document.getElementById('geminiApiKey')) {
         document.getElementById('geminiApiKey').value = savedKey;
