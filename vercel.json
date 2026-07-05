@@ -1,12 +1,7 @@
 {
-  "buildCommand": "echo 'Build complete'",
   "functions": {
     "api/generate-workout.js": {
       "runtime": "nodejs18.x"
     }
-  },
-  "env": {
-    "OPENAI_API_KEY": "@openai_api_key",
-    "OPENAI_API_BASE": "@openai_api_base"
   }
 }
