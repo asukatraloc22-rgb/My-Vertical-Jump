@@ -296,12 +296,8 @@ async function askManusIA() {
     if(responseText) responseText.value = '';
 
     try {
-        // Appel au serveur backend local
-        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
-            ? 'http://localhost:8000/generate-workout'
-            : '/api/generate-workout'; // Pour production
-        
-        const response = await fetch(apiUrl, {
+        // Appel à la fonction Vercel Serverless (fonctionne automatiquement sur le cloud)
+        const response = await fetch('/api/generate-workout', {
             method: 'POST',
             headers: { 
                 'Content-Type': 'application/json'
@@ -316,7 +312,7 @@ async function askManusIA() {
 
         if (!response.ok) {
             const errorData = await response.json();
-            throw new Error(errorData.detail || `HTTP ${response.status}`);
+            throw new Error(errorData.error || `HTTP ${response.status}`);
         }
 
         const data = await response.json();
@@ -325,12 +321,12 @@ async function askManusIA() {
             if(responseText) responseText.value = data.workout;
             if(responseBox) responseBox.classList.add('show');
         } else {
-            if(responseText) responseText.value = `Erreur : Réponse inattendue du serveur.`;
+            if(responseText) responseText.value = `Erreur : ${data.error || 'Réponse inattendue du serveur.'}`;
         }
     } catch (error) {
         console.error('Erreur API:', error);
         if(responseText) {
-            responseText.value = `⚠️ Erreur : ${error.message}\n\nAssurez-vous que le serveur backend est en cours d'exécution sur le port 8000.`;
+            responseText.value = `⚠️ Erreur : ${error.message}\n\nAssurez-vous que les variables d'environnement sont configurées sur Vercel.`;
         }
     } finally {
         if(btn) btn.disabled = false;
