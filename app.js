@@ -32,8 +32,6 @@ function showSection(event, sectionId) {
     if(targetSection) {
         targetSection.classList.add('active');
         event.target.classList.add('active');
-    } else {
-        console.error("Erreur de navigation: La section", sectionId, "n'existe pas dans le HTML.");
     }
 }
 
@@ -234,18 +232,82 @@ function removeTask(day, index) {
     }
 }
 
-// ==================== FAVORIS IA ====================
+// ==================== LIVE GOOGLE GEMINI API ENGINE ====================
+// Fonction corrigée pour se connecter proprement à Google Gemini
+async function askManusIA() {
+    const apiKey = document.getElementById('geminiApiKey')?.value;
+    const energy = document.getElementById('liveEnergy')?.value || 7;
+    const time = document.getElementById('liveTime')?.value || 45;
+    const needs = document.getElementById('liveNeeds')?.value;
+
+    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Gemini !"); return; }
+    if (!needs) { alert("⚠️ Décris tes besoins dans la grande zone de texte."); return; }
+
+    const btn = document.getElementById('btnGemini');
+    const loading = document.getElementById('aiLoading');
+    const responseBox = document.getElementById('aiLiveResponseBox');
+    const responseText = document.getElementById('aiLiveResponseText');
+
+    if(btn) btn.disabled = true;
+    if(loading) loading.style.display = 'block';
+    if(responseBox) responseBox.classList.remove('show');
+
+    const promptData = `Tu es un coach NBA d'élite. Je suis un meneur de 1m78 évoluant à Madagascar. 
+    - Énergie : ${energy}/10
+    - Temps dispo : ${time} minutes
+    - Mes besoins/focus : "${needs}"
+    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis et lisible.`;
+
+    try {
+        // Envoi de la requête propre à l'API GEMINI
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+            method: 'POST',
+            headers: { 
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ 
+                contents: [{ parts: [{ text: promptData }] }]
+            })
+        });
+
+        const data = await response.json();
+        
+        if (data.error) {
+            if(responseText) responseText.value = `Erreur API : ${data.error.message}`;
+        } else if (data.candidates && data.candidates[0].content) {
+            let aiText = data.candidates[0].content.parts[0].text;
+            // Nettoyage des étoiles Markdown
+            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); 
+            if(responseText) responseText.value = aiText;
+        } else {
+            if(responseText) responseText.value = `Erreur : Réponse inattendue. Vérifie ta clé.`;
+        }
+    } catch (error) {
+        if(responseText) responseText.value = `Erreur réseau ou clé API rejetée. Vérifie ta connexion.`;
+    } finally {
+        if(btn) btn.disabled = false;
+        if(loading) loading.style.display = 'none';
+        if(responseBox) responseBox.classList.add('show');
+    }
+}
+
+function saveApiKey() {
+    const key = document.getElementById('geminiApiKey')?.value;
+    if(key) localStorage.setItem('geminiApiKeyLocal', key);
+}
+
+// ==================== WORKOUTS FAVORIS (IA) ====================
 let savedAIWorkouts = JSON.parse(localStorage.getItem('pgFavoriteWorkouts')) || [];
 
 function saveAIWorkout() {
     const textArea = document.getElementById('aiLiveResponseText');
     if(!textArea) {
-        alert("Erreur système: Champ de texte introuvable.");
+        alert("Erreur: Champ de texte introuvable.");
         return;
     }
     const content = textArea.value;
-    if(!content || !content.trim()) {
-        alert("Il n'y a rien à sauvegarder.");
+    if(!content || !content.trim() || content.includes("Erreur")) {
+        alert("Il n'y a pas de programme valide à sauvegarder.");
         return;
     }
     
@@ -254,13 +316,16 @@ function saveAIWorkout() {
         savedAIWorkouts.push({ id: Date.now(), title: title, content: content });
         localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
         alert("Workout sauvegardé ! Va dans l'onglet 'Routines & Planner' pour le retrouver.");
-        renderFavoriteWorkouts();
+        
+        if (typeof renderFavoriteWorkouts === "function") {
+            renderFavoriteWorkouts();
+        }
     }
 }
 
 function renderFavoriteWorkouts() {
     const container = document.getElementById('favoriteWorkoutsContainer');
-    if(!container) return; // Ne plante pas si l'élément n'est pas sur la page
+    if(!container) return; 
     container.innerHTML = '';
     
     if(savedAIWorkouts.length === 0) {
@@ -587,163 +652,6 @@ function resetAnimation() {
     loadPlay(currentPlayId); 
 }
 
-// ==================== LIVE MANUS / OPENAI API ENGINE ====================
-async function askManusIA() {
-    const apiKey = document.getElementById('geminiApiKey')?.value;
-    const energy = document.getElementById('liveEnergy')?.value || 7;
-    const time = document.getElementById('liveTime')?.value || 45;
-    const needs = document.getElementById('liveNeeds')?.value;
-
-    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API !"); return; }
-    if (!needs) { alert("⚠️ Décris tes besoins dans la grande zone de texte."); return; }
-
-    const btn = document.getElementById('btnGemini');
-    const loading = document.getElementById('aiLoading');
-    const responseBox = document.getElementById('aiLiveResponseBox');
-    const responseText = document.getElementById('aiLiveResponseText');
-
-    if(btn) btn.disabled = true;
-    if(loading) loading.style.display = 'block';
-    if(responseBox) responseBox.classList.remove('show');
-
-    const promptData = `Tu es un coach NBA d'élite. Je suis un meneur de 1m78 évoluant à Madagascar. 
-    - Énergie : ${energy}/10
-    - Temps dispo : ${time} minutes
-    - Mes besoins/focus : "${needs}"
-    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis et lisible.`;
-
-    try {
-        // Envoi de la requête au standard OpenAI/Manus
-        const response = await fetch('https://api.manus.ai/v1/chat/completions', {
-            method: 'POST',
-            headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}` 
-            },
-            body: JSON.stringify({ 
-                model: "gpt-3.5-turbo", // Le standard fallback si "manus" plante chez eux
-                messages: [{ role: "user", content: promptData }]
-            })
-        });
-
-        const data = await response.json();
-        
-        if (data.error) {
-            if(responseText) responseText.value = `Erreur API : ${data.error.message || 'Clé invalide ou modèle non trouvé'}`;
-        } else if (data.choices && data.choices.length > 0) {
-            let aiText = data.choices[0].message.content;
-            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); 
-            if(responseText) responseText.value = aiText;
-        } else {
-            if(responseText) responseText.value = `Erreur : Réponse inattendue. Vérifie ta clé.`;
-        }
-    } catch (error) {
-        if(responseText) responseText.value = `Erreur réseau ou clé API rejetée. Détails : ${error.message}`;
-    } finally {
-        if(btn) btn.disabled = false;
-        if(loading) loading.style.display = 'none';
-        if(responseBox) responseBox.classList.add('show');
-    }
-}
-
-function saveApiKey() {
-    const key = document.getElementById('geminiApiKey')?.value;
-    if(key) localStorage.setItem('geminiApiKeyLocal', key);
-}
-
-// ==================== WORKOUTS FAVORIS (IA) ====================
-let savedAIWorkouts = JSON.parse(localStorage.getItem('pgFavoriteWorkouts')) || [];
-
-function saveAIWorkout() {
-    const textArea = document.getElementById('aiLiveResponseText');
-    if(!textArea) {
-        alert("Erreur: Champ de texte introuvable.");
-        return;
-    }
-    const content = textArea.value;
-    if(!content || !content.trim() || content.includes("Erreur")) {
-        alert("Il n'y a pas de programme valide à sauvegarder.");
-        return;
-    }
-    
-    const title = prompt("Donne un nom à ce workout (ex: Focus Tir & Pace) :");
-    if(title) {
-        savedAIWorkouts.push({ id: Date.now(), title: title, content: content });
-        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
-        alert("Workout sauvegardé ! Va dans l'onglet 'Routines & Planner' pour le retrouver.");
-        
-        // Rafraîchir l'interface des favoris si on est sur la bonne page
-        if (typeof renderFavoriteWorkouts === "function") {
-            renderFavoriteWorkouts();
-        }
-    }
-}
-
-function renderFavoriteWorkouts() {
-    const container = document.getElementById('favoriteWorkoutsContainer');
-    if(!container) return; 
-    container.innerHTML = '';
-    
-    if(savedAIWorkouts.length === 0) {
-        container.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Aucun workout sauvegardé pour le moment.</p>';
-        return;
-    }
-
-    savedAIWorkouts.forEach((wk, index) => {
-        const card = `
-            <div class="day-card" style="border-color: #8b5cf6;">
-                <div class="day-header" style="cursor: pointer;" onclick="toggleFavorite(${index})">
-                    <span class="day-title" style="color: white; font-size: 1rem; text-transform:none;">${wk.title}</span>
-                    <span style="color: #8b5cf6;">▼</span>
-                </div>
-                <div id="fav-content-${index}" style="display: none; margin-top: 1rem;">
-                    <textarea id="fav-text-${index}" style="width: 100%; min-height: 200px; background: rgba(0,0,0,0.5); color: white; border: 1px solid #8b5cf6; border-radius: 6px; padding: 0.5rem; font-family: inherit; font-size: 0.85rem; line-height: 1.5;">${wk.content}</textarea>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--accent);" onclick="updateFavorite(${index})">💾 MAJ</button>
-                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--danger);" onclick="deleteFavorite(${index})">🗑️ Suppr.</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        container.innerHTML += card;
-    });
-}
-
-function toggleFavorite(index) {
-    const contentDiv = document.getElementById(`fav-content-${index}`);
-    if(contentDiv) {
-        contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
-    }
-}
-
-function updateFavorite(index) {
-    const newContent = document.getElementById(`fav-text-${index}`).value;
-    savedAIWorkouts[index].content = newContent;
-    localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
-    alert("Workout mis à jour avec succès !");
-}
-
-function deleteFavorite(index) {
-    if(confirm("Supprimer définitivement ce workout de tes favoris ?")) {
-        savedAIWorkouts.splice(index, 1);
-        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
-        renderFavoriteWorkouts();
-    }
-}
-
-// L'appel au démarrage pour charger les favoris
-document.addEventListener('DOMContentLoaded', () => {
-    // ... tes autres inits ...
-    if (typeof renderFavoriteWorkouts === "function") {
-        renderFavoriteWorkouts();
-    }
-    const savedKey = localStorage.getItem('geminiApiKeyLocal');
-    if(savedKey) {
-        const keyInput = document.getElementById('geminiApiKey');
-        if(keyInput) keyInput.value = savedKey;
-    }
-});
-
 // ==================== TIMERS & CHART ====================
 let timerSeconds = 120, timerInterval, timerRunning = false;
 function updateTimerDisplay() {
@@ -780,8 +688,9 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWorkout('');
     updateChart();
     renderSchedule();
-    renderFavoriteWorkouts();
-    
+    if (typeof renderFavoriteWorkouts === "function") {
+        renderFavoriteWorkouts();
+    }
     const savedKey = localStorage.getItem('geminiApiKeyLocal');
     if(savedKey) {
         const keyInput = document.getElementById('geminiApiKey');
