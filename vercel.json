@@ -1,6 +1,6 @@
 {
   "functions": {
-    "api/generate-workout.js": {
+    "api/*.js": {
       "runtime": "nodejs18.x"
     }
   }
