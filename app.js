@@ -275,13 +275,15 @@ function moveTaskDown(day, index) {
 
 // ==================== LIVE MANUS IA API ENGINE (VIA PROXY) ====================
 async function askManusIA() {
-    const apiKey = document.getElementById('geminiApiKey')?.value;
-    const energy = document.getElementById('liveEnergy')?.value || 7;
-    const time = document.getElementById('liveTime')?.value || 45;
+    const energy = parseInt(document.getElementById('liveEnergy')?.value) || 7;
+    const time = parseInt(document.getElementById('liveTime')?.value) || 45;
     const needs = document.getElementById('liveNeeds')?.value;
+    const format = document.getElementById('workoutFormat')?.value || 'solo';
 
-    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Manus !"); return; }
-    if (!needs) { alert("⚠️ Décris tes besoins dans la grande zone de texte."); return; }
+    if (!needs || needs.trim() === '') { 
+        alert("⚠️ Décris tes besoins dans la grande zone de texte."); 
+        return; 
+    }
 
     const btn = document.getElementById('btnGemini');
     const loading = document.getElementById('aiLoading');
@@ -291,44 +293,45 @@ async function askManusIA() {
     if(btn) btn.disabled = true;
     if(loading) loading.style.display = 'block';
     if(responseBox) responseBox.classList.remove('show');
-
-    const promptData = `Tu es un coach NBA d'élite. Je suis un meneur de 1m78 évoluant à Madagascar. 
-    - Énergie : ${energy}/10
-    - Temps dispo : ${time} minutes
-    - Mes besoins/focus : "${needs}"
-    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis et lisible.`;
+    if(responseText) responseText.value = '';
 
     try {
-        // Le tunnel (Proxy) pour contourner le blocage de sécurité de Manus IA
-        const targetUrl = 'https://api.manus.ai/v1/chat/completions';
-        const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
-
-        // Envoi de la requête au standard OpenAI/Manus via le tunnel
-        const response = await fetch(proxyUrl, {
+        // Appel au serveur backend local
+        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+            ? 'http://localhost:8000/generate-workout'
+            : '/api/generate-workout'; // Pour production
+        
+        const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${apiKey}` 
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify({ 
-                model: "gpt-3.5-turbo", // Modèle standard accepté par la majorité des API
-                messages: [{ role: "user", content: promptData }]
+                energy: energy,
+                time: time,
+                needs: needs,
+                format: format
             })
         });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.detail || `HTTP ${response.status}`);
+        }
+
         const data = await response.json();
         
-        if (data.error) {
-            if(responseText) responseText.value = `Erreur API Manus : ${data.error.message || 'Clé refusée'}`;
-        } else if (data.choices && data.choices.length > 0) {
-            let aiText = data.choices[0].message.content;
-            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); // Nettoyer les étoiles
-            if(responseText) responseText.value = aiText;
+        if (data.success && data.workout) {
+            if(responseText) responseText.value = data.workout;
+            if(responseBox) responseBox.classList.add('show');
         } else {
-            if(responseText) responseText.value = `Erreur : Réponse inattendue de l'API.`;
+            if(responseText) responseText.value = `Erreur : Réponse inattendue du serveur.`;
         }
     } catch (error) {
-        if(responseText) responseText.value = `Erreur réseau : Le serveur bloque toujours la connexion ou le proxy est surchargé. Détails : ${error.message}`;
+        console.error('Erreur API:', error);
+        if(responseText) {
+            responseText.value = `⚠️ Erreur : ${error.message}\n\nAssurez-vous que le serveur backend est en cours d'exécution sur le port 8000.`;
+        }
     } finally {
         if(btn) btn.disabled = false;
         if(loading) loading.style.display = 'none';
@@ -336,10 +339,7 @@ async function askManusIA() {
     }
 }
 
-function saveApiKey() {
-    const key = document.getElementById('geminiApiKey')?.value;
-    if(key) localStorage.setItem('geminiApiKeyLocal', key);
-}
+// Fonction saveApiKey() supprimée - Plus besoin de clé API externe
 
 // ==================== WORKOUTS FAVORIS (IA) ====================
 let savedAIWorkouts = JSON.parse(localStorage.getItem('pgFavoriteWorkouts')) || [];
@@ -735,10 +735,5 @@ document.addEventListener('DOMContentLoaded', () => {
     renderSchedule();
     if (typeof renderFavoriteWorkouts === "function") {
         renderFavoriteWorkouts();
-    }
-    const savedKey = localStorage.getItem('geminiApiKeyLocal');
-    if(savedKey) {
-        const keyInput = document.getElementById('geminiApiKey');
-        if(keyInput) keyInput.value = savedKey;
     }
 });
