@@ -10,8 +10,9 @@
     <meta name="apple-mobile-web-app-title" content="PG Flight">
     
     <link rel="manifest" href="./manifest.json">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
-    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><rect width=%22100%22 height=%22100%22 fill=%22%23090911%22/><text y=%22.9em%22 font-size=%2290%22>🏀</text></svg>">
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🏀%3C/text%3E%3C/svg%3E">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' fill='%23090911'/%3E%3Ctext y='.9em' font-size='90'%3E🏀%3C/text%3E%3C/svg%3E">
+
     <link rel="stylesheet" href="./style.css">
 
     <title>5'10" PG Flight & IQ Suite</title>
@@ -21,7 +22,7 @@
     <header class="header">
         <div style="font-size: 3.5rem; filter: drop-shadow(0 0 15px rgba(255, 107, 53, 0.5)); margin-bottom: 0.5rem; line-height: 1;">🏀</div>
         <h1>PG Dunk & IQ Suite</h1>
-        <p>The Ultimate 5'10" Prototype System</p>
+        <p>The Ultimate Prototype System</p>
     </header>
 
     <div class="engine-switch">
@@ -32,16 +33,15 @@
     <nav id="navAthletic" class="nav-tabs">
         <button class="nav-tab active" onclick="showSection(event, 'dash-athletic')">📊 HQ Metrics</button>
         <button class="nav-tab" onclick="showSection(event, 'calc-athletic')">🧮 Video Jump & RSI</button>
-        <button class="nav-tab" onclick="showSection(event, 'routines-athletic')">💪 Routines</button>
+        <button class="nav-tab" onclick="showSection(event, 'routines-athletic')">💪 Routines & Planner</button>
         <button class="nav-tab" onclick="showSection(event, 'analytics-athletic')">📈 Analytics</button>
     </nav>
 
     <nav id="navTactical" class="nav-tabs" style="display: none;">
         <button class="nav-tab active" onclick="showSection(event, 'live-reads')">⚡ Live Decisions</button>
         <button class="nav-tab" onclick="showSection(event, 'sniper-tracker')">🎯 Sniper Tracker</button>
-        <button class="nav-tab" onclick="showSection(event, 'skills-encyclopedia')">📖 Masterclass Skills</button>
         <button class="nav-tab" onclick="showSection(event, 'coachboard')">📋 Playbook Animé</button>
-        <button class="nav-tab" onclick="showSection(event, 'ia-gemini-log')">🤖 Gemini Pre-Log</button>
+        <button class="nav-tab" onclick="showSection(event, 'ia-gemini-log')">🤖 Live AI Coach</button>
     </nav>
 
     <section id="dash-athletic" class="content-section active">
@@ -63,13 +63,12 @@
                     <div class="progress-label"><span>Marge d'Arceau (Target: 320cm)</span><span id="dunkProgressText">Calcul...</span></div>
                     <div class="progress-bar"><div class="progress-fill" id="dunkProgress" style="width: 85%"></div></div>
                 </div>
-                <input type="hidden" id="currentSquat" value="90">
             </div>
             <div class="card">
                 <h3>⚡ Elastic Pools Capacities</h3>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                     <div class="metric-pill"><div class="val" style="color: var(--primary);" id="quickRSI">1.40</div><div class="label">Tendon Stiffness (RSI)</div></div>
-                    <div class="metric-pill"><div class="val" style="color: var(--accent);" id="quickSquat">1.17x</div><div class="label">Relative Squat Load</div></div>
+                    <div class="metric-pill"><div class="val" style="color: var(--accent);" id="quickSquat">1.18x</div><div class="label">Relative Squat Load</div></div>
                 </div>
             </div>
         </div>
@@ -136,7 +135,6 @@
         </div>
     </section>
 
-
     <section id="live-reads" class="content-section">
         <div class="card" style="margin-bottom: 1.5rem; background: linear-gradient(135deg, rgba(220, 38, 38, 0.15), var(--card-bg)); border-color: var(--danger);">
             <h3 style="color: white;">⚡ The Ultimate IQ Simulator</h3>
@@ -145,15 +143,18 @@
 
         <div class="card-grid">
             <div class="card" style="border-top: 3px solid var(--primary);">
-                <h3>🗡️ Offensive Reads</h3>
+                <h3>🗡️ Offensive Mastermind</h3>
                 
                 <div class="input-group">
-                    <label>Pick & Roll (Pivot adverse)</label>
+                    <label>Pick & Roll (Lecture du Pivot)</label>
                     <select onchange="triggerRead('offense', this.value)">
                         <option value="">-- Sélectionner --</option>
                         <option value="drop">Drop (Recule dans la raquette)</option>
                         <option value="blitz">Blitz / Trap (Prise à deux agressive)</option>
                         <option value="under">Under (Passe sous l'écran)</option>
+                        <option value="switch_big_off">Switch (Le pivot se retrouve sur toi)</option>
+                        <option value="hedge">Hedge & Recover (Sort fort puis recule)</option>
+                        <option value="ice">Ice / Blue (Refuse l'écran, te force vers la ligne)</option>
                     </select>
                 </div>
 
@@ -163,16 +164,30 @@
                         <option value="">-- Sélectionner --</option>
                         <option value="handcheck">Hand-checking (Te pousse avec les mains)</option>
                         <option value="overplay">Overplay (Coupe ta main forte)</option>
-                        <option value="cushion">Cushion (Te laisse 2 mètres d'espace)</option>
+                        <option value="cushion">Cushion / Sagging (Te laisse 2 mètres)</option>
+                        <option value="long_defender">Défenseur très grand/long (Envergure)</option>
+                        <option value="quick_pest">Petit défenseur ultra-rapide (Pest)</option>
                     </select>
                 </div>
 
                 <div class="input-group">
-                    <label>Situations Globales</label>
+                    <label>Jeu Sans Ballon (Off-Ball)</label>
                     <select onchange="triggerRead('offense', this.value)">
                         <option value="">-- Sélectionner --</option>
-                        <option value="zone23">Face à une Zone 2-3 fermée</option>
-                        <option value="transition">Transition / Contre-attaque (Surnombre)</option>
+                        <option value="face_guard">Face-guarding (Te refuse la balle)</option>
+                        <option value="ball_watch">Défenseur regarde le ballon (Ball-watching)</option>
+                        <option value="closeout_wild">Close-out agressif (Vole vers toi)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Tactique Collective & Transition</label>
+                    <select onchange="triggerRead('offense', this.value)">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="zone23">Zone 2-3 (Raquette fermée)</option>
+                        <option value="zone32">Zone 3-2 (Arc à 3 points verrouillé)</option>
+                        <option value="fastbreak_2v1">Transition : 2 contre 1</option>
+                        <option value="press_full">Press Tout Terrain</option>
                     </select>
                 </div>
             </div>
@@ -181,12 +196,23 @@
                 <h3>🛡️ Defensive Matrix (1m78 POV)</h3>
                 
                 <div class="input-group">
-                    <label>Défense sur Porteur (Point of Attack)</label>
+                    <label>Défense sur Porteur (1v1)</label>
                     <select onchange="triggerRead('defense', this.value)">
                         <option value="">-- Profil du porteur --</option>
-                        <option value="shifty">Shifty / Ultra-rapide (Style Kyrie)</option>
-                        <option value="heavy">Lourd / Bumper (Style Luka/Brunson)</option>
-                        <option value="shooter">Shooteur d'élite (Style Curry)</option>
+                        <option value="shifty">Shifty / Ultra-rapide</option>
+                        <option value="heavy">Lourd / Bumper (Bully Ball)</option>
+                        <option value="shooter">Shooteur d'élite</option>
+                        <option value="slasher">Slasher (Ne sait pas shooter)</option>
+                    </select>
+                </div>
+
+                <div class="input-group">
+                    <label>Défense Sans Ballon & Aides</label>
+                    <select onchange="triggerRead('defense', this.value)">
+                        <option value="">-- Sélectionner --</option>
+                        <option value="chasing_screens">Poursuite sur écrans (Shooteur off-ball)</option>
+                        <option value="low_man">Aide côté faible (Low Man on the roll)</option>
+                        <option value="nail_help">Aide au poste franc (The Nail)</option>
                     </select>
                 </div>
 
@@ -194,8 +220,9 @@
                     <label>Mismatchs & Post-Up</label>
                     <select onchange="triggerRead('defense', this.value)">
                         <option value="">-- Situation critique --</option>
-                        <option value="tall_post">Grand/Lourd te poste (Dos au panier)</option>
-                        <option value="switch_big">Switch sur Pivot au large</option>
+                        <option value="tall_post">Grand te poste près du cercle</option>
+                        <option value="wing_post">Ailier athlétique te poste à mi-distance</option>
+                        <option value="switch_big_def">Isolé sur un Pivot au large</option>
                     </select>
                 </div>
             </div>
@@ -227,110 +254,6 @@
                 <button class="btn btn-secondary" style="background:var(--danger);" onclick="addShot(false)">❌ Manqué (MISS)</button>
             </div>
             <button class="btn btn-secondary" style="margin-top:0.5rem; background:rgba(255,255,255,0.05);" onclick="resetZoneStats()">Réinitialiser la Zone Sélectionnée</button>
-        </div>
-    </section>
-
-    <section id="skills-encyclopedia" class="content-section">
-        <div class="card" style="margin-bottom: 1.5rem;">
-            <h3><span class="card-icon">🌊</span> Sniper Sequencing (Curry / Tominaga)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">Le secret pour ne plus être "raide" et tirer de 9 mètres sans forcer : le tir en 1-temps (1-Motion Shot). L'énergie part des orteils et finit dans les doigts sans AUCUNE pause.</p>
-            <ul class="exercise-list">
-                <li class="exercise-item">
-                    <div>
-                        <span class="read-badge" style="background: var(--accent);">Biomécanique</span>
-                        <strong>The "Dip" & Energy Transfer</strong>
-                        <div class="detail-text">Descendre la balle au niveau de la taille/cuisse exactement au moment où tes hanches descendent. Quand tu montes, la balle monte. Zéro pause au niveau du front. C'est un mouvement de fouet (Whip), pas une catapulte.</div>
-                    </div>
-                </li>
-                <li class="exercise-item">
-                    <div>
-                        <span class="read-badge" style="background: var(--accent);">Relâchement</span>
-                        <strong>The "Sway" (Balancier)</strong>
-                        <div class="detail-text">Ne retombe jamais exactement là où tu as sauté. Tes pieds doivent atterrir légèrement vers l'avant, et tes épaules doivent se pencher en arrière en l'air. Cela libère les tensions des épaules et donne cet effet "effortless/nonchalant".</div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card" style="margin-bottom: 1.5rem;">
-            <h3><span class="card-icon">🛑</span> Pace & Manipulation (SGA / CP3)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">La vitesse ne sert à rien si tu ne sais pas freiner. Les défenseurs agressifs de Madagascar vont s'empaler sur tes freins si tu maîtrises la décélération.</p>
-            <ul class="exercise-list">
-                <li class="exercise-item">
-                    <div>
-                        <span class="read-badge" style="background: var(--primary);">Pace Control</span>
-                        <strong>The "Hostage" Dribble (Jail)</strong>
-                        <div class="detail-text">Après avoir passé ton joueur, mets-le dans ton dos. Ralentis volontairement. Garde-le sur ta hanche arrière. Cela bloque le pivot adverse qui ne sait pas s'il doit t'attaquer ou rester sur son joueur.</div>
-                    </div>
-                </li>
-                <li class="exercise-item">
-                    <div>
-                        <span class="read-badge" style="background: var(--primary);">Deceleration</span>
-                        <strong>The Punch Drag (Luka / SGA)</strong>
-                        <div class="detail-text">Sur un drive à 100% de vitesse, frappe le ballon très fort au sol (Punch) en t'arrêtant net sur ton pied opposé. Le défenseur va continuer de courir sur 2 mètres. Ramène la balle entre les jambes pour créer l'espace.</div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-
-        <div class="card">
-            <h3><span class="card-icon">🪶</span> Elite Finishing (Kyrie / Edwards)</h3>
-            <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1rem;">À 1m78, fuir le contact c'est s'exposer au contre. Tu dois devenir l'initiateur du contact pour désactiver la détente des pivots.</p>
-            <ul class="exercise-list">
-                <li class="exercise-item">
-                    <div>
-                        <span class="read-badge" style="background: var(--danger);">Contact</span>
-                        <strong>The Veer Step (Edwards / Brunson)</strong>
-                        <div class="detail-text">Sur ton drive, au lieu d'aller tout droit vers le cercle, ton dernier appui attaque le torse du défenseur. Tu sautes *sur* lui pour créer le contact en l'air, le repousser, et finir tranquillement avec ton bras extérieur.</div>
-                    </div>
-                </li>
-                <li class="exercise-item">
-                    <div>
-                        <span class="read-badge" style="background: var(--danger);">Touch</span>
-                        <strong>Wrong Foot / Same Hand (Nash / Kyrie)</strong>
-                        <div class="detail-text">Finir main droite en sautant sur le pied droit. Cela détruit complètement le timing du contreur qui attend que tu poses ton deuxième appui. Le ballon part une fraction de seconde trop tôt pour la défense.</div>
-                    </div>
-                </li>
-            </ul>
-        </div>
-    </section>
-
-    <section id="ia-gemini-log" class="content-section">
-        <div class="card" style="border-top: 3px solid #8b5cf6;">
-            <h3>🧠 Cerveau IA Gemini (Live API)</h3>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Génère tes workouts sur-mesure en temps réel. La clé API est sauvegardée localement et en sécurité sur ton téléphone.</p>
-
-            <div class="input-group">
-                <label>Clé API Gemini (Gratuite)</label>
-                <input type="password" id="geminiApiKey" placeholder="Colle ta clé API ici..." onchange="saveApiKey()">
-            </div>
-
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="input-group">
-                    <label>Énergie (1-10)</label>
-                    <input type="number" id="liveEnergy" min="1" max="10" value="7">
-                </div>
-                <div class="input-group">
-                    <label>Temps dispo (Min)</label>
-                    <input type="number" id="liveTime" value="45">
-                </div>
-            </div>
-
-            <div class="input-group">
-                <label>Besoins / Blocages du jour</label>
-                <textarea class="notes-area" id="liveNeeds" placeholder="Ex: Je veux un workout Solo focus sur mon tir en sortie d'écran. J'ai les jambes lourdes aujourd'hui."></textarea>
-            </div>
-
-            <button class="btn" style="background: #8b5cf6; margin-bottom: 1rem;" id="btnGemini" onclick="askGemini()">✨ Générer mon Workout avec l'IA</button>
-
-            <div id="aiLoading" style="display: none; text-align: center; padding: 1rem; color: #8b5cf6; font-weight: bold;">
-                L'IA analyse tes datas... ⏳
-            </div>
-
-            <div id="aiLiveResponseBox" class="result-box" style="border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
-                <strong style="color:#8b5cf6; display:block; margin-bottom:0.5rem; text-transform:uppercase;">📝 Ton Programme :</strong>
-                <div id="aiLiveResponseText" style="font-size: 0.9rem; line-height: 1.6; color: #fff;">Les résultats s'afficheront ici.</div>
-            </div>
         </div>
     </section>
 
@@ -391,6 +314,62 @@
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; margin-top: 1rem;">
                 <button class="btn" onclick="playAnimation()">▶️ Lancer le Play</button>
                 <button class="btn btn-secondary" onclick="resetAnimation()">🔄 Reset</button>
+            </div>
+        </div>
+    </section>
+
+    <section id="ia-gemini-log" class="content-section">
+        <div class="card" style="border-top: 3px solid #8b5cf6;">
+            <h3>🧠 Cerveau IA Gemini (Live API)</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Génère tes workouts sur-mesure en temps réel. La clé API est sauvegardée localement et en sécurité sur ton téléphone.</p>
+
+            <div class="input-group">
+                <label>Clé API Gemini (Gratuite)</label>
+                <input type="password" id="geminiApiKey" placeholder="Colle ta clé API ici..." onchange="saveApiKey()">
+            </div>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                <div class="input-group">
+                    <label>Énergie (1-10)</label>
+                    <input type="number" id="liveEnergy" min="1" max="10" value="7">
+                </div>
+                <div class="input-group">
+                    <label>Temps dispo (Min)</label>
+                    <input type="number" id="liveTime" value="45">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Besoins / Blocages du jour</label>
+                <textarea class="notes-area" id="liveNeeds" placeholder="Ex: Je veux un workout Solo focus sur mon tir en sortie d'écran. J'ai les jambes lourdes aujourd'hui."></textarea>
+            </div>
+
+            <button class="btn" style="background: #8b5cf6; margin-bottom: 1rem;" id="btnGemini" onclick="askGemini()">✨ Générer mon Workout avec l'IA</button>
+
+            <div id="aiLoading" style="display: none; text-align: center; padding: 1rem; color: #8b5cf6; font-weight: bold;">
+                L'IA analyse tes datas... ⏳
+            </div>
+
+            <div id="aiLiveResponseBox" class="result-box" style="border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
+                <strong style="color:#8b5cf6; display:block; margin-bottom:0.5rem; text-transform:uppercase;">📝 Ton Programme :</strong>
+                <div id="aiLiveResponseText" style="font-size: 0.9rem; line-height: 1.6; color: #fff;">Les résultats s'afficheront ici.</div>
+            </div>
+        </div>
+    </section>
+
+    <section id="timer" class="content-section">
+        <div class="card" style="max-width:500px; margin:0 auto;">
+            <h3>⏱️ High-Density Rest Timer</h3>
+            <div class="timer-display" id="mainTimer">02:00</div>
+            <div class="timer-controls">
+                <button class="btn" onclick="startTimer()">▶️ Start</button>
+                <button class="btn btn-secondary" onclick="pauseTimer()">⏸️ Pause</button>
+                <button class="btn btn-secondary" onclick="resetTimer()">🔄 Reset</button>
+            </div>
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.5rem;">
+                <button class="btn btn-secondary" onclick="setTimer(60)">60s</button>
+                <button class="btn btn-secondary" onclick="setTimer(120)">2m (Plyo)</button>
+                <button class="btn btn-secondary" onclick="setTimer(180)">3m (Heavy)</button>
             </div>
         </div>
     </section>
