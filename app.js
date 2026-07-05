@@ -587,15 +587,15 @@ function resetAnimation() {
     loadPlay(currentPlayId); 
 }
 
-// ==================== LIVE GEMINI API ENGINE ====================
-async function askGemini() {
+// ==================== LIVE MANUS IA API ENGINE ====================
+async function askManusIA() {
     const apiKey = document.getElementById('geminiApiKey')?.value;
     const energy = document.getElementById('liveEnergy')?.value;
     const time = document.getElementById('liveTime')?.value;
     const needs = document.getElementById('liveNeeds')?.value;
 
-    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Gemini !"); return; }
-    if (!needs) { alert("⚠️ Décris tes besoins ou blocages du jour."); return; }
+    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Manus !"); return; }
+    if (!needs) { alert("⚠️ Décris tes besoins dans la grande zone de texte."); return; }
 
     const btn = document.getElementById('btnGemini');
     const loading = document.getElementById('aiLoading');
@@ -610,36 +610,41 @@ async function askGemini() {
     - Énergie : ${energy}/10
     - Temps dispo : ${time} minutes
     - Mes besoins/focus : "${needs}"
-    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis, facile à lire.`;
+    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket (Pace, Shifty, Drop Stance). Format concis et lisible.`;
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
+        // Requête format Standard (compatible Manus IA, OpenAI, etc.)
+        const response = await fetch('https://api.manus.ai/v1/chat/completions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ contents: [{ parts: [{ text: promptData }] }] })
+            headers: { 
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}` // Utilisation de ta clé Manus
+            },
+            body: JSON.stringify({ 
+                model: "manus", // Modèle par défaut, l'API corrigera si besoin
+                messages: [{ role: "user", content: promptData }]
+            })
         });
 
         const data = await response.json();
         
         if (data.error) {
             if(responseText) responseText.value = `Erreur API : ${data.error.message}`;
-        } else {
-            let aiText = data.candidates[0].content.parts[0].text;
+        } else if (data.choices && data.choices[0]) {
+            let aiText = data.choices[0].message.content;
+            // Nettoyage des étoiles gras Markdown pour une lecture propre dans le textarea
             aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); 
             if(responseText) responseText.value = aiText;
+        } else {
+            if(responseText) responseText.value = `Erreur : Réponse inattendue de Manus IA.`;
         }
     } catch (error) {
-        if(responseText) responseText.value = `Erreur de connexion internet.`;
+        if(responseText) responseText.value = `Erreur de réseau : Impossible de contacter Manus IA. Vérifie ta connexion.`;
     } finally {
         if(btn) btn.disabled = false;
         if(loading) loading.style.display = 'none';
         if(responseBox) responseBox.classList.add('show');
     }
-}
-
-function saveApiKey() {
-    const key = document.getElementById('geminiApiKey')?.value;
-    if(key) localStorage.setItem('geminiApiKeyLocal', key);
 }
 
 // ==================== TIMERS & CHART ====================
