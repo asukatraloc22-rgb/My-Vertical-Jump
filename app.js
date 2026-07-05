@@ -192,10 +192,16 @@ function renderSchedule() {
     Object.keys(mySchedule).forEach(day => {
         let tasksHtml = '';
         mySchedule[day].forEach((task, index) => {
+            // Nouveaux boutons : Monter, Descendre, Éditer, Supprimer
             tasksHtml += `
                 <div class="task-item">
                     <span class="task-text">${task}</span>
-                    <button class="btn-delete-task" onclick="removeTask('${day}', ${index})">×</button>
+                    <div class="task-controls">
+                        <button class="btn-icon" onclick="moveTaskUp('${day}', ${index})">⬆️</button>
+                        <button class="btn-icon" onclick="moveTaskDown('${day}', ${index})">⬇️</button>
+                        <button class="btn-icon" onclick="editTask('${day}', ${index})">✏️</button>
+                        <button class="btn-icon delete" onclick="removeTask('${day}', ${index})">×</button>
+                    </div>
                 </div>
             `;
         });
@@ -215,6 +221,7 @@ function renderSchedule() {
     });
 }
 
+// Fonction : Ajouter
 function addTask(day) {
     const task = prompt(`Quelle session veux-tu ajouter à ${day} ?`);
     if(task && task.trim() !== '') {
@@ -224,9 +231,43 @@ function addTask(day) {
     }
 }
 
+// Fonction : Supprimer
 function removeTask(day, index) {
     if(confirm('Supprimer cette session ?')) {
         mySchedule[day].splice(index, 1);
+        localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
+        renderSchedule();
+    }
+}
+
+// NOUVELLE Fonction : Éditer
+function editTask(day, index) {
+    const currentTask = mySchedule[day][index];
+    const newTask = prompt(`Modifier la session du ${day} :`, currentTask);
+    if(newTask && newTask.trim() !== '') {
+        mySchedule[day][index] = newTask;
+        localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
+        renderSchedule();
+    }
+}
+
+// NOUVELLE Fonction : Monter
+function moveTaskUp(day, index) {
+    if(index > 0) {
+        const temp = mySchedule[day][index];
+        mySchedule[day][index] = mySchedule[day][index - 1];
+        mySchedule[day][index - 1] = temp;
+        localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
+        renderSchedule();
+    }
+}
+
+// NOUVELLE Fonction : Descendre
+function moveTaskDown(day, index) {
+    if(index < mySchedule[day].length - 1) {
+        const temp = mySchedule[day][index];
+        mySchedule[day][index] = mySchedule[day][index + 1];
+        mySchedule[day][index + 1] = temp;
         localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
         renderSchedule();
     }
