@@ -498,10 +498,11 @@ async function askGemini() {
     - Énergie : ${energy}/10
     - Temps dispo : ${time} minutes
     - Mes besoins/focus : "${needs}"
-    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis et lisible.`;
+    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis, sans fioritures, facile à lire sur un écran de téléphone.`;
 
     try {
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // CORRECTION DE L'URL API AVEC -latest
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ contents: [{ parts: [{ text: promptData }] }] })
@@ -510,15 +511,15 @@ async function askGemini() {
         const data = await response.json();
         
         if (data.error) {
-            responseText.innerHTML = `<span style="color:var(--danger)">Erreur API : ${data.error.message}</span>`;
+            responseText.value = `Erreur API : ${data.error.message}`;
         } else {
             let aiText = data.candidates[0].content.parts[0].text;
-            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--primary);">$1</strong>');
-            aiText = aiText.replace(/\*(.*?)/g, '<br>• $1'); 
-            responseText.innerHTML = aiText;
+            // Nettoyage rapide du markdown pour le textarea
+            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); 
+            responseText.value = aiText;
         }
     } catch (error) {
-        responseText.innerHTML = `<span style="color:var(--danger)">Erreur de connexion internet.</span>`;
+        responseText.value = `Erreur de connexion internet.`;
     } finally {
         btn.disabled = false;
         loading.style.display = 'none';
@@ -569,3 +570,69 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('geminiApiKey').value = savedKey;
     }
 });
+
+// ==================== WORKOUTS FAVORIS (IA) ====================
+let savedAIWorkouts = JSON.parse(localStorage.getItem('pgFavoriteWorkouts')) || [];
+
+function saveAIWorkout() {
+    const content = document.getElementById('aiLiveResponseText').value;
+    if(!content.trim()) return;
+    
+    const title = prompt("Donne un nom à ce workout (ex: Focus Tir & Pace) :");
+    if(title) {
+        savedAIWorkouts.push({ id: Date.now(), title: title, content: content });
+        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
+        alert("Workout sauvegardé ! Va dans l'onglet 'Routines & Planner' pour le retrouver.");
+        renderFavoriteWorkouts();
+    }
+}
+
+function renderFavoriteWorkouts() {
+    const container = document.getElementById('favoriteWorkoutsContainer');
+    if(!container) return;
+    container.innerHTML = '';
+    
+    if(savedAIWorkouts.length === 0) {
+        container.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Aucun workout sauvegardé pour le moment.</p>';
+        return;
+    }
+
+    savedAIWorkouts.forEach((wk, index) => {
+        const card = `
+            <div class="day-card" style="border-color: #8b5cf6;">
+                <div class="day-header" style="cursor: pointer;" onclick="toggleFavorite(${index})">
+                    <span class="day-title" style="color: white; font-size: 1rem;">${wk.title}</span>
+                    <span style="color: #8b5cf6;">▼</span>
+                </div>
+                <div id="fav-content-${index}" style="display: none; margin-top: 1rem;">
+                    <textarea id="fav-text-${index}" style="width: 100%; min-height: 200px; background: rgba(0,0,0,0.5); color: white; border: 1px solid #8b5cf6; border-radius: 6px; padding: 0.5rem; font-family: inherit; font-size: 0.85rem; line-height: 1.5;">${wk.content}</textarea>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--accent);" onclick="updateFavorite(${index})">💾 Mettre à jour</button>
+                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--danger);" onclick="deleteFavorite(${index})">🗑️ Supprimer</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
+
+function toggleFavorite(index) {
+    const contentDiv = document.getElementById(`fav-content-${index}`);
+    contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
+}
+
+function updateFavorite(index) {
+    const newContent = document.getElementById(`fav-text-${index}`).value;
+    savedAIWorkouts[index].content = newContent;
+    localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
+    alert("Workout mis à jour avec succès !");
+}
+
+function deleteFavorite(index) {
+    if(confirm("Supprimer définitivement ce workout de tes favoris ?")) {
+        savedAIWorkouts.splice(index, 1);
+        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
+        renderFavoriteWorkouts();
+    }
+}
