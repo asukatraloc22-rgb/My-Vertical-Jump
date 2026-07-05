@@ -27,23 +27,34 @@ function switchEngine(engineMode) {
 function showSection(event, sectionId) {
     document.querySelectorAll('.content-section').forEach(s => s.classList.remove('active'));
     event.target.parentNode.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-    document.getElementById(sectionId).classList.add('active');
-    event.target.classList.add('active');
+    
+    const targetSection = document.getElementById(sectionId);
+    if(targetSection) {
+        targetSection.classList.add('active');
+        event.target.classList.add('active');
+    } else {
+        console.error("Erreur de navigation: La section", sectionId, "n'existe pas dans le HTML.");
+    }
 }
 
 // ==================== ATHLETIC ENGINE ====================
 function updateProfile() {
-    const h = parseFloat(document.getElementById('profileHeight').value) || 178;
-    const w = parseFloat(document.getElementById('profileWeight').value) || 77;
-    const r = parseFloat(document.getElementById('profileReach').value) || 229;
+    const h = parseFloat(document.getElementById('profileHeight')?.value) || 178;
+    const w = parseFloat(document.getElementById('profileWeight')?.value) || 77;
+    const r = parseFloat(document.getElementById('profileReach')?.value) || 229;
     
     let currentVertValue = 71;
     const vertEl = document.getElementById('videoVertValue');
     if(vertEl) { currentVertValue = parseFloat(vertEl.textContent) || 71; }
 
-    document.getElementById('pillHeight').textContent = `${h} cm`;
-    document.getElementById('pillWeight').textContent = `${w.toFixed(1)} kg`;
-    document.getElementById('currentVert').textContent = `${currentVertValue.toFixed(0)} cm`;
+    const pillH = document.getElementById('pillHeight');
+    if(pillH) pillH.textContent = `${h} cm`;
+    
+    const pillW = document.getElementById('pillWeight');
+    if(pillW) pillW.textContent = `${w.toFixed(1)} kg`;
+    
+    const currVert = document.getElementById('currentVert');
+    if(currVert) currVert.textContent = `${currentVertValue.toFixed(0)} cm`;
     
     const currentApex = r + currentVertValue;
     const targetRim = 320; 
@@ -52,48 +63,65 @@ function updateProfile() {
     const progressText = document.getElementById('dunkProgressText');
     const progressFill = document.getElementById('dunkProgress');
 
-    if(deficit > 0) {
-        progressText.textContent = `Manque ${deficit.toFixed(0)} cm pour le Target Apex`;
-        progressText.style.color = "var(--warning)";
-        progressFill.style.width = Math.max(10, Math.min(100, (currentApex / targetRim) * 100)) + '%';
-    } else {
-        progressText.textContent = `DUNK READY ! Surplus: +${Math.abs(deficit).toFixed(0)} cm`;
-        progressText.style.color = "var(--accent)";
-        progressFill.style.width = "100%";
+    if(progressText && progressFill) {
+        if(deficit > 0) {
+            progressText.textContent = `Manque ${deficit.toFixed(0)} cm pour le Target Apex`;
+            progressText.style.color = "var(--warning)";
+            progressFill.style.width = Math.max(10, Math.min(100, (currentApex / targetRim) * 100)) + '%';
+        } else {
+            progressText.textContent = `DUNK READY ! Surplus: +${Math.abs(deficit).toFixed(0)} cm`;
+            progressText.style.color = "var(--accent)";
+            progressFill.style.width = "100%";
+        }
     }
 }
 
 function calculateVideoJump() {
-    const takeoff = parseFloat(document.getElementById('frameTakeoff').value) || 0;
-    const landing = parseFloat(document.getElementById('frameLanding').value) || 0;
+    const takeoff = parseFloat(document.getElementById('frameTakeoff')?.value) || 0;
+    const landing = parseFloat(document.getElementById('frameLanding')?.value) || 0;
     if(landing <= takeoff) return;
 
     const totalFrames = landing - takeoff;
     const flightTime = totalFrames / 240; 
     const heightCm = 0.125 * 9.81 * Math.pow(flightTime, 2) * 100;
 
-    document.getElementById('videoVertValue').textContent = heightCm.toFixed(1) + ' cm';
-    document.getElementById('videoOutputs').innerHTML = `
-        <div><strong>Airtime :</strong> ${flightTime.toFixed(3)} s</div>
-        <div><strong>Frames de vol :</strong> ${totalFrames} frames</div>
-    `;
-    document.getElementById('currentVert').textContent = heightCm.toFixed(0) + ' cm';
-    document.getElementById('vertProgress').style.width = Math.min(100, (heightCm / 100) * 100) + '%';
+    const vertValue = document.getElementById('videoVertValue');
+    if(vertValue) vertValue.textContent = heightCm.toFixed(1) + ' cm';
+    
+    const outputs = document.getElementById('videoOutputs');
+    if(outputs) {
+        outputs.innerHTML = `
+            <div><strong>Airtime :</strong> ${flightTime.toFixed(3)} s</div>
+            <div><strong>Frames de vol :</strong> ${totalFrames} frames</div>
+        `;
+    }
+    
+    const currVert = document.getElementById('currentVert');
+    if(currVert) currVert.textContent = heightCm.toFixed(0) + ' cm';
+    
+    const progress = document.getElementById('vertProgress');
+    if(progress) progress.style.width = Math.min(100, (heightCm / 100) * 100) + '%';
+    
     updateProfile();
 }
 
 function calculateRSI() {
-    const jump = parseFloat(document.getElementById('rsiJump').value) || 35;
-    const time = parseFloat(document.getElementById('rsiTime').value) || 0.25;
+    const jump = parseFloat(document.getElementById('rsiJump')?.value) || 35;
+    const time = parseFloat(document.getElementById('rsiTime')?.value) || 0.25;
     const rsi = (jump / 100) / time;
 
-    document.getElementById('rsiValue').textContent = rsi.toFixed(2);
-    document.getElementById('quickRSI').textContent = rsi.toFixed(2);
+    const rsiVal = document.getElementById('rsiValue');
+    if(rsiVal) rsiVal.textContent = rsi.toFixed(2);
+    
+    const quickRSI = document.getElementById('quickRSI');
+    if(quickRSI) quickRSI.textContent = rsi.toFixed(2);
 
     const rating = document.getElementById('rsiRating');
-    if(rsi < 1.5) { rating.textContent = "🚨 Amortisseur (Ressort Mou) : Travaille la rigidité réflexe."; rating.style.color = "var(--danger)"; }
-    else if(rsi < 2.5) { rating.textContent = "⚡ Zone Adaptive Fonctionnelle."; rating.style.color = "var(--warning)"; }
-    else { rating.textContent = "🚀 Rigidité Élite (Ressort d'Acier)."; rating.style.color = "var(--accent)"; }
+    if(rating) {
+        if(rsi < 1.5) { rating.textContent = "🚨 Amortisseur (Ressort Mou) : Travaille la rigidité réflexe."; rating.style.color = "var(--danger)"; }
+        else if(rsi < 2.5) { rating.textContent = "⚡ Zone Adaptive Fonctionnelle."; rating.style.color = "var(--warning)"; }
+        else { rating.textContent = "🚀 Rigidité Élite (Ressort d'Acier)."; rating.style.color = "var(--accent)"; }
+    }
 }
 
 // ==================== WORKOUTS & PLANNER ====================
@@ -134,13 +162,16 @@ const workouts = {
 
 function loadWorkout(day) {
     const w = workouts[day];
-    if (!w) { document.getElementById('workoutDisplay').innerHTML = ''; return; }
+    const display = document.getElementById('workoutDisplay');
+    if(!display) return;
+    
+    if (!w) { display.innerHTML = ''; return; }
     let html = '<ul class="exercise-list">';
     w.list.forEach(e => {
         html += `<li class="exercise-item"><div><strong>${e.n}</strong><div class="detail-text">${e.d}</div></div><button class="check-btn" onclick="this.classList.toggle('completed')"></button></li>`;
     });
     html += '</ul>';
-    document.getElementById('workoutDisplay').innerHTML = `<h4>${w.title}</h4>${html}`;
+    display.innerHTML = `<h4>${w.title}</h4>${html}`;
 }
 
 const defaultSchedule = {
@@ -200,6 +231,82 @@ function removeTask(day, index) {
         mySchedule[day].splice(index, 1);
         localStorage.setItem('pgFlightSchedule', JSON.stringify(mySchedule));
         renderSchedule();
+    }
+}
+
+// ==================== FAVORIS IA ====================
+let savedAIWorkouts = JSON.parse(localStorage.getItem('pgFavoriteWorkouts')) || [];
+
+function saveAIWorkout() {
+    const textArea = document.getElementById('aiLiveResponseText');
+    if(!textArea) {
+        alert("Erreur système: Champ de texte introuvable.");
+        return;
+    }
+    const content = textArea.value;
+    if(!content || !content.trim()) {
+        alert("Il n'y a rien à sauvegarder.");
+        return;
+    }
+    
+    const title = prompt("Donne un nom à ce workout (ex: Focus Tir & Pace) :");
+    if(title) {
+        savedAIWorkouts.push({ id: Date.now(), title: title, content: content });
+        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
+        alert("Workout sauvegardé ! Va dans l'onglet 'Routines & Planner' pour le retrouver.");
+        renderFavoriteWorkouts();
+    }
+}
+
+function renderFavoriteWorkouts() {
+    const container = document.getElementById('favoriteWorkoutsContainer');
+    if(!container) return; // Ne plante pas si l'élément n'est pas sur la page
+    container.innerHTML = '';
+    
+    if(savedAIWorkouts.length === 0) {
+        container.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Aucun workout sauvegardé pour le moment.</p>';
+        return;
+    }
+
+    savedAIWorkouts.forEach((wk, index) => {
+        const card = `
+            <div class="day-card" style="border-color: #8b5cf6;">
+                <div class="day-header" style="cursor: pointer;" onclick="toggleFavorite(${index})">
+                    <span class="day-title" style="color: white; font-size: 1rem; text-transform:none;">${wk.title}</span>
+                    <span style="color: #8b5cf6;">▼</span>
+                </div>
+                <div id="fav-content-${index}" style="display: none; margin-top: 1rem;">
+                    <textarea id="fav-text-${index}" style="width: 100%; min-height: 200px; background: rgba(0,0,0,0.5); color: white; border: 1px solid #8b5cf6; border-radius: 6px; padding: 0.5rem; font-family: inherit; font-size: 0.85rem; line-height: 1.5;">${wk.content}</textarea>
+                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
+                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--accent);" onclick="updateFavorite(${index})">💾 MAJ</button>
+                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--danger);" onclick="deleteFavorite(${index})">🗑️ Suppr.</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        container.innerHTML += card;
+    });
+}
+
+function toggleFavorite(index) {
+    const contentDiv = document.getElementById(`fav-content-${index}`);
+    if(contentDiv) {
+        contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
+    }
+}
+
+function updateFavorite(index) {
+    const newContent = document.getElementById(`fav-text-${index}`).value;
+    savedAIWorkouts[index].content = newContent;
+    localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
+    alert("Workout mis à jour avec succès !");
+}
+
+function deleteFavorite(index) {
+    if(confirm("Supprimer définitivement ce workout de tes favoris ?")) {
+        savedAIWorkouts.splice(index, 1);
+        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
+        renderFavoriteWorkouts();
     }
 }
 
@@ -270,7 +377,8 @@ function triggerRead(mode, val) {
 function selectZone(zoneKey) {
     selectedZone = zoneKey;
     document.querySelectorAll('.zone-btn').forEach(b => b.classList.remove('active'));
-    document.getElementById(`zone-${zoneKey}`).classList.add('active');
+    const activeZone = document.getElementById(`zone-${zoneKey}`);
+    if(activeZone) activeZone.classList.add('active');
 }
 
 function addShot(isHit) {
@@ -295,6 +403,8 @@ function updateCourtDisplay() {
         const element = document.getElementById(`stat-${key}`);
         const btn = document.getElementById(`zone-${key}`);
         
+        if(!element || !btn) return;
+
         element.innerHTML = `${z.made}/${z.att} <span style="font-size:0.75rem; display:block; color:rgba(255,255,255,0.8);">${pct}%</span>`;
         
         if (z.att >= 5) {
@@ -431,22 +541,25 @@ function loadPlay(playId) {
     currentFrame = 0;
     
     if(!playId) {
-        document.getElementById('playDescription').textContent = "Sélectionne un système pour voir la description et lancer l'animation tactique.";
+        const desc = document.getElementById('playDescription');
+        if(desc) desc.textContent = "Sélectionne un système pour voir la description et lancer l'animation tactique.";
         document.querySelectorAll('.player-node, .ball-node').forEach(n => n.style.opacity = 0);
         return;
     }
 
     const playData = coachboardDB[playId];
-    document.getElementById('playDescription').innerHTML = playData.description;
+    const desc = document.getElementById('playDescription');
+    if(desc) desc.innerHTML = playData.description;
     
     document.querySelectorAll('.player-node').forEach(n => n.style.transition = 'none');
-    document.getElementById('ballNode').style.transition = 'none';
+    const ballNode = document.getElementById('ballNode');
+    if(ballNode) ballNode.style.transition = 'none';
     
     renderFrame(playData.frames[0]);
     
     setTimeout(() => {
         document.querySelectorAll('.player-node').forEach(n => n.style.transition = 'top 1s cubic-bezier(0.4, 0, 0.2, 1), left 1s cubic-bezier(0.4, 0, 0.2, 1)');
-        document.getElementById('ballNode').style.transition = 'top 0.6s linear, left 0.6s linear';
+        if(ballNode) ballNode.style.transition = 'top 0.6s linear, left 0.6s linear';
     }, 50);
 }
 
@@ -474,13 +587,12 @@ function resetAnimation() {
     loadPlay(currentPlayId); 
 }
 
-
 // ==================== LIVE GEMINI API ENGINE ====================
 async function askGemini() {
-    const apiKey = document.getElementById('geminiApiKey').value;
-    const energy = document.getElementById('liveEnergy').value;
-    const time = document.getElementById('liveTime').value;
-    const needs = document.getElementById('liveNeeds').value;
+    const apiKey = document.getElementById('geminiApiKey')?.value;
+    const energy = document.getElementById('liveEnergy')?.value;
+    const time = document.getElementById('liveTime')?.value;
+    const needs = document.getElementById('liveNeeds')?.value;
 
     if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Gemini !"); return; }
     if (!needs) { alert("⚠️ Décris tes besoins ou blocages du jour."); return; }
@@ -490,18 +602,17 @@ async function askGemini() {
     const responseBox = document.getElementById('aiLiveResponseBox');
     const responseText = document.getElementById('aiLiveResponseText');
 
-    btn.disabled = true;
-    loading.style.display = 'block';
-    responseBox.classList.remove('show');
+    if(btn) btn.disabled = true;
+    if(loading) loading.style.display = 'block';
+    if(responseBox) responseBox.classList.remove('show');
 
     const promptData = `Tu es un coach NBA d'élite. Je suis un meneur de 1m78 évoluant à Madagascar. 
     - Énergie : ${energy}/10
     - Temps dispo : ${time} minutes
     - Mes besoins/focus : "${needs}"
-    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis, sans fioritures, facile à lire sur un écran de téléphone.`;
+    Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis, facile à lire.`;
 
     try {
-        // CORRECTION DE L'URL API AVEC -latest
         const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash-latest:generateContent?key=${apiKey}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -511,30 +622,31 @@ async function askGemini() {
         const data = await response.json();
         
         if (data.error) {
-            responseText.value = `Erreur API : ${data.error.message}`;
+            if(responseText) responseText.value = `Erreur API : ${data.error.message}`;
         } else {
             let aiText = data.candidates[0].content.parts[0].text;
-            // Nettoyage rapide du markdown pour le textarea
             aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); 
-            responseText.value = aiText;
+            if(responseText) responseText.value = aiText;
         }
     } catch (error) {
-        responseText.value = `Erreur de connexion internet.`;
+        if(responseText) responseText.value = `Erreur de connexion internet.`;
     } finally {
-        btn.disabled = false;
-        loading.style.display = 'none';
-        responseBox.classList.add('show');
+        if(btn) btn.disabled = false;
+        if(loading) loading.style.display = 'none';
+        if(responseBox) responseBox.classList.add('show');
     }
 }
 
 function saveApiKey() {
-    const key = document.getElementById('geminiApiKey').value;
-    localStorage.setItem('geminiApiKeyLocal', key);
+    const key = document.getElementById('geminiApiKey')?.value;
+    if(key) localStorage.setItem('geminiApiKeyLocal', key);
 }
 
+// ==================== TIMERS & CHART ====================
 let timerSeconds = 120, timerInterval, timerRunning = false;
 function updateTimerDisplay() {
-    document.getElementById('mainTimer').textContent = `${Math.floor(timerSeconds/60).toString().padStart(2,'0')}:${(timerSeconds%60).toString().padStart(2,'0')}`;
+    const mainT = document.getElementById('mainTimer');
+    if(mainT) mainT.textContent = `${Math.floor(timerSeconds/60).toString().padStart(2,'0')}:${(timerSeconds%60).toString().padStart(2,'0')}`;
 }
 function startTimer() { if (!timerRunning) { timerRunning = true; timerInterval = setInterval(() => { if(timerSeconds > 0) { timerSeconds--; updateTimerDisplay(); } else { pauseTimer(); alert("Fin de récup ! Au combat."); } }, 1000); } }
 function pauseTimer() { timerRunning = false; clearInterval(timerInterval); }
@@ -542,7 +654,9 @@ function resetTimer() { pauseTimer(); timerSeconds = 120; updateTimerDisplay(); 
 function setTimer(s) { resetTimer(); timerSeconds = s; updateTimerDisplay(); startTimer(); }
 
 function updateChart() {
-    const area = document.getElementById('progressChart'); area.innerHTML = '';
+    const area = document.getElementById('progressChart'); 
+    if(!area) return;
+    area.innerHTML = '';
     if (chartData.length === 0) return;
     const max = Math.max(...chartData);
     chartData.forEach((v, i) => {
@@ -564,79 +678,11 @@ document.addEventListener('DOMContentLoaded', () => {
     loadWorkout('');
     updateChart();
     renderSchedule();
+    renderFavoriteWorkouts();
     
-    // 👇 C'EST ÇA L'ÉTAPE C : On lance l'affichage de tes favoris IA au démarrage !
-    renderFavoriteWorkouts(); 
-    
-    // Restaure la clé API si elle était sauvegardée
     const savedKey = localStorage.getItem('geminiApiKeyLocal');
-    if(savedKey && document.getElementById('geminiApiKey')) {
-        document.getElementById('geminiApiKey').value = savedKey;
+    if(savedKey) {
+        const keyInput = document.getElementById('geminiApiKey');
+        if(keyInput) keyInput.value = savedKey;
     }
 });
-
-// ==================== WORKOUTS FAVORIS (IA) ====================
-let savedAIWorkouts = JSON.parse(localStorage.getItem('pgFavoriteWorkouts')) || [];
-
-function saveAIWorkout() {
-    const content = document.getElementById('aiLiveResponseText').value;
-    if(!content.trim()) return;
-    
-    const title = prompt("Donne un nom à ce workout (ex: Focus Tir & Pace) :");
-    if(title) {
-        savedAIWorkouts.push({ id: Date.now(), title: title, content: content });
-        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
-        alert("Workout sauvegardé ! Va dans l'onglet 'Routines & Planner' pour le retrouver.");
-        renderFavoriteWorkouts();
-    }
-}
-
-function renderFavoriteWorkouts() {
-    const container = document.getElementById('favoriteWorkoutsContainer');
-    if(!container) return;
-    container.innerHTML = '';
-    
-    if(savedAIWorkouts.length === 0) {
-        container.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">Aucun workout sauvegardé pour le moment.</p>';
-        return;
-    }
-
-    savedAIWorkouts.forEach((wk, index) => {
-        const card = `
-            <div class="day-card" style="border-color: #8b5cf6;">
-                <div class="day-header" style="cursor: pointer;" onclick="toggleFavorite(${index})">
-                    <span class="day-title" style="color: white; font-size: 1rem;">${wk.title}</span>
-                    <span style="color: #8b5cf6;">▼</span>
-                </div>
-                <div id="fav-content-${index}" style="display: none; margin-top: 1rem;">
-                    <textarea id="fav-text-${index}" style="width: 100%; min-height: 200px; background: rgba(0,0,0,0.5); color: white; border: 1px solid #8b5cf6; border-radius: 6px; padding: 0.5rem; font-family: inherit; font-size: 0.85rem; line-height: 1.5;">${wk.content}</textarea>
-                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--accent);" onclick="updateFavorite(${index})">💾 Mettre à jour</button>
-                        <button class="btn" style="flex: 1; padding: 0.5rem; font-size: 0.8rem; background: var(--danger);" onclick="deleteFavorite(${index})">🗑️ Supprimer</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        container.innerHTML += card;
-    });
-}
-
-function toggleFavorite(index) {
-    const contentDiv = document.getElementById(`fav-content-${index}`);
-    contentDiv.style.display = contentDiv.style.display === 'none' ? 'block' : 'none';
-}
-
-function updateFavorite(index) {
-    const newContent = document.getElementById(`fav-text-${index}`).value;
-    savedAIWorkouts[index].content = newContent;
-    localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
-    alert("Workout mis à jour avec succès !");
-}
-
-function deleteFavorite(index) {
-    if(confirm("Supprimer définitivement ce workout de tes favoris ?")) {
-        savedAIWorkouts.splice(index, 1);
-        localStorage.setItem('pgFavoriteWorkouts', JSON.stringify(savedAIWorkouts));
-        renderFavoriteWorkouts();
-    }
-}
