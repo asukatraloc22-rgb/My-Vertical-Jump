@@ -326,44 +326,50 @@
         </div>
     </section>
 
-    <section id="ia-gemini-log" class="content-section">
-        <div class="card" style="border-top: 3px solid #8b5cf6;">
-            <h3>🧠 Cerveau IA Gemini (Live API)</h3>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1rem;">Génère tes workouts sur-mesure en temps réel. La clé API est sauvegardée localement et en sécurité sur ton téléphone.</p>
+  <section id="ia-gemini-log" class="content-section">
+        <div class="card" style="border-top: 3px solid #8b5cf6; box-shadow: 0 10px 30px rgba(139, 92, 246, 0.15);">
+            <h3><span class="card-icon">🧠</span> Cerveau IA (Manus API)</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-bottom:1.5rem;">Génère tes workouts sur-mesure en temps réel. Connecté au nouveau moteur Manus IA.</p>
 
             <div class="input-group">
-                <label>Clé API Gemini (Gratuite)</label>
-                <input type="password" id="geminiApiKey" placeholder="Colle ta clé API ici..." onchange="saveApiKey()">
+                <label style="color: #a78bfa;">Clé API Manus IA</label>
+                <input type="password" id="geminiApiKey" placeholder="Colle ta nouvelle clé API ici..." onchange="saveApiKey()" style="border-color: rgba(139, 92, 246, 0.4);">
             </div>
 
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
-                <div class="input-group">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1.5rem;">
+                <div class="input-group" style="margin-bottom: 0;">
                     <label>Énergie (1-10)</label>
                     <input type="number" id="liveEnergy" min="1" max="10" value="7">
                 </div>
-                <div class="input-group">
+                <div class="input-group" style="margin-bottom: 0;">
                     <label>Temps dispo (Min)</label>
                     <input type="number" id="liveTime" value="45">
                 </div>
             </div>
 
             <div class="input-group">
-                <label>Besoins / Blocages du jour</label>
-                <textarea class="notes-area" id="liveNeeds" placeholder="Ex: Je veux un workout Solo focus sur mon tir en sortie d'écran. J'ai les jambes lourdes aujourd'hui."></textarea>
+                <label style="color: #8b5cf6; font-size: 0.95rem; margin-bottom: 0.75rem; display: flex; align-items: center; gap: 0.5rem;">
+                    🎯 Tes Besoins & Blocages du jour
+                </label>
+                <textarea id="liveNeeds" placeholder="Ex: J'ai les jambes lourdes aujourd'hui. Je veux un workout Solo focus sur mon tir en sortie d'écran, ma fluidité et mon Pace control..." 
+                style="width: 100%; min-height: 160px; background: rgba(0,0,0,0.6); border: 2px solid rgba(139, 92, 246, 0.3); border-radius: 12px; padding: 1.25rem; color: #fff; font-family: inherit; font-size: 1rem; line-height: 1.6; resize: vertical; transition: all 0.3s ease; box-shadow: inset 0 4px 12px rgba(0,0,0,0.4); outline: none;" 
+                onfocus="this.style.borderColor='#8b5cf6'; this.style.boxShadow='inset 0 4px 12px rgba(0,0,0,0.4), 0 0 15px rgba(139, 92, 246, 0.2)';" 
+                onblur="this.style.borderColor='rgba(139, 92, 246, 0.3)'; this.style.boxShadow='inset 0 4px 12px rgba(0,0,0,0.4)';"></textarea>
             </div>
 
-            <button class="btn" style="background: #8b5cf6; margin-bottom: 1rem;" id="btnGemini" onclick="askGemini()">✨ Générer mon Workout avec l'IA</button>
+            <button class="btn" style="background: linear-gradient(135deg, #8b5cf6, #6d28d9); margin-bottom: 1rem; font-size: 1.05rem; padding: 1.2rem; border-radius: 12px; border: none; text-transform: uppercase; font-weight: 900; letter-spacing: 1px; box-shadow: 0 6px 20px rgba(139, 92, 246, 0.4);" id="btnGemini" onclick="askManusIA()">✨ Générer mon Workout</button>
 
-            <div id="aiLoading" style="display: none; text-align: center; padding: 1rem; color: #8b5cf6; font-weight: bold;">
-                L'IA analyse tes datas... ⏳
+            <div id="aiLoading" style="display: none; text-align: center; padding: 1rem; color: #a78bfa; font-weight: bold; font-size: 1.1rem; animation: pulse 1.5s infinite;">
+                L'IA Manus construit ta séance... ⏳
             </div>
 
             <div id="aiLiveResponseBox" class="result-box" style="border-color: #8b5cf6; background: rgba(139, 92, 246, 0.1);">
                 <strong style="color:#8b5cf6; display:block; margin-bottom:0.5rem; text-transform:uppercase;">📝 Ton Programme (Modifiable) :</strong>
-                <textarea id="aiLiveResponseText" style="width: 100%; min-height: 250px; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(139, 92, 246, 0.5); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; font-family: inherit; font-size: 0.9rem; line-height: 1.5;"></textarea>
+                <textarea id="aiLiveResponseText" style="width: 100%; min-height: 300px; background: rgba(0,0,0,0.5); color: white; border: 1px solid rgba(139, 92, 246, 0.5); border-radius: 8px; padding: 1rem; margin-bottom: 1rem; font-family: inherit; font-size: 0.95rem; line-height: 1.6;"></textarea>
                 
                 <button class="btn" style="background: var(--accent);" onclick="saveAIWorkout()">⭐ Sauvegarder dans mes Favoris</button>
             </div>
+        </div>
     </section>
 
     <section id="timer" class="content-section">
