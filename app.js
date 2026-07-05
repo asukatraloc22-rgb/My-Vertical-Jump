@@ -232,15 +232,14 @@ function removeTask(day, index) {
     }
 }
 
-// ==================== LIVE GOOGLE GEMINI API ENGINE ====================
-// Fonction corrigée pour se connecter proprement à Google Gemini
+// ==================== LIVE MANUS IA API ENGINE (VIA PROXY) ====================
 async function askManusIA() {
     const apiKey = document.getElementById('geminiApiKey')?.value;
     const energy = document.getElementById('liveEnergy')?.value || 7;
     const time = document.getElementById('liveTime')?.value || 45;
     const needs = document.getElementById('liveNeeds')?.value;
 
-    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Gemini !"); return; }
+    if (!apiKey) { alert("⚠️ Tu dois entrer ta clé API Manus !"); return; }
     if (!needs) { alert("⚠️ Décris tes besoins dans la grande zone de texte."); return; }
 
     const btn = document.getElementById('btnGemini');
@@ -259,31 +258,36 @@ async function askManusIA() {
     Conçois ma séance sur-mesure (Échauffement, Exercices précis, Fin). Utilise du vocabulaire basket. Format concis et lisible.`;
 
     try {
-        // Envoi de la requête propre à l'API GEMINI
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=${apiKey}`, {
+        // Le tunnel (Proxy) pour contourner le blocage de sécurité de Manus IA
+        const targetUrl = 'https://api.manus.ai/v1/chat/completions';
+        const proxyUrl = 'https://corsproxy.io/?' + encodeURIComponent(targetUrl);
+
+        // Envoi de la requête au standard OpenAI/Manus via le tunnel
+        const response = await fetch(proxyUrl, {
             method: 'POST',
             headers: { 
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${apiKey}` 
             },
             body: JSON.stringify({ 
-                contents: [{ parts: [{ text: promptData }] }]
+                model: "gpt-3.5-turbo", // Modèle standard accepté par la majorité des API
+                messages: [{ role: "user", content: promptData }]
             })
         });
 
         const data = await response.json();
         
         if (data.error) {
-            if(responseText) responseText.value = `Erreur API : ${data.error.message}`;
-        } else if (data.candidates && data.candidates[0].content) {
-            let aiText = data.candidates[0].content.parts[0].text;
-            // Nettoyage des étoiles Markdown
-            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); 
+            if(responseText) responseText.value = `Erreur API Manus : ${data.error.message || 'Clé refusée'}`;
+        } else if (data.choices && data.choices.length > 0) {
+            let aiText = data.choices[0].message.content;
+            aiText = aiText.replace(/\*\*(.*?)\*\*/g, '$1'); // Nettoyer les étoiles
             if(responseText) responseText.value = aiText;
         } else {
-            if(responseText) responseText.value = `Erreur : Réponse inattendue. Vérifie ta clé.`;
+            if(responseText) responseText.value = `Erreur : Réponse inattendue de l'API.`;
         }
     } catch (error) {
-        if(responseText) responseText.value = `Erreur réseau ou clé API rejetée. Vérifie ta connexion.`;
+        if(responseText) responseText.value = `Erreur réseau : Le serveur bloque toujours la connexion ou le proxy est surchargé. Détails : ${error.message}`;
     } finally {
         if(btn) btn.disabled = false;
         if(loading) loading.style.display = 'none';
